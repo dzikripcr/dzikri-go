@@ -6,4 +6,3 @@ createRoot(document.getElementById('root')).render(
     <Biodata/>
   </div>
 )
-  

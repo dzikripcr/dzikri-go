@@ -4,7 +4,7 @@ import "./Biodata.css";
 export default function Biodata() {
     return (
         <div className="container stark-ui">
-            <Header />
+            <Header/>
             <UserCard 
                 nama="Dzikri Maulana" 
                 nim="2457301037" 
