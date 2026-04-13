@@ -1,4 +1,4 @@
-export function SelectField({ label, options, value, onChange, error }) {
+export default function SelectField({ label, options, value, onChange, error }) {
   return (
     <div className="mb-4">
       <label className="block text-gray-700 font-medium mb-1">{label}</label>
@@ -22,7 +22,8 @@ export function SelectField({ label, options, value, onChange, error }) {
       </select>
 
       {error && (
-        <div className="mt-1 text-xs text-red-600 bg-red-100 px-2 py-1 rounded border border-red-300 animate-pulse">
+        <div className="mt-1 text-xs text-red-600 bg-red-100 px-2 
+        py-1 rounded border border-red-300 animate-pulse">
           {error}
         </div>
       )}

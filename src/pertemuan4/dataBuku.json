@@ -1,0 +1,377 @@
+[
+  {
+    "id": 1,
+    "title": "Atomic Habits",
+    "description": "An Easy & Proven Way to Build Good Habits.",
+    "image": "/images/atomic-habit.jpg",
+    "details": {
+      "author": "James Clear",
+      "publisher": "Penguin",
+      "year": 2018
+    },
+    "category": "Self Development",
+    "tags": ["Motivation", "Habit", "Productivity"],
+    "stock": {
+      "available": true,
+      "total": 120,
+      "sold": 90
+    }
+  },
+  {
+    "id": 2,
+    "title": "Deep Work",
+    "description": "Rules for Focused Success in a Distracted World.",
+    "image": "/images/deep-work.jpg",
+    "details": {
+      "author": "Cal Newport",
+      "publisher": "Grand Central",
+      "year": 2016
+    },
+    "category": "Productivity",
+    "tags": ["Focus", "Work", "Success"],
+    "stock": {
+      "available": true,
+      "total": 80,
+      "sold": 50
+    }
+  },
+  {
+    "id": 3,
+    "title": "Clean Code",
+    "description": "A Handbook of Agile Software Craftsmanship.",
+    "image": "/images/clean-code.jpg",
+    "details": {
+      "author": "Robert C. Martin",
+      "publisher": "Prentice Hall",
+      "year": 2008
+    },
+    "category": "Programming",
+    "tags": ["Code", "Software", "Best Practice"],
+    "stock": {
+      "available": true,
+      "total": 60,
+      "sold": 45
+    }
+  },
+  {
+    "id": 4,
+    "title": "The Pragmatic Programmer",
+    "description": "Journey to mastery.",
+    "image": "/images/the-pragmatic-programmer.jpg",
+    "details": {
+      "author": "Andrew Hunt",
+      "publisher": "Addison Wesley",
+      "year": 1999
+    },
+    "category": "Programming",
+    "tags": ["Developer", "Coding", "Career"],
+    "stock": {
+      "available": true,
+      "total": 70,
+      "sold": 55
+    }
+  },
+  {
+    "id": 5,
+    "title": "Rich Dad Poor Dad",
+    "description": "What the rich teach their kids.",
+    "image": "/images/rich-dad-poor-dad.jpg",
+    "details": {
+      "author": "Robert Kiyosaki",
+      "publisher": "Warner Books",
+      "year": 1997
+    },
+    "category": "Finance",
+    "tags": ["Money", "Business", "Investing"],
+    "stock": {
+      "available": true,
+      "total": 150,
+      "sold": 120
+    }
+  },
+
+  {
+    "id": 6,
+    "title": "The Psychology of Money",
+    "description": "Timeless lessons on wealth.",
+    "image": "/images/the-psychology-of-money.jpg",
+    "details": {
+      "author": "Morgan Housel",
+      "publisher": "Harriman House",
+      "year": 2020
+    },
+    "category": "Finance",
+    "tags": ["Money", "Mindset", "Wealth"],
+    "stock": {
+      "available": true,
+      "total": 90,
+      "sold": 70
+    }
+  },
+
+  {
+    "id": 7,
+    "title": "Start With Why",
+    "description": "How great leaders inspire action.",
+    "image": "/images/start-with-why.jpg",
+    "details": {
+      "author": "Simon Sinek",
+      "publisher": "Portfolio",
+      "year": 2009
+    },
+    "category": "Leadership",
+    "tags": ["Leadership", "Motivation", "Business"],
+    "stock": {
+      "available": true,
+      "total": 100,
+      "sold": 80
+    }
+  },
+
+  {
+    "id": 8,
+    "title": "Zero to One",
+    "description": "Notes on startups.",
+    "image": "/images/zero-to-one.jpg",
+    "details": {
+      "author": "Peter Thiel",
+      "publisher": "Crown Business",
+      "year": 2014
+    },
+    "category": "Startup",
+    "tags": ["Startup", "Innovation", "Business"],
+    "stock": {
+      "available": true,
+      "total": 75,
+      "sold": 60
+    }
+  },
+
+  {
+    "id": 9,
+    "title": "The Lean Startup",
+    "description": "Build-measure-learn.",
+    "image": "/images/the-lean-startup.jpg",
+    "details": {
+      "author": "Eric Ries",
+      "publisher": "Crown Business",
+      "year": 2011
+    },
+    "category": "Startup",
+    "tags": ["Startup", "Lean", "Business"],
+    "stock": {
+      "available": true,
+      "total": 85,
+      "sold": 65
+    }
+  },
+
+  {
+    "id": 10,
+    "title": "Think and Grow Rich",
+    "description": "Success principles.",
+    "image": "/images/think-and-grow-rich.jpg",
+    "details": {
+      "author": "Napoleon Hill",
+      "publisher": "The Ralston Society",
+      "year": 1937
+    },
+    "category": "Self Development",
+    "tags": ["Success", "Mindset", "Wealth"],
+    "stock": {
+      "available": true,
+      "total": 200,
+      "sold": 180
+    }
+  },
+
+  {
+    "id": 11,
+    "title": "Hooked",
+    "description": "How to build habit-forming products.",
+    "image": "/images/hooked.jpg",
+    "details": {
+      "author": "Nir Eyal",
+      "publisher": "Portfolio",
+      "year": 2014
+    },
+    "category": "Product",
+    "tags": ["UX", "Product", "Design"],
+    "stock": {
+      "available": true,
+      "total": 60,
+      "sold": 45
+    }
+  },
+
+  {
+    "id": 12,
+    "title": "Sprint",
+    "description": "Solve big problems in 5 days.",
+    "image": "/images/sprint.jpg",
+    "details": {
+      "author": "Jake Knapp",
+      "publisher": "Simon & Schuster",
+      "year": 2016
+    },
+    "category": "Product",
+    "tags": ["Design", "Sprint", "UX"],
+    "stock": {
+      "available": true,
+      "total": 50,
+      "sold": 40
+    }
+  },
+
+  {
+    "id": 13,
+    "title": "Design of Everyday Things",
+    "description": "Good design principles.",
+    "image": "/images/design-of-everyday-things.jpg",
+    "details": {
+      "author": "Don Norman",
+      "publisher": "Basic Books",
+      "year": 1988
+    },
+    "category": "Design",
+    "tags": ["UX", "Design", "Product"],
+    "stock": {
+      "available": true,
+      "total": 55,
+      "sold": 42
+    }
+  },
+
+  {
+    "id": 14,
+    "title": "Refactoring",
+    "description": "Improving existing code.",
+    "image": "/images/refactoring.jpg",
+    "details": {
+      "author": "Martin Fowler",
+      "publisher": "Addison Wesley",
+      "year": 1999
+    },
+    "category": "Programming",
+    "tags": ["Code", "Refactor", "Software"],
+    "stock": {
+      "available": true,
+      "total": 65,
+      "sold": 50
+    }
+  },
+
+  {
+    "id": 15,
+    "title": "Cracking the Coding Interview",
+    "description": "Coding interview guide.",
+    "image": "/images/cracking-the-coding-interview.jpg",
+    "details": {
+      "author": "Gayle McDowell",
+      "publisher": "CareerCup",
+      "year": 2015
+    },
+    "category": "Programming",
+    "tags": ["Interview", "Coding", "Career"],
+    "stock": {
+      "available": true,
+      "total": 110,
+      "sold": 90
+    }
+  },
+
+  {
+    "id": 16,
+    "title": "Eloquent JavaScript",
+    "description": "Modern introduction to JS.",
+    "image": "/images/eloquent-javascript.jpg",
+    "details": {
+      "author": "Marijn Haverbeke",
+      "publisher": "No Starch Press",
+      "year": 2018
+    },
+    "category": "Programming",
+    "tags": ["JavaScript", "Programming", "Web"],
+    "stock": {
+      "available": true,
+      "total": 70,
+      "sold": 55
+    }
+  },
+
+  {
+    "id": 17,
+    "title": "You Dont Know JS",
+    "description": "Deep dive into JS.",
+    "image": "/images/you-dont-know-js.jpg",
+    "details": {
+      "author": "Kyle Simpson",
+      "publisher": "O'Reilly",
+      "year": 2015
+    },
+    "category": "Programming",
+    "tags": ["JavaScript", "Advanced", "Web"],
+    "stock": {
+      "available": true,
+      "total": 75,
+      "sold": 60
+    }
+  },
+
+  {
+    "id": 18,
+    "title": "The Alchemist",
+    "description": "A journey of dreams.",
+    "image": "/images/the-alchemist.jpg",
+    "details": {
+      "author": "Paulo Coelho",
+      "publisher": "HarperOne",
+      "year": 1988
+    },
+    "category": "Novel",
+    "tags": ["Story", "Life", "Philosophy"],
+    "stock": {
+      "available": true,
+      "total": 140,
+      "sold": 120
+    }
+  },
+
+  {
+    "id": 19,
+    "title": "Harry Potter",
+    "description": "Wizarding world story.",
+    "image": "/images/harry-potter.jpg",
+    "details": {
+      "author": "J.K. Rowling",
+      "publisher": "Bloomsbury",
+      "year": 1997
+    },
+    "category": "Fantasy",
+    "tags": ["Magic", "Adventure", "Story"],
+    "stock": {
+      "available": true,
+      "total": 300,
+      "sold": 280
+    }
+  },
+
+  {
+    "id": 20,
+    "title": "The Hobbit",
+    "description": "Adventure of Bilbo.",
+    "image": "/images/the-hobbit.jpg",
+    "details": {
+      "author": "J.R.R. Tolkien",
+      "publisher": "Allen & Unwin",
+      "year": 1937
+    },
+    "category": "Fantasy",
+    "tags": ["Adventure", "Fantasy", "Story"],
+    "stock": {
+      "available": true,
+      "total": 180,
+      "sold": 150
+    }
+  }
+]

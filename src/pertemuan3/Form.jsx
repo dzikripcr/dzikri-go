@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { InputField } from "./components/InputField";
-import { SelectField } from "./components/SelectField";
+import InputField from "./components/InputField";
+import SelectField from "./components/SelectField";
 
 export default function Form() {
   const [nama, setNama] = useState("");
@@ -41,13 +41,18 @@ export default function Form() {
   const isFormValid = !errorNama && !errorUmur && !errorHobi && !errorGender && !errorPekerjaan;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 flex flex-col items-center py-10">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 
+    via-purple-100 to-pink-100 flex flex-col items-center py-10">
 
       {/* CARD */}
-      <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-md border border-white/40 hover:shadow-2xl transition duration-300">
+      <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl 
+      shadow-xl w-full max-w-md border border-white/40 hover:shadow-2xl 
+      transition duration-300">
 
         {/* TITLE */}
-        <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
+        <h2 className="text-3xl font-extrabold text-center 
+        bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text 
+        text-transparent mb-6">
           Form Data Diri
         </h2>
 
@@ -110,7 +115,8 @@ export default function Form() {
 
       {/* HASIL */}
       {isSubmitted && isFormValid && (
-        <div className="mt-8 bg-gradient-to-r from-green-100 to-emerald-100 p-6 rounded-xl border border-green-300 w-full max-w-md shadow-lg animate-fade-in">
+        <div className="mt-8 bg-gradient-to-r from-green-100 to-emerald-100 p-6 rounded-xl 
+        border border-green-300 w-full max-w-md shadow-lg animate-fade-in">
           <h3 className="text-lg font-bold text-green-800 mb-3 border-b border-green-200">
             Data Berhasil Terinput:
           </h3>
@@ -126,3 +132,4 @@ export default function Form() {
     </div>
   );
 }
+
