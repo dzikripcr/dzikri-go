@@ -24,7 +24,7 @@ export default function Buku() {
 
   const _search = searchTerm.toLowerCase();
 
-  const filtered = dataBuku.filter((dataBuku) => {
+  const filtered = dataBuku.filter((dataBuku) => {``
     const matchSearch =
       dataBuku.title.toLowerCase().includes(_search) ||
       dataBuku.description.toLowerCase().includes(_search);
@@ -33,7 +33,7 @@ export default function Buku() {
       ? dataBuku.category === selectedCategory
       : true;
 
-    const matchTag = selectedTag ? dataBuku.tags.includes(selectedTag) : true;
+    const matchTag = selectedTag ? dataBuku.tag.includes(selectedTag) : true;
 
     return matchSearch && matchCategory && matchTag;
   });
@@ -42,7 +42,7 @@ export default function Buku() {
   const categories = [...new Set(dataBuku.map((dataBuku) => dataBuku.category))];
 
   /** Deklarasi pengambilan unique tags di dataBuku **/
-  const tags = [...new Set(dataBuku.flatMap((dataBuku) => dataBuku.tags))];
+  const tags = [...new Set(dataBuku.flatMap((dataBuku) => dataBuku.tag))];
 
   // Dynamic styles based on view
   const isGuest = view === "guest";

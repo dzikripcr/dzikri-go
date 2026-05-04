@@ -22,14 +22,14 @@ export default function Guest({ dataBuku }) {
               {b.title}
             </h2>
             <p className="text-xs font-semibold text-indigo-300 tracking-wider uppercase mb-3">
-              {b.details.author} • {b.details.year}
+              {b.detail.author} • {b.detail.year}
             </p>
             <p className="text-sm text-slate-300 line-clamp-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
               {b.description}
             </p>
 
             <div className="flex flex-wrap gap-2">
-              {b.tags.map((tag, i) => (
+              {b.tag.map((tag, i) => (
                 <span
                   key={i}
                   className="text-[10px] font-bold text-cyan-950 bg-cyan-400 px-2.5 py-1 rounded-md shadow-[0_0_8px_rgba(6,182,212,0.6)]"

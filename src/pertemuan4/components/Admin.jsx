@@ -18,12 +18,12 @@ export default function Admin({ dataBuku }) {
               <tr 
                 key={b.id} 
                 className={`border-b border-gray-100 hover:bg-indigo-50 transition-colors duration-200 ${
-                  index % 2 === 0 ? "bg-slate-50/50" : "bg-white"
+                  index % 2 == 0 ? "bg-slate-200/50" : "bg-white"
                 }`}
               >
                 <td className="p-4 font-medium text-indigo-900/50">{b.id}</td>
                 <td className="p-4 font-bold text-indigo-900">{b.title}</td>
-                <td className="p-4 text-gray-600">{b.details.author}</td>
+                <td className="p-4 text-gray-600">{b.detail.author}</td>
                 <td className="p-4 text-center">
                   <span className="px-3 py-1 rounded-full text-xs font-medium bg-fuchsia-100 text-fuchsia-700 border border-fuchsia-200">
                     {b.category}
