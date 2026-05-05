@@ -1,47 +1,63 @@
-import { FaBell, FaSearch, FaSun } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { FiBell } from "react-icons/fi";
+import { useLocation } from "react-router-dom";
 
 export default function Header() {
+  const location = useLocation();
+
+  // Logika untuk mengubah path menjadi Judul (contoh: /order-management -> Order Management)
+  const getTitle = () => {
+    const path = location.pathname.split("/").pop();
+    if (!path || path === "") return "Dashboard";
+    return path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, " ");
+  };
+
   return (
-    <div 
-      id="header-container" 
-      className="flex justify-between items-center bg-white px-8 py-4 border-b border-gray-200 shadow-sm"
-    >
-      {/* Search Bar */}
-      <div id="search-bar" className="relative w-full max-w-md">
-        <input
-          id="search-input"
-          type="text"
-          placeholder="Search data, users, or reports"
-          className="bg-gray-100 text-gray-700 text-sm rounded-full py-2.5 pl-5 pr-10 w-full focus:outline-none focus:ring-1 focus:ring-gray-900 transition-all"
-        />
-        <FaSearch id="search-icon" className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-      </div>
+    <div className="flex justify-between items-center py-5 px-10 bg-white border-b border-gray-50 font-['Lato']">
+      {/* Dynamic Title */}
+      <h1 className="text-[22px] font-black text-[#0A2533] tracking-tight">
+        {getTitle()}
+      </h1>
 
-      {/* Icon & Profile Section */}
-      <div id="icons-container" className="flex items-center space-x-6">
+      {/* Fitur Kanan */}
+      <div className="flex items-center space-x-6">
         
-        {/* Notification Icon */}
-        <div id="notification-icon" className="relative text-gray-400 hover:text-gray-900 transition-colors duration-200 cursor-pointer text-xl">
-          <FaBell />
-          {/* Menambahkan border putih pada dot merah pada icon notif*/}
-          <span className="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/3 bg-red-500 border-2 border-white rounded-full w-3 h-3"></span>
-        </div>
-        
-        {/* Theme Toggle Button - Diubah ke Monokrom */}
-        <div className="flex items-center bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5 cursor-pointer hover:bg-gray-100 transition-colors">
-           <FaSun className="text-gray-600 mr-2 text-sm" />
-           <div className="w-7 h-4 bg-gray-300 rounded-full relative">
-               <div className="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full shadow-sm"></div>
-           </div>
+        {/* Search Bar - Sesuai Gambar */}
+        <div className="relative hidden md:block">
+          <input
+            type="text"
+            placeholder="Search data, users, or reports"
+            className="w-[450px] bg-[#F9FAFB] text-[16px] text-[000000/69] border-[#EAF8E7] border-1 rounded-full py-3 pl-6 pr-12 outline-none focus:ring-2 focus:ring-[#55A67B]/20 transition-all placeholder:text-gray-400"
+          />
+          <FaSearch className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
         </div>
 
-        {/* Profile Avatar */}
-        <img
-          id="profile-avatar"
-          src="./img/foto.jpeg"
-          className="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-gray-900 transition-colors cursor-pointer"
-          alt="Profile"
-        />
+        <div className="flex items-center space-x-4">
+          {/* Notification Button */}
+          <button className="relative p-2 text-gray-600 hover:text-[#55A67B] transition-colors">
+            <FiBell className="text-2xl" />
+            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white rounded-full"></span>
+          </button>
+
+          {/* Theme Toggle Light/Dark - Warna EAF8E7 */}
+          <div className="flex items-center bg-[#EAF8E7] p-1.5 rounded-full w-16 cursor-pointer">
+             <div className="bg-white p-1 rounded-full shadow-sm">
+                {/* Icon Sun */}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700">
+                  <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+             </div>
+          </div>
+
+          {/* Profile Section */}
+          <div className="cursor-pointer">
+            <img
+              src="./img/foto.jpeg"
+              alt="Profile"
+              className="w-10 h-10 rounded-full border border-gray-200 object-cover"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

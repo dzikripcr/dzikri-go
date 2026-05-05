@@ -2,19 +2,13 @@ import { useState } from "react";
 import { 
   FaPlus, 
   FaEllipsisV, 
-  FaCheckCircle, 
-  FaClock, 
-  FaTimesCircle, 
-  FaTruck, 
-  FaTimes 
+  FaTimes,
+  FaSearch
 } from "react-icons/fa";
 import ordersData from "../components/order.json";
 
 export default function Orders() {
-  // Tambahkan setOrders untuk memanipulasi data tabel
   const [orders, setOrders] = useState(ordersData);
-  
-  // State untuk Modal Form
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     productName: "",
@@ -24,93 +18,90 @@ export default function Orders() {
     productImage: ""
   });
 
-  // Handle perubahan input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle submit form order baru
   const handleSubmit = (e) => {
-    
-    // Tutup modal dan reset form
+    e.preventDefault();
+    // Logika submit form order baru
     setIsModalOpen(false);
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen relative">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-serif font-bold text-gray-900 tracking-tight">Order List</h1>
+    <div className="p-6 bg-gray-50 min-h-screen relative">
+      <div className="flex justify-between items-center mb-6">
         <div className="flex space-x-3">
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-full flex items-center text-sm font-medium transition-all shadow-sm"
+            className="bg-[#4EA674] text-white px-5 py-2 rounded-md flex items-center text-sm font-semibold transition-colors shadow-sm"
           >
             <FaPlus className="mr-2" /> Add Order
-          </button>
-          <button className="bg-white border border-gray-200 text-gray-700 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all">
-            More Action ⋮
           </button>
         </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-          <p className="text-gray-500 text-sm font-medium mb-3">Total Orders</p>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+          <p className="text-gray-800 font-bold mb-2 text-lg">Total Orders</p>
           <div className="flex items-end space-x-2">
-            <span className="text-3xl font-bold text-gray-900 tracking-tight">1,240</span>
-            <span className="text-sm text-emerald-600 mb-1 font-semibold">↑ 14.4%</span>
+            <span className="text-3xl font-extrabold text-gray-800">1,240</span>
+            <span className="text-sm text-green-500 mb-1">↑ 14.4%</span>
           </div>
-          <p className="text-xs text-gray-400 mt-2">Last 7 days</p>
+          <p className="text-xs text-gray-400 mt-1">Last 7 days</p>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-          <p className="text-gray-500 text-sm font-medium mb-3">New Orders</p>
+        <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+          <p className="text-gray-800 font-bold mb-2 text-lg">New Orders</p>
           <div className="flex items-end space-x-2">
-            <span className="text-3xl font-bold text-gray-900 tracking-tight">240</span>
-            <span className="text-sm text-emerald-600 mb-1 font-semibold">↑ 20%</span>
+            <span className="text-3xl font-extrabold text-gray-800">240</span>
+            <span className="text-sm text-green-500 mb-1">↑ 20%</span>
           </div>
-          <p className="text-xs text-gray-400 mt-2">Last 7 days</p>
+          <p className="text-xs text-gray-400 mt-1">Last 7 days</p>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-          <p className="text-gray-500 text-sm font-medium mb-3">Completed Orders</p>
+        <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+          <p className="text-gray-800 font-bold mb-2 text-lg">Completed</p>
           <div className="flex items-end space-x-2">
-            <span className="text-3xl font-bold text-gray-900 tracking-tight">960</span>
-            <span className="text-sm text-emerald-600 mb-1 font-semibold">↑ 85%</span>
+            <span className="text-3xl font-extrabold text-gray-800">960</span>
+            <span className="text-sm text-green-500 mb-1">↑ 85%</span>
           </div>
-          <p className="text-xs text-gray-400 mt-2">Last 7 days</p>
+          <p className="text-xs text-gray-400 mt-1">Last 7 days</p>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-          <p className="text-gray-500 text-sm font-medium mb-3">Canceled Orders</p>
+        <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+          <p className="text-gray-800 font-bold mb-2 text-lg">Canceled</p>
           <div className="flex items-end space-x-2">
-            <span className="text-3xl font-bold text-gray-900 tracking-tight">87</span>
-            <span className="text-sm text-rose-600 mb-1 font-semibold">↓ 5%</span>
+            <span className="text-3xl font-extrabold text-gray-800">87</span>
+            <span className="text-sm text-red-500 mb-1">↓ 5%</span>
           </div>
-          <p className="text-xs text-gray-400 mt-2">Last 7 days</p>
+          <p className="text-xs text-gray-400 mt-1">Last 7 days</p>
         </div>
       </div>
 
       {/* Filters & Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="p-5 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-white">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex space-x-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-            <button className="bg-gray-900 border border-gray-900 text-white px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap shadow-sm">
+            <button className="bg-green-50 text-green-600 px-4 py-1.5 rounded-md text-sm font-semibold whitespace-nowrap">
               All order ({orders.length})
             </button>
-            <button className="text-gray-500 border border-transparent hover:bg-gray-50 hover:text-gray-900 px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors">Delivered</button>
-            <button className="text-gray-500 border border-transparent hover:bg-gray-50 hover:text-gray-900 px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors">Pending</button>
-            <button className="text-gray-500 border border-transparent hover:bg-gray-50 hover:text-gray-900 px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors">Shipped</button>
-            <button className="text-gray-500 border border-transparent hover:bg-gray-50 hover:text-gray-900 px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors">Canceled</button>
+            <button className="text-gray-500 hover:bg-gray-50 px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors">Delivered</button>
+            <button className="text-gray-500 hover:bg-gray-50 px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors">Pending</button>
+            <button className="text-gray-500 hover:bg-gray-50 px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors">Shipped</button>
+            <button className="text-gray-500 hover:bg-gray-50 px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors">Canceled</button>
           </div>
           
           <div className="flex space-x-3 w-full md:w-auto">
-            <input 
-              type="text" 
-              placeholder="Search order report..." 
-              className="w-full md:w-64 border border-gray-200 rounded-full px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 transition-all bg-gray-50" 
-            />
-            <button className="border border-gray-200 px-3 py-2 rounded-full hover:bg-gray-50 transition-colors">
-              <FaEllipsisV className="text-gray-400 hover:text-gray-900" />
+            <div className="relative w-full md:w-64">
+               <input 
+                 type="text" 
+                 placeholder="Search order..." 
+                 className="w-full border border-gray-200 rounded-md py-1.5 pl-8 pr-3 text-sm outline-none focus:border-blue-500 transition-colors" 
+               />
+               <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs" />
+            </div>
+            <button className="border border-gray-200 px-3 py-1.5 rounded-md hover:bg-gray-50 transition-colors">
+              <FaEllipsisV className="text-gray-400" />
             </button>
           </div>
         </div>
@@ -118,56 +109,51 @@ export default function Orders() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50/50 text-gray-500 text-xs uppercase tracking-widest border-b border-gray-100">
-                <th className="p-5 font-semibold">No.</th>
-                <th className="p-5 font-semibold">Order Id</th>
-                <th className="p-5 font-semibold">Product</th>
-                <th className="p-5 font-semibold">Date</th>
-                <th className="p-5 font-semibold">Price</th>
-                <th className="p-5 font-semibold">Payment</th>
-                <th className="p-5 font-semibold">Status</th>
+              <tr className="bg-green-50 text-gray-700 text-sm">
+                <th className="p-4 font-semibold">No.</th>
+                <th className="p-4 font-semibold">Order Id</th>
+                <th className="p-4 font-semibold">Product</th>
+                <th className="p-4 font-semibold">Date</th>
+                <th className="p-4 font-semibold">Price</th>
+                <th className="p-4 font-semibold">Payment</th>
+                <th className="p-4 font-semibold">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody>
               {orders.map((order, index) => (
-                <tr key={order.orderId} className="hover:bg-gray-50/80 transition-colors text-sm group">
-                  <td className="p-5 text-gray-500">{index + 1}</td>
-                  <td className="p-5 font-semibold text-gray-900">{order.orderId}</td>
-                  <td className="p-5">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gray-50 rounded-lg flex-shrink-0 overflow-hidden border border-gray-200">
+                <tr key={order.orderId} className="border-b border-gray-100 hover:bg-gray-50 text-sm transition-colors">
+                  <td className="p-4 text-gray-500">{index + 1}</td>
+                  <td className="p-4 font-medium text-gray-800">{order.orderId}</td>
+                  <td className="p-4">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-gray-100 rounded-md overflow-hidden">
                         <img 
                           src={order.productImage || "https://via.placeholder.com/150"} 
                           alt={order.productName}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          onError={(e) => {
-                            e.target.src = "https://via.placeholder.com/48?text=📦";
-                          }}
+                          className="w-full h-full object-cover"
+                          onError={(e) => { e.target.src = "https://via.placeholder.com/40?text=Img"; }}
                         />
                       </div>
-                      <span className="font-semibold text-gray-900">{order.productName}</span>
+                      <span className="font-semibold text-gray-800">{order.productName}</span>
                     </div>
                   </td>
-                  <td className="p-5 text-gray-500 whitespace-nowrap">{order.date}</td>
-                  <td className="p-5 font-bold text-gray-900">${order.price.toFixed(2)}</td>
-                  <td className="p-5">
+                  <td className="p-4 text-gray-500">{order.date}</td>
+                  <td className="p-4 font-bold text-gray-800">${order.price.toFixed(2)}</td>
+                  <td className="p-4">
                     <span className="flex items-center text-gray-700 font-medium">
-                      <span className={`w-2 h-2 rounded-full mr-2.5 ${order.payment?.toLowerCase() === "paid" ? "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]" : "bg-rose-500"}`}></span>
+                      <span className={`w-2 h-2 rounded-full mr-2 ${order.payment?.toLowerCase() === "paid" ? "bg-green-500" : "bg-red-500"}`}></span>
                       {order.payment}
                     </span>
                   </td>
-                  <td className="p-5">
-                    <div className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-full w-fit text-xs font-bold tracking-wide capitalize
-                      ${order.status?.toLowerCase() === "delivered" ? "bg-emerald-50 text-emerald-700 border border-emerald-100" : 
-                        order.status?.toLowerCase() === "pending" ? "bg-amber-50 text-amber-700 border border-amber-100" : 
-                        order.status?.toLowerCase() === "shipped" ? "bg-slate-100 text-slate-700 border border-slate-200" : 
-                        "bg-rose-50 text-rose-700 border border-rose-100"}`}>
-                      {order.status?.toLowerCase() === "delivered" && <FaCheckCircle size={12} />}
-                      {order.status?.toLowerCase() === "pending" && <FaClock size={12} />}
-                      {order.status?.toLowerCase() === "shipped" && <FaTruck size={12} />}
-                      {(order.status?.toLowerCase() === "cancelled" || order.status?.toLowerCase() === "canceled") && <FaTimesCircle size={12} />}
-                      <span>{order.status}</span>
-                    </div>
+                  <td className="p-4">
+                     <span className="flex items-center text-gray-700 font-medium">
+                        <span className={`w-2 h-2 rounded-full mr-2 
+                          ${order.status?.toLowerCase() === "delivered" ? "bg-green-500" : 
+                            order.status?.toLowerCase() === "pending" ? "bg-yellow-500" : 
+                            order.status?.toLowerCase() === "shipped" ? "bg-blue-500" : "bg-red-500"}`}>
+                        </span>
+                        {order.status}
+                     </span>
                   </td>
                 </tr>
               ))}
@@ -178,47 +164,41 @@ export default function Orders() {
 
       {/* MODAL FORM ADD NEW ORDER */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex justify-center items-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 bg-black/40 z-50 flex justify-center items-center p-4">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-lg overflow-hidden">
             <div className="flex justify-between items-center p-6 border-b border-gray-100">
-              <h2 className="text-xl font-serif font-bold text-gray-900">Add New Order</h2>
-              <button 
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-gray-900 transition-colors p-2 rounded-full hover:bg-gray-100"
-              >
+              <h2 className="text-xl font-bold text-gray-800">Add New Order</h2>
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-800">
                 <FaTimes />
               </button>
             </div>
             
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              {/* Product Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
                 <input 
                   type="text" name="productName" required
                   value={formData.productName} onChange={handleInputChange}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 focus:bg-white transition-all"
+                  className="w-full border border-gray-200 rounded-md px-4 py-2 text-sm outline-none focus:border-blue-500"
                   placeholder="e.g. Classic Leather Handbag"
                 />
               </div>
 
-              {/* Price & Payment */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
                   <input 
                     type="number" step="0.01" name="price" required
                     value={formData.price} onChange={handleInputChange}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 focus:bg-white transition-all"
+                    className="w-full border border-gray-200 rounded-md px-4 py-2 text-sm outline-none focus:border-blue-500"
                     placeholder="0.00"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
                   <select 
-                    name="payment" 
-                    value={formData.payment} onChange={handleInputChange}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 focus:bg-white transition-all text-gray-700"
+                    name="payment" value={formData.payment} onChange={handleInputChange}
+                    className="w-full border border-gray-200 rounded-md px-4 py-2 text-sm outline-none focus:border-blue-500 text-gray-700"
                   >
                     <option value="Paid">Paid</option>
                     <option value="Unpaid">Unpaid</option>
@@ -226,14 +206,12 @@ export default function Orders() {
                 </div>
               </div>
 
-              {/* Order Status & Image URL */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Order Status</label>
                   <select 
-                    name="status" 
-                    value={formData.status} onChange={handleInputChange}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 focus:bg-white transition-all text-gray-700"
+                    name="status" value={formData.status} onChange={handleInputChange}
+                    className="w-full border border-gray-200 rounded-md px-4 py-2 text-sm outline-none focus:border-blue-500 text-gray-700"
                   >
                     <option value="Pending">Pending</option>
                     <option value="Shipped">Shipped</option>
@@ -246,29 +224,22 @@ export default function Orders() {
                   <input 
                     type="url" name="productImage" required
                     value={formData.productImage} onChange={handleInputChange}
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 focus:bg-white transition-all"
+                    className="w-full border border-gray-200 rounded-md px-4 py-2 text-sm outline-none focus:border-blue-500"
                     placeholder="https://example.com/image.jpg"
                   />
                 </div>
               </div>
 
-              {/* Info Text */}
-              <p className="text-xs text-gray-500 pt-2">
-                * Order ID and Date will be generated automatically.
-              </p>
-
-              {/* Action Buttons */}
-              <div className="flex justify-end space-x-3 pt-4 mt-6 border-t border-gray-100">
+              <div className="flex justify-end space-x-3 pt-4 mt-4 border-t border-gray-100">
                 <button 
-                  type="button" 
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-5 py-2.5 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+                  type="button" onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit"
-                  className="bg-gray-900 hover:bg-gray-800 text-white px-6 py-2.5 rounded-full text-sm font-medium transition-all shadow-sm"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-md text-sm font-medium"
                 >
                   Save Order
                 </button>

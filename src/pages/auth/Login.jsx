@@ -3,167 +3,128 @@ import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { TbHanger } from "react-icons/tb";
 
 export default function Login() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [dataForm, setDataForm] = useState({
-    email: "",
-    password: "",
-  });
+  const [dataForm, setDataForm] = useState({ email: "", password: "" });
 
   const handleChange = (evt) => {
     const { name, value } = evt.target;
-    setDataForm({
-      ...dataForm,
-      [name]: value,
-    });
+    setDataForm({ ...dataForm, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
-    setError(false);
+    setError("");
 
     axios
       .post("https://dummyjson.com/user/login", {
         username: dataForm.email,
         password: dataForm.password,
       })
-      .then((response) => {
-        if (response.status !== 200) {
-          setError(response.data.message);
-          return;
-        }
-        navigate("/");
-      })
-      .catch((err) => {
-        if (err.response) {
-          setError(err.response.data.message || "An error occurred");
-        } else {
-          setError(err.message || "An unknown error occurred");
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      .then(() => navigate("/"))
+      .catch((err) => setError(err.response?.data?.message || "Authentication failed"))
+      .finally(() => setLoading(false));
   };
 
-  const errorInfo = error ? (
-    <div className="bg-rose-50 mb-6 p-4 text-sm font-medium text-rose-700 border border-rose-100 rounded-xl flex items-center shadow-sm">
-      <BsFillExclamationDiamondFill className="text-rose-500 me-3 text-lg flex-shrink-0" />
-      {error}
-    </div>
-  ) : null;
-
-  const loadingInfo = loading ? (
-    <div className="bg-slate-50 mb-6 p-4 text-sm font-medium text-slate-700 border border-slate-200 rounded-xl flex items-center shadow-sm">
-      <ImSpinner2 className="me-3 animate-spin text-gray-900 text-lg flex-shrink-0" />
-      Authenticating...
-    </div>
-  ) : null;
-
   return (
-    // Menggunakan fixed inset-0 z-50 agar memaksa full layar menutupi layout bawaan
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 overflow-hidden">
-      {/* Background Image Full Screen */}
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1600&q=80')",
-        }}
-      >
-        <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"></div>
+    <div className="w-full">
+      <div className="mb-10 text-left">
+        {/* Judul: Poppins, 32px, Medium, #000000 */}
+        <h2 className="font-['Poppins'] text-[32px] font-medium text-[#000000] leading-tight">
+          Welcome back!
+        </h2>
+        {/* Sub-judul: Poppins, 16px, #000000 */}
+        <p className="font-['Poppins'] text-[16px] text-[#000000] mt-2 opacity-70">
+          Enter your Credentials to access your account
+        </p>
       </div>
 
-      {/* Login Card */}
-      <div className="relative z-10 w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 sm:p-10 m-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="flex justify-center mb-6">
-          <span className="text-2xl font-serif font-bold text-gray-900 tracking-widest flex items-center gap-2">
-            <TbHanger />
-            BOUTIQUE
-          </span>
+      {error && (
+        <div className="bg-rose-50 mb-6 p-4 text-sm text-rose-700 border border-rose-100 rounded-lg flex items-center">
+          <BsFillExclamationDiamondFill className="text-rose-500 me-3 text-lg flex-shrink-0" />
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          {/* Label: Poppins, 14px, Medium */}
+          <label className="block font-['Poppins'] text-[14px] font-medium text-[#000000] mb-2">
+            Email address
+          </label>
+          <input
+            name="email"
+            type="text"
+            onChange={handleChange}
+            required
+            className="w-full border border-[#D9D9D9] rounded-lg px-4 py-3 text-sm outline-none focus:border-gray-500 transition-all placeholder:text-gray-300"
+            placeholder="Enter your email"
+          />
         </div>
 
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-serif font-bold text-gray-900 tracking-tight">
-            Welcome Back
-          </h2>
-          <p className="text-sm text-gray-500 mt-2">
-            Please enter your details to sign in
-          </p>
-        </div>
-
-        {errorInfo}
-        {loadingInfo}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5 ml-1">
-              Username / Email
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            {/* Label: Poppins, 14px, Medium */}
+            <label className="block font-['Poppins'] text-[14px] font-medium text-[#000000]">
+              Password
             </label>
-            <input
-              type="text"
-              id="email"
-              name="email"
-              onChange={handleChange}
-              disabled={loading}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 focus:bg-white transition-all text-gray-900 placeholder-gray-400 disabled:opacity-50"
-              placeholder="e.g. kminchelle"
-            />
-          </div>
-
-          <div>
-            <div className="flex justify-between items-center mb-1.5 ml-1 mr-1">
-              <label className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-
-              <Link
-                to="/forgot"
-                className="text-xs text-gray-500 hover:text-gray-900 transition-colors font-medium"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              onChange={handleChange}
-              disabled={loading}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-gray-900/10 focus:border-gray-900 focus:bg-white transition-all text-gray-900 placeholder-gray-400 disabled:opacity-50"
-              placeholder="••••••••"
-            />
-          </div>
-
-          <div className="pt-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-full transition-all shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed flex justify-center items-center"
-            >
-              {loading ? "Signing in..." : "Sign In"}
-            </button>
-          </div>
-        </form>
-
-        {/* Link ke Register */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
-            Don't have an account?{" "}
-            <Link
-              to="/register"
-              className="text-gray-900 hover:underline font-semibold transition-all"
-            >
-              Create an Account
+            <Link to="/forgot" className="text-[12px] text-[#0C2A92] hover:underline">
+              forgot password
             </Link>
-          </p>
+          </div>
+          <input
+            name="password"
+            type="password"
+            onChange={handleChange}
+            required
+            className="w-full border border-[#D9D9D9] rounded-lg px-4 py-3 text-sm outline-none focus:border-gray-500 transition-all placeholder:text-gray-300"
+            placeholder="Enter your password"
+          />
         </div>
+
+        <div className="flex items-center gap-2">
+          <input type="checkbox" id="remember" className="w-4 h-4 rounded border-[#D9D9D9]" />
+          <label htmlFor="remember" className="text-[14px] text-gray-600 font-['Poppins']">
+            Remember for 30 days
+          </label>
+        </div>
+
+        {/* Button: Background #3A5B22 */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-[#3A5B22] hover:bg-[#2d461a] text-white font-medium py-3.5 rounded-lg transition-all flex justify-center items-center shadow-sm disabled:opacity-70"
+        >
+          {loading ? <ImSpinner2 className="animate-spin text-lg" /> : "Login"}
+        </button>
+      </form>
+
+      {/* Or Separator */}
+      <div className="relative my-8 text-center">
+        <hr className="border-[#D9D9D9]" />
+        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-[12px] text-gray-400 font-['Poppins']">
+          Or
+        </span>
+      </div>
+
+      {/* Social Login */}
+      <div className="grid grid-cols-2 gap-4">
+        <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2.5 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
+           <img src="https://www.svgrepo.com/show/355037/google.svg" className="w-4" alt="google" /> Sign in with Google
+        </button>
+        <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2.5 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
+           <img src="https://www.svgrepo.com/show/445327/apple.svg" className="w-4" alt="apple" /> Sign in with Apple
+        </button>
+      </div>
+
+      <div className="mt-10 text-center">
+        <p className="text-[14px] text-gray-600 font-['Poppins']">
+          Don't have an account? <Link to="/register" className="text-[#000000] font-bold hover:underline">Sign Up</Link>
+        </p>
       </div>
     </div>
   );

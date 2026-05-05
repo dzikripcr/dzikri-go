@@ -1,17 +1,18 @@
 import { Outlet } from "react-router-dom";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import Header from "../components/Header"; 
+import Sidebar from "../components/Sidebar"; 
 
 export default function MainLayout() {
   return (
-    <div id="app-container" className="bg-gray-100 min-h-screen flex">
-      <div id="layout-wrapper" className="flex flex-row flex-1">
-        <Sidebar/>
-        <div id="main-content" className="flex-1 p-4">
-          <Header />
+    // Tambahkan font-['Lato'] di sini untuk apply secara global
+    <div className="flex h-screen w-full bg-[#f8f9fc] font-['Lato'] overflow-hidden text-gray-800">
+      <Sidebar />
 
+      <div className="flex flex-col flex-1 w-full h-full">
+        <Header />
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 md:p-8">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );
