@@ -1,6 +1,6 @@
 [
   {
-    "customerId": "#CUST001",
+    "customerId": "CUST001",
     "name": "Anya Geraldine",
     "phone": "+6281234567801",
     "orderCount": 25,
@@ -8,7 +8,7 @@
     "status": "Active"
   },
   {
-    "customerId": "#CUST002",
+    "customerId": "CUST002",
     "name": "Bella Hadid",
     "phone": "+6281234567802",
     "orderCount": 12,
@@ -16,7 +16,7 @@
     "status": "Active"
   },
   {
-    "customerId": "#CUST003",
+    "customerId": "CUST003",
     "name": "Chelsea Islan",
     "phone": "+6281234567803",
     "orderCount": 5,
@@ -24,7 +24,7 @@
     "status": "Inactive"
   },
   {
-    "customerId": "#CUST004",
+    "customerId": "CUST004",
     "name": "Dian Sastro",
     "phone": "+6281234567804",
     "orderCount": 30,
@@ -32,7 +32,7 @@
     "status": "VIP"
   },
   {
-    "customerId": "#CUST005",
+    "customerId": "CUST005",
     "name": "Emma Watson",
     "phone": "+6281234567805",
     "orderCount": 18,
@@ -40,7 +40,7 @@
     "status": "Active"
   },
   {
-    "customerId": "#CUST006",
+    "customerId": "CUST006",
     "name": "Raisa Andriana",
     "phone": "+6281234567806",
     "orderCount": 40,
@@ -48,7 +48,7 @@
     "status": "VIP"
   },
   {
-    "customerId": "#CUST007",
+    "customerId": "CUST007",
     "name": "Gigi Hadid",
     "phone": "+6281234567807",
     "orderCount": 2,
@@ -56,7 +56,7 @@
     "status": "Inactive"
   },
   {
-    "customerId": "#CUST008",
+    "customerId": "CUST008",
     "name": "Pevita Pearce",
     "phone": "+6281234567808",
     "orderCount": 8,
@@ -64,7 +64,7 @@
     "status": "Active"
   },
   {
-    "customerId": "#CUST009",
+    "customerId": "CUST009",
     "name": "Kendall Jenner",
     "phone": "+6281234567809",
     "orderCount": 22,
@@ -72,7 +72,7 @@
     "status": "Active"
   },
   {
-    "customerId": "#CUST010",
+    "customerId": "CUST010",
     "name": "Zendaya",
     "phone": "+6281234567810",
     "orderCount": 35,
