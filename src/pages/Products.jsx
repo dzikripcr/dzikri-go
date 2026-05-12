@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaPlus, FaSearch, FaFilter, FaEllipsisH, FaTimes } from "react-icons/fa";
-import productsData from "../components/products.json";
+import productsData from "../data/products.json";
 
 export default function Products() {
   const [products, setProducts] = useState(productsData);

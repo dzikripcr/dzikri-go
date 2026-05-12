@@ -5,7 +5,7 @@ import {
   FaTimes,
   FaSearch
 } from "react-icons/fa";
-import ordersData from "../components/order.json";
+import ordersData from "../data/order.json";
 
 export default function Orders() {
   const [orders, setOrders] = useState(ordersData);

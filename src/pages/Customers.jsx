@@ -1,5 +1,5 @@
 import { useState } from "react";
-import customersData from "../components/customer.json"; 
+import customersData from "../data/customer.json"; 
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import CustomersChart from "../components/SalesChart"; // Pastikan path import ini benar
 
