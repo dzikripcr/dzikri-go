@@ -82,7 +82,6 @@ export default function Customers() {
           <thead>
             <tr className="bg-green-50 text-gray-700 text-sm">
                <th className="p-4 font-semibold">No.</th>
-              <th className="p-4 font-semibold">Customer Id</th>
               <th className="p-4 font-semibold">Name</th>
               <th className="p-4 font-semibold">Phone</th>
               <th className="p-4 font-semibold text-center">Order Count</th>
@@ -95,7 +94,6 @@ export default function Customers() {
             {customers.map((customer, index) => (
               <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 text-sm transition-colors">
                <td className="p-4 text-gray-500">{index + 1}</td>
-                <td className="p-4 font-medium text-gray-800">{customer.customerId}</td>
                 <td className="p-4 text-gray-700">{customer.name}</td>
                 <td className="p-4 text-gray-500">{customer.phone}</td>
                 <td className="p-4 text-gray-700 text-center">{customer.orderCount}</td>
