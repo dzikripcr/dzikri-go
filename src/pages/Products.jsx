@@ -10,6 +10,7 @@ import {
   FaTrashAlt,
 } from "react-icons/fa";
 import productsData from "../data/products.json";
+import { Link } from "react-router-dom";
 
 export default function Products() {
   const [products, setProducts] = useState(productsData);
@@ -137,6 +138,12 @@ export default function Products() {
                     <button className="hover:text-red-500 transition-colors">
                       <FaTrashAlt />
                     </button>
+                    <Link
+                      to={`/products/${product.id}`}
+                      className="text-emerald-400 hover:text-emerald-500"
+                    >
+                      <AiFillEye />
+                    </Link>
                   </td>
                 </tr>
               ))}
