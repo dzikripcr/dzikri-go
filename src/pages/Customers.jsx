@@ -81,6 +81,7 @@ export default function Customers() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-green-50 text-gray-700 text-sm">
+               <th className="p-4 font-semibold">No.</th>
               <th className="p-4 font-semibold">Customer Id</th>
               <th className="p-4 font-semibold">Name</th>
               <th className="p-4 font-semibold">Phone</th>
@@ -91,8 +92,9 @@ export default function Customers() {
             </tr>
           </thead>
           <tbody>
-            {customers.map((customer, idx) => (
-              <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50 text-sm transition-colors">
+            {customers.map((customer, index) => (
+              <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 text-sm transition-colors">
+               <td className="p-4 text-gray-500">{index + 1}</td>
                 <td className="p-4 font-medium text-gray-800">{customer.customerId}</td>
                 <td className="p-4 text-gray-700">{customer.name}</td>
                 <td className="p-4 text-gray-500">{customer.phone}</td>
