@@ -3,6 +3,8 @@ import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Badge from "../../components/Badge";
+import HeaderSection from "../../components/HeaderSection";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -26,28 +28,27 @@ export default function Login() {
         password: dataForm.password,
       })
       .then(() => navigate("/"))
-      .catch((err) => setError(err.response?.data?.message || "Authentication failed"))
+      .catch((err) =>
+        setError(err.response?.data?.message || "Authentication failed"),
+      )
       .finally(() => setLoading(false));
   };
 
   return (
     <div className="w-full">
-      <div className="mb-10 text-left">
-        {/* Judul: Poppins, 32px, Medium, #000000 */}
-        <h2 className="font-['Poppins'] text-[32px] font-medium text-[#000000] leading-tight">
-          Welcome back!
-        </h2>
-        {/* Sub-judul: Poppins, 16px, #000000 */}
-        <p className="font-['Poppins'] text-[16px] text-[#000000] mt-2 opacity-70">
-          Enter your Credentials to access your account
-        </p>
-      </div>
+      <HeaderSection
+        title="Welcome back!"
+        subtitle="Enter your Credentials to access your account"
+      />
 
       {error && (
-        <div className="bg-rose-50 mb-6 p-4 text-sm text-rose-700 border border-rose-100 rounded-lg flex items-center">
-          <BsFillExclamationDiamondFill className="text-rose-500 me-3 text-lg flex-shrink-0" />
-          {error}
-        </div>
+        <Badge type="error">
+          <BsFillExclamationDiamondFill className="text-rose-500 text-lg mt-0.5 flex-shrink-0" />
+
+          <div>
+            <p className="mx-2">{error}</p>
+          </div>
+        </Badge>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -72,7 +73,10 @@ export default function Login() {
             <label className="block font-['Poppins'] text-[14px] font-medium text-[#000000]">
               Password
             </label>
-            <Link to="/forgot" className="text-[12px] text-[#0C2A92] hover:underline">
+            <Link
+              to="/forgot"
+              className="text-[12px] text-[#0C2A92] hover:underline"
+            >
               forgot password
             </Link>
           </div>
@@ -87,8 +91,15 @@ export default function Login() {
         </div>
 
         <div className="flex items-center gap-2">
-          <input type="checkbox" id="remember" className="w-4 h-4 rounded border-[#D9D9D9]" />
-          <label htmlFor="remember" className="text-[14px] text-gray-600 font-['Poppins']">
+          <input
+            type="checkbox"
+            id="remember"
+            className="w-4 h-4 rounded border-[#D9D9D9]"
+          />
+          <label
+            htmlFor="remember"
+            className="text-[14px] text-gray-600 font-['Poppins']"
+          >
             Remember for 30 days
           </label>
         </div>
@@ -114,16 +125,32 @@ export default function Login() {
       {/* Social Login */}
       <div className="grid grid-cols-2 gap-4">
         <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2.5 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
-           <img src="https://www.svgrepo.com/show/355037/google.svg" className="w-4" alt="google" /> Sign in with Google
+          <img
+            src="https://www.svgrepo.com/show/355037/google.svg"
+            className="w-4"
+            alt="google"
+          />{" "}
+          Sign in with Google
         </button>
         <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2.5 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
-           <img src="https://www.svgrepo.com/show/445327/apple.svg" className="w-4" alt="apple" /> Sign in with Apple
+          <img
+            src="https://www.svgrepo.com/show/445327/apple.svg"
+            className="w-4"
+            alt="apple"
+          />{" "}
+          Sign in with Apple
         </button>
       </div>
 
       <div className="mt-10 text-center">
         <p className="text-[14px] text-gray-600 font-['Poppins']">
-          Don't have an account? <Link to="/register" className="text-[#000000] font-bold hover:underline">Sign Up</Link>
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-[#000000] font-bold hover:underline"
+          >
+            Sign Up
+          </Link>
         </p>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header"; 
 import Sidebar from "../components/Sidebar"; 
+import Footer from "../components/Footer";
 
 export default function MainLayout() {
   return (
@@ -12,6 +13,8 @@ export default function MainLayout() {
         <Header />
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 md:p-8">
           <Outlet />
+          
+          <Footer/>
         </main>
       </div>
     </div>

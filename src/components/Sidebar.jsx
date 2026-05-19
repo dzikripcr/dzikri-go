@@ -59,7 +59,7 @@ export default function Sidebar() {
 
       {/* Footer Profile Mini */}
       <div id="sidebar-footer" className="mt-auto pt-6 border-t border-gray-100 flex items-center space-x-3">
-        <img src="./img/foto.jpeg" alt="User" className="w-10 h-10 rounded-full object-cover border border-gray-200" />
+        <img src="../img/foto.jpeg" alt="User" className="w-10 h-10 rounded-full object-cover border border-gray-200" />
         <div className="flex flex-col">
           <span className="text-sm font-bold text-gray-900">Dzikri Maulana</span>
           <span className="text-xs text-gray-500">dzikri@gmail.com</span>

@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
+import HeaderSection from "../../components/HeaderSection";
 
 export default function Forgot() {
   return (
     <>
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-serif font-bold text-gray-900 tracking-tight">Reset Password</h2>
-        <p className="text-sm text-gray-500 mt-2">Enter your email to receive a reset link</p>
-      </div>
+      <HeaderSection
+              title="Reset Password"
+              subtitle="Enter your email to receive a reset link"
+            />
 
       <form className="space-y-5">
         <div>

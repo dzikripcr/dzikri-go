@@ -1,6 +1,9 @@
 import { FaSearch } from "react-icons/fa";
 import { FiBell } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
+import Button from "./Button";
+import Avatar from "./Avatar";
+import InputField from "./InputField";
 
 export default function Header() {
   const location = useLocation();
@@ -21,10 +24,9 @@ export default function Header() {
 
       {/* Fitur Kanan */}
       <div className="flex items-center space-x-6">
-        
         {/* Search Bar - Sesuai Gambar */}
         <div className="relative hidden md:block">
-          <input
+          <InputField
             type="text"
             placeholder="Search data, users, or reports"
             className="w-[450px] bg-[#F9FAFB] text-[16px] text-[000000/69] border-[#EAF8E7] border-1 rounded-full py-3 pl-6 pr-12 outline-none focus:ring-2 focus:ring-[#55A67B]/20 transition-all placeholder:text-gray-400"
@@ -41,22 +43,34 @@ export default function Header() {
 
           {/* Theme Toggle Light/Dark - Warna EAF8E7 */}
           <div className="flex items-center bg-[#EAF8E7] p-1.5 rounded-full w-16 cursor-pointer">
-             <div className="bg-white p-1 rounded-full shadow-sm">
-                {/* Icon Sun */}
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-700">
-                  <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                </svg>
-             </div>
+            <div className="bg-white p-1 rounded-full shadow-sm">
+              {/* Icon Sun */}
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-gray-700"
+              >
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            </div>
           </div>
 
           {/* Profile Section */}
-          <div className="cursor-pointer">
-            <img
-              src="./img/foto.jpeg"
-              alt="Profile"
-              className="w-10 h-10 rounded-full border border-gray-200 object-cover"
-            />
-          </div>
+          <Avatar src="../img/foto.jpeg" alt="Profile" />
         </div>
       </div>
     </div>

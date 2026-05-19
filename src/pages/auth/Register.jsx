@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
+import HeaderSection from "../../components/HeaderSection";
 
 export default function Register() {
   return (
     <>
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-serif font-bold text-gray-900 tracking-tight">Create Account ✨</h2>
-        <p className="text-sm text-gray-500 mt-2">Join our exclusive community today</p>
-      </div>
+      <HeaderSection
+              title="Create Account ✨"
+              subtitle="Join our exclusive community today"
+            />
 
       <form className="space-y-4">
         <div>
