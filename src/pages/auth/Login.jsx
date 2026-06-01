@@ -3,8 +3,9 @@ import { BsFillExclamationDiamondFill } from "react-icons/bs";
 import { ImSpinner2 } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Badge from "../../components/Badge";
+
 import HeaderSection from "../../components/HeaderSection";
+import AlertError from "@/components/Alert";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -42,13 +43,7 @@ export default function Login() {
       />
 
       {error && (
-        <Badge type="error">
-          <BsFillExclamationDiamondFill className="text-rose-500 text-lg mt-0.5 flex-shrink-0" />
-
-          <div>
-            <p className="mx-2">{error}</p>
-          </div>
-        </Badge>
+        <AlertError message={error} />
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
