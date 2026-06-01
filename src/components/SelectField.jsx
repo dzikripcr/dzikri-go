@@ -1,10 +1,18 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export default function SelectField({
   label,
-  name,
   value,
   onChange,
   options = [],
-  className,
+  placeholder = "Select option",
+  className = "",
 }) {
   return (
     <div>
@@ -14,21 +22,27 @@ export default function SelectField({
         </label>
       )}
 
-      <select
-        name={name}
+      <Select
         value={value}
-        onChange={onChange}
-        className={className}
+        onValueChange={onChange}
       >
-        {options.map((option, index) => (
-          <option
-            key={index}
-            value={option.value}
-          >
-            {option.label}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger
+          className={`w-full border border-gray-200 text-gray-600 ${className}`}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem
+              key={option.value}
+              value={option.value}
+            >
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

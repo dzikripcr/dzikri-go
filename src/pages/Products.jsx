@@ -55,9 +55,10 @@ export default function Products() {
       product.name.toLowerCase().includes(_searchTerm) ||
       product.category.toLowerCase().includes(_searchTerm);
 
-    const matchesCategory = selectedCategory
-      ? product.category === selectedCategory
-      : true;
+    const matchesCategory =
+      selectedCategory && selectedCategory !== "all"
+        ? product.category === selectedCategory
+        : true;
 
     return matchesSearch && matchesCategory;
   });
@@ -100,13 +101,13 @@ export default function Products() {
               Sorting By <span className="ml-2 text-[10px]">▼</span>{" "}
             </button>
             <SelectField
-              name="selectedCategory"
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={setSelectedCategory}
+              placeholder="All Category"
               options={[
                 {
-                  label: "Filter",
-                  value: "",
+                  label: "All Category",
+                  value: "all",
                 },
 
                 ...allCategories.map((category) => ({
@@ -114,7 +115,7 @@ export default function Products() {
                   value: category,
                 })),
               ]}
-              className="border border-gray-200 text-gray-600 px-4 py-1.5 rounded-md text-sm outline-none focus:border-[#4EA674]/50"
+              className="w-[180px]"
             />
           </div>
         </div>
