@@ -8,35 +8,35 @@ import Card from "../components/Card";
 
 export default function Dashboard() {
   const products = [
-    {
-      id: "#FXZ-4567",
-      name: "Apple iPhone 13",
-      price: 999.0,
-      image:
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&q=80",
-    },
-    {
-      id: "#FXZ-4567",
-      name: "Nike Air Jordan",
-      price: 72.4,
-      image:
-        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80",
-    },
-    {
-      id: "#FXZ-4567",
-      name: "T-shirt",
-      price: 35.4,
-      image:
-        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&q=80",
-    },
-    {
-      id: "#FXZ-4567",
-      name: "Assorted Cross Bag",
-      price: 80.0,
-      image:
-        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80",
-    },
-  ];
+  {
+    id: "PRD001",
+    name: "Elegant Silk Dress",
+    price: 120.0,
+    image:
+      "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&q=80",
+  },
+  {
+    id: "PRD002",
+    name: "Classic Leather Handbag",
+    price: 250.0,
+    image:
+      "https://images.unsplash.com/photo-1629374029669-aab2f060553b?w=600&auto=format&fit=crop&q=60",
+  },
+  {
+    id: "PRD003",
+    name: "Vintage Pearl Necklace",
+    price: 85.5,
+    image:
+      "https://images.unsplash.com/photo-1601762603339-fd61e28b698a?w=600&auto=format&fit=crop&q=60",
+  },
+  {
+    id: "PRD006",
+    name: "Suede Ankle Boots",
+    price: 145.0,
+    image:
+      "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=60",
+  },
+];
 
   return (
     <div className="p-4 md:p-8 bg-gray-50 min-h-screen flex flex-col">
