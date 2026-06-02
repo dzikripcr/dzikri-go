@@ -89,8 +89,7 @@ export default function SalesChart() {
           content={
             <ChartTooltipContent
               formatter={(value) => [
-                `${Number(value).toLocaleString()} Users`,
-                "Customers",
+                `${Number(value).toLocaleString()} Sales`
               ]}
             />
           }

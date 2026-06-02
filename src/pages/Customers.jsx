@@ -1,7 +1,7 @@
 import { useState } from "react";
 import customersData from "../data/customer.json";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import CustomersChart from "../components/SalesChart"; // Pastikan path import ini benar
+import CustomersChart from "../components/CustomersChart"; // Pastikan path import ini benar
 import Card from "../components/Card";
 import Table from "../components/Table";
 import Button from "../components/Button";
@@ -108,7 +108,7 @@ export default function Customers() {
           </div>
 
           {/* Area Chart yang di-render */}
-          <div className="flex-grow w-full min-h-[250px]">
+          <div className="w-full h-[300px]">
             <CustomersChart />
           </div>
         </div>
