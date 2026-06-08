@@ -29,6 +29,9 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  // SORTING JUMLAH STOCK
+  const [sortBy, setSortBy] = useState("id");
+
   /** HANDLE INPUT FORM */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,18 +53,32 @@ export default function Products() {
   const _searchTerm = searchTerm.toLowerCase();
 
   /** FILTER PRODUCT */
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(_searchTerm) ||
-      product.category.toLowerCase().includes(_searchTerm);
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(_searchTerm) ||
+        product.category.toLowerCase().includes(_searchTerm);
 
-    const matchesCategory =
-      selectedCategory && selectedCategory !== "all"
-        ? product.category === selectedCategory
-        : true;
+      const matchesCategory =
+        selectedCategory && selectedCategory !== "all"
+          ? product.category === selectedCategory
+          : true;
 
-    return matchesSearch && matchesCategory;
-  });
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "stock-asc":
+          return a.stock - b.stock;
+
+        case "stock-desc":
+          return b.stock - a.stock;
+
+        case "id":
+        default:
+          return a.id.localeCompare(b.id);
+      }
+    });
 
   /** UNIQUE CATEGORY */
   const allCategories = [
@@ -96,10 +113,25 @@ export default function Products() {
           </div>
 
           <div className="flex space-x-2 w-full md:w-auto">
-            <button className="flex-1 md:flex-none border border-gray-200 text-gray-600 px-4 py-1.5 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors flex justify-center items-center">
-              {" "}
-              Sorting By <span className="ml-2 text-[10px]">▼</span>{" "}
-            </button>
+            <SelectField
+              value={sortBy}
+              onChange={setSortBy}
+              options={[
+                {
+                  label: "Default Stock",
+                  value: "id",
+                },
+                {
+                  label: "Stock: Lowest to Highest",
+                  value: "stock-asc",
+                },
+                {
+                  label: "Stock: Highest to Lowest",
+                  value: "stock-desc",
+                },
+              ]}
+              className="w-[220px]"
+            />
             <SelectField
               value={selectedCategory}
               onChange={setSelectedCategory}
