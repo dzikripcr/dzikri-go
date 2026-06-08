@@ -5,7 +5,7 @@ export default function Table({ headers, children }) {
 
         {/* Table Head */}
         <thead>
-          <tr className="bg-green-50 text-gray-700 text-sm">
+          <tr className="bg-[#EAF8E7] text-gray-700 text-sm">
             {headers.map((header, index) => (
               <th
                 key={index}

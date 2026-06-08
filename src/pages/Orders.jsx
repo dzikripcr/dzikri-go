@@ -135,24 +135,25 @@ export default function Orders() {
       {/* Filters & Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex space-x-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+          <div className="flex space-x-2 bg-[#EAF8E7] overflow-x-auto w-full md:w-auto p-1 rounded-lg">
             <button
               onClick={() => setSelectedStatus("")}
-              className={`px-4 py-1.5 rounded-md text-sm font-semibold whitespace-nowrap ${
+              className={`px-4 py-1.5 rounded-md text-sm font-semibold whitespace-nowrap transition-all ${
                 selectedStatus === ""
-                  ? "bg-green-50 text-green-600"
-                  : "text-gray-500 hover:bg-gray-50"
+                  ? "bg-white text-gray-800 shadow-sm"
+                  : "text-gray-600"
               }`}
             >
-              All Order ({orders.length})
+              All Order{" "}
+              <span className="text-green-600">({orders.length})</span>
             </button>
 
             <button
               onClick={() => setSelectedStatus("Delivered")}
               className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap ${
                 selectedStatus === "Delivered"
-                  ? "bg-green-50 text-green-600"
-                  : "text-gray-500 hover:bg-gray-50"
+                  ? "bg-white text-gray-800 shadow-sm"
+                  : "text-gray-600"
               }`}
             >
               Delivered
@@ -162,8 +163,8 @@ export default function Orders() {
               onClick={() => setSelectedStatus("Pending")}
               className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap ${
                 selectedStatus === "Pending"
-                  ? "bg-green-50 text-green-600"
-                  : "text-gray-500 hover:bg-gray-50"
+                  ? "bg-white text-gray-800 shadow-sm"
+                  : "text-gray-600"
               }`}
             >
               Pending
@@ -173,8 +174,8 @@ export default function Orders() {
               onClick={() => setSelectedStatus("Shipped")}
               className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap ${
                 selectedStatus === "Shipped"
-                  ? "bg-green-50 text-green-600"
-                  : "text-gray-500 hover:bg-gray-50"
+                  ? "bg-white text-gray-800 shadow-sm"
+                  : "text-gray-600"
               }`}
             >
               Shipped
@@ -184,8 +185,8 @@ export default function Orders() {
               onClick={() => setSelectedStatus("Canceled")}
               className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap ${
                 selectedStatus === "Canceled"
-                  ? "bg-green-50 text-green-600"
-                  : "text-gray-500 hover:bg-gray-50"
+                  ? "bg-white text-gray-800 shadow-sm"
+                  : "text-gray-600"
               }`}
             >
               Canceled
