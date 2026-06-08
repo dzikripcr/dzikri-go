@@ -5,11 +5,14 @@ import CustomersChart from "../components/CustomersChart"; // Pastikan path impo
 import Card from "../components/Card";
 import Table from "../components/Table";
 import Button from "../components/Button";
+import CustomerDetail from "../pages/CustomerDetail";
 
 export default function Customers() {
   const [customers] = useState(customersData);
 
   const [selectedPeriod, setSelectedPeriod] = useState("thisWeek");
+
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -72,9 +75,7 @@ export default function Customers() {
             <h3 className="font-bold text-gray-800 text-lg">
               Customer Overview
             </h3>
-            <div
-              className="inline-flex items-center bg-[#EAF8E7] gap-1 p-1 rounded-lg"
-            >
+            <div className="inline-flex items-center bg-[#EAF8E7] gap-1 p-1 rounded-lg">
               <button
                 onClick={() => setSelectedPeriod("thisWeek")}
                 className={`px-4 py-2 rounded-md text-sm transition-all ${
@@ -134,48 +135,74 @@ export default function Customers() {
       </div>
 
       {/* Customer List Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <Table
-          headers={[
-            "No.",
-            "Name",
-            "Phone",
-            "Order Count",
-            "Total Spend",
-            "Status",
-            "Action",
-          ]}
+      <div
+        className={`grid gap-6 ${
+          selectedCustomer ? "grid-cols-1 lg:grid-cols-4" : "grid-cols-1"
+        }`}
+      >
+        <div
+          className={`bg-white rounded-xl shadow-sm border border-[#EAF8E7] overflow-hidden ${
+            selectedCustomer ? "lg:col-span-3" : "w-full"
+          }`}
         >
-          {customers.map((customer, index) => (
-            <tr
-              key={index}
-              className="border-b border-gray-100 hover:bg-gray-50 text-sm transition-colors"
-            >
-              <td className="p-4 text-gray-500">{index + 1}</td>
+          <Table
+            headers={[
+              "No.",
+              "Name",
+              "Phone",
+              "Order Count",
+              "Total Spend",
+              "Status",
+              "Action",
+            ]}
+          >
+            {customers.map((customer, index) => (
+              <tr
+                key={index}
+                onClick={() => setSelectedCustomer(customer)}
+                className={`
+                  cursor-pointer
+                  border-b
+                  border-[#EAF8E7]
+                  hover:bg-[#F7FCF5]
+                  transition-all
+                  ${selectedCustomer?.customerId === customer.customerId ? "bg-[#F7FCF5]" : ""}
+                `}
+              >
+                <td className="p-4 text-gray-500">{index + 1}</td>
 
-              <td className="p-4 text-gray-700">{customer.name}</td>
+                <td className="p-4 text-gray-700">{customer.name}</td>
 
-              <td className="p-4 text-gray-500">{customer.phone}</td>
+                <td className="p-4 text-gray-500">{customer.phone}</td>
 
-              <td className="p-4 text-center">{customer.orderCount}</td>
+                <td className="p-4 text-center">{customer.orderCount}</td>
 
-              <td className="p-4 font-medium text-gray-800">
-                ${customer.totalSpend.toFixed(2)}
-              </td>
+                <td className="p-4 font-medium text-gray-800">
+                  ${customer.totalSpend.toFixed(2)}
+                </td>
 
-              <td className="p-4">{customer.status}</td>
+                <td className="p-4">{customer.status}</td>
 
-              <td className="p-4 flex space-x-3 text-gray-400">
-                <Button type="edit">
-                  <FaEdit />
-                </Button>
-                <Button type="hapus">
-                  <FaTrashAlt />
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </Table>
+                <td className="p-4 flex space-x-3 text-gray-400">
+                  <Button type="edit">
+                    <FaEdit />
+                  </Button>
+                  <Button type="hapus">
+                    <FaTrashAlt />
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </Table>
+        </div>
+        {selectedCustomer && (
+          <div className="lg:col-span-1">
+            <CustomerDetail
+              customer={selectedCustomer}
+              onClose={() => setSelectedCustomer(null)}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
