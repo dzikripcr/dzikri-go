@@ -51,7 +51,7 @@
     "date": "01-05-2026",
     "price": 160.0,
     "payment": "Unpaid",
-    "status": "Cancelled"
+    "status": "Canceled"
   },
   {
     "orderId": "ORD0007",

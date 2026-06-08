@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   FaPlus,
   FaEllipsisV,
@@ -15,7 +15,6 @@ import Table from "../components/Table";
 import InputField from "../components/InputField";
 
 export default function Orders() {
-
   const [orders, setOrders] = useState(ordersData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -40,19 +39,31 @@ export default function Orders() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
 
-  const _searchTerm = searchTerm.toLowerCase();
+  const [filteredOrders, setFilteredOrders] = useState(orders);
 
-  const filteredOrders = orders.filter((order) => {
-    const matchesSearch =
-      order.productName.toLowerCase().includes(_searchTerm) ||
-      order.orderId.toLowerCase().includes(_searchTerm);
+  const searchRef = useRef("");
+  const statusRef = useRef("");
 
-    const matchesStatus = selectedStatus
-      ? order.status === selectedStatus
-      : true;
+  useEffect(() => {
+    searchRef.current = searchTerm;
+    statusRef.current = selectedStatus;
 
-    return matchesSearch && matchesStatus;
-  });
+    const filtered = orders.filter((order) => {
+      const matchesSearch =
+        order.productName
+          .toLowerCase()
+          .includes(searchRef.current.toLowerCase()) ||
+        order.orderId.toLowerCase().includes(searchRef.current.toLowerCase());
+
+      const matchesStatus = statusRef.current
+        ? order.status === statusRef.current
+        : true;
+
+      return matchesSearch && matchesStatus;
+    });
+
+    setFilteredOrders(filtered);
+  }, [searchTerm, selectedStatus, orders]);
 
   const allStatus = [...new Set(orders.map((order) => order.status))];
 
@@ -125,19 +136,58 @@ export default function Orders() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex space-x-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
-            <button className="bg-green-50 text-green-600 px-4 py-1.5 rounded-md text-sm font-semibold whitespace-nowrap">
-              All order ({orders.length})
+            <button
+              onClick={() => setSelectedStatus("")}
+              className={`px-4 py-1.5 rounded-md text-sm font-semibold whitespace-nowrap ${
+                selectedStatus === ""
+                  ? "bg-green-50 text-green-600"
+                  : "text-gray-500 hover:bg-gray-50"
+              }`}
+            >
+              All Order ({orders.length})
             </button>
-            <button className="text-gray-500 hover:bg-gray-50 px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors">
+
+            <button
+              onClick={() => setSelectedStatus("Delivered")}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap ${
+                selectedStatus === "Delivered"
+                  ? "bg-green-50 text-green-600"
+                  : "text-gray-500 hover:bg-gray-50"
+              }`}
+            >
               Delivered
             </button>
-            <button className="text-gray-500 hover:bg-gray-50 px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors">
+
+            <button
+              onClick={() => setSelectedStatus("Pending")}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap ${
+                selectedStatus === "Pending"
+                  ? "bg-green-50 text-green-600"
+                  : "text-gray-500 hover:bg-gray-50"
+              }`}
+            >
               Pending
             </button>
-            <button className="text-gray-500 hover:bg-gray-50 px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors">
+
+            <button
+              onClick={() => setSelectedStatus("Shipped")}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap ${
+                selectedStatus === "Shipped"
+                  ? "bg-green-50 text-green-600"
+                  : "text-gray-500 hover:bg-gray-50"
+              }`}
+            >
               Shipped
             </button>
-            <button className="text-gray-500 hover:bg-gray-50 px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors">
+
+            <button
+              onClick={() => setSelectedStatus("Canceled")}
+              className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap ${
+                selectedStatus === "Canceled"
+                  ? "bg-green-50 text-green-600"
+                  : "text-gray-500 hover:bg-gray-50"
+              }`}
+            >
               Canceled
             </button>
           </div>

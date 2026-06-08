@@ -5,7 +5,7 @@
     "phone": "+6281234567801",
     "orderCount": 25,
     "totalSpend": 3450.0,
-    "status": "Active"
+    "status": "Inactive"
   },
   {
     "customerId": "CUST002",
@@ -13,7 +13,7 @@
     "phone": "+6281234567802",
     "orderCount": 12,
     "totalSpend": 1850.0,
-    "status": "Active"
+    "status": "Inactive"
   },
   {
     "customerId": "CUST003",
@@ -29,7 +29,7 @@
     "phone": "+6281234567804",
     "orderCount": 30,
     "totalSpend": 4600.0,
-    "status": "VIP"
+    "status": "Inactive"
   },
   {
     "customerId": "CUST005",
@@ -45,7 +45,7 @@
     "phone": "+6281234567806",
     "orderCount": 40,
     "totalSpend": 5200.0,
-    "status": "VIP"
+    "status": "Inactive"
   },
   {
     "customerId": "CUST007",
@@ -61,7 +61,7 @@
     "phone": "+6281234567808",
     "orderCount": 8,
     "totalSpend": 850.0,
-    "status": "Active"
+    "status": "Inactive"
   },
   {
     "customerId": "CUST009",
@@ -77,6 +77,6 @@
     "phone": "+6281234567810",
     "orderCount": 35,
     "totalSpend": 4800.0,
-    "status": "VIP"
+    "status": "Inactive"
   }
 ]
