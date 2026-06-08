@@ -9,6 +9,8 @@ import Button from "../components/Button";
 export default function Customers() {
   const [customers] = useState(customersData);
 
+  const [selectedPeriod, setSelectedPeriod] = useState("thisWeek");
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -70,11 +72,28 @@ export default function Customers() {
             <h3 className="font-bold text-gray-800 text-lg">
               Customer Overview
             </h3>
-            <div className="flex space-x-2">
-              <button className="px-3 py-1 bg-green-50 text-green-600 rounded-md text-sm font-semibold">
+            <div
+              className="inline-flex items-center bg-[#EAF8E7] gap-1 p-1 rounded-lg"
+            >
+              <button
+                onClick={() => setSelectedPeriod("thisWeek")}
+                className={`px-4 py-2 rounded-md text-sm transition-all ${
+                  selectedPeriod === "thisWeek"
+                    ? "bg-white text-[#4EA674] shadow-sm font-medium"
+                    : "text-gray-600"
+                }`}
+              >
                 This week
               </button>
-              <button className="px-3 py-1 text-gray-500 rounded-md text-sm hover:bg-gray-50">
+
+              <button
+                onClick={() => setSelectedPeriod("lastWeek")}
+                className={`px-4 py-2 rounded-md text-sm transition-all ${
+                  selectedPeriod === "lastWeek"
+                    ? "bg-white text-[#4EA674] shadow-sm font-medium"
+                    : "text-gray-600"
+                }`}
+              >
                 Last week
               </button>
             </div>
@@ -108,7 +127,7 @@ export default function Customers() {
           </div>
 
           {/* Area Chart yang di-render */}
-          <div className="w-full h-[300px]">
+          <div className="w-full h-[280px]">
             <CustomersChart />
           </div>
         </div>
