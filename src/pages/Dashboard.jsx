@@ -41,7 +41,6 @@ export default function Dashboard() {
   return (
     <div className="p-4 md:p-8 bg-gray-50 min-h-screen flex flex-col">
       {/* Top Stat Cards */}
-      {/* Top Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* Total Sales */}
         <Card>

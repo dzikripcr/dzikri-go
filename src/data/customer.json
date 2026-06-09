@@ -12,7 +12,12 @@
     "joinDate": "2025-01-15",
     "lastPurchase": "2025-06-08",
     "completedOrders": 20,
-    "cancelledOrders": 5
+    "cancelledOrders": 5,
+    "levelMembership": "Silver",
+    "transactionId": "TRX101",
+    "purchasedProduct": "Silk Dress",
+    "userSource": "Instagram Ads",
+    "feedback": "5/5 - Sangat bagus!"
   },
   {
     "customerId": "CUST002",
@@ -27,7 +32,12 @@
     "joinDate": "2025-02-10",
     "lastPurchase": "2025-06-05",
     "completedOrders": 10,
-    "cancelledOrders": 2
+    "cancelledOrders": 2,
+    "levelMembership": "Silver",
+    "transactionId": "TRX089",
+    "purchasedProduct": "Leather Handbag",
+    "userSource": "TikTok Shop",
+    "feedback": "4/5 - Pengiriman agak lama"
   },
   {
     "customerId": "CUST003",
@@ -42,7 +52,12 @@
     "joinDate": "2025-03-01",
     "lastPurchase": "2025-05-20",
     "completedOrders": 4,
-    "cancelledOrders": 1
+    "cancelledOrders": 1,
+    "levelMembership": "Platinum",
+    "transactionId": "TRX045",
+    "purchasedProduct": "Basic Cotton Tee",
+    "userSource": "Organic Search",
+    "feedback": "4/5 - Nyaman dipakai"
   },
   {
     "customerId": "CUST004",
@@ -57,14 +72,19 @@
     "joinDate": "2024-12-12",
     "lastPurchase": "2025-06-09",
     "completedOrders": 28,
-    "cancelledOrders": 2
+    "cancelledOrders": 2,
+    "levelMembership": "Gold",
+    "transactionId": "TRX112",
+    "purchasedProduct": "Cashmere Sweater",
+    "userSource": "Referral Teman",
+    "feedback": "5/5 - Kualitas sangat baik"
   },
   {
     "customerId": "CUST005",
     "name": "Emma Watson",
     "email": "emma@email.com",
     "phone": "+6281234567805",
-    "address": "Bali, Indonesia",
+    "address": "Pekanbaru, Indonesia",
     "profileImage": "https://i.pravatar.cc/300?img=5",
     "orderCount": 18,
     "totalSpend": 2100,
@@ -72,7 +92,12 @@
     "joinDate": "2025-01-28",
     "lastPurchase": "2025-06-03",
     "completedOrders": 15,
-    "cancelledOrders": 3
+    "cancelledOrders": 3,
+    "levelMembership": "Silver",
+    "transactionId": "TRX130",
+    "purchasedProduct": "iPhone Leather Case",
+    "userSource": "Email Newsletter",
+    "feedback": "3/5 - Warnanya sedikit beda dengan foto"
   },
   {
     "customerId": "CUST006",
@@ -87,7 +112,12 @@
     "joinDate": "2024-11-20",
     "lastPurchase": "2025-06-09",
     "completedOrders": 35,
-    "cancelledOrders": 5
+    "cancelledOrders": 5,
+    "levelMembership": "Gold",
+    "transactionId": "TRX215",
+    "purchasedProduct": "Cat Pattern Tote Bag",
+    "userSource": "Instagram Ads",
+    "feedback": "5/5 - Desainnya sangat lucu!"
   },
   {
     "customerId": "CUST007",
@@ -102,7 +132,12 @@
     "joinDate": "2025-04-11",
     "lastPurchase": "2025-04-20",
     "completedOrders": 2,
-    "cancelledOrders": 0
+    "cancelledOrders": 0,
+    "levelMembership": "Silver",
+    "transactionId": "TRX155",
+    "purchasedProduct": "High-waisted Jeans",
+    "userSource": "TikTok Shop",
+    "feedback": "5/5 - Fitting sempurna"
   },
   {
     "customerId": "CUST008",
@@ -117,7 +152,12 @@
     "joinDate": "2025-02-17",
     "lastPurchase": "2025-06-01",
     "completedOrders": 7,
-    "cancelledOrders": 1
+    "cancelledOrders": 1,
+    "levelMembership": "Gold",
+    "transactionId": "TRX198",
+    "purchasedProduct": "Ankle Boots",
+    "userSource": "Instagram Ads",
+    "feedback": "4/5 - Nyaman dipakai seharian"
   },
   {
     "customerId": "CUST009",
@@ -132,7 +172,12 @@
     "joinDate": "2025-01-03",
     "lastPurchase": "2025-06-08",
     "completedOrders": 20,
-    "cancelledOrders": 2
+    "cancelledOrders": 2,
+    "levelMembership": "Platinum",
+    "transactionId": "TRX210",
+    "purchasedProduct": "Classic Trench Coat",
+    "userSource": "Google Search",
+    "feedback": "5/5 - Sangat elegan dan bahannya tebal"
   },
   {
     "customerId": "CUST010",
@@ -147,6 +192,11 @@
     "joinDate": "2024-10-15",
     "lastPurchase": "2025-06-07",
     "completedOrders": 32,
-    "cancelledOrders": 3
+    "cancelledOrders": 3,
+    "levelMembership": "Platinum",
+    "transactionId": "TRX250",
+    "purchasedProduct": "Luxury Velvet Blazer",
+    "userSource": "Facebook Ads",
+    "feedback": "5/5 - Kualitas premium, sangat memuaskan!"
   }
 ]

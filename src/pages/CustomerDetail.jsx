@@ -9,7 +9,7 @@ import {
 export default function CustomerDetail({ customer, onClose }) {
   if (!customer) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-[#EAF8E7] p-5">
+      <div className="bg-white rounded-xl shadow-sm border p-5">
         <p className="text-center text-gray-400">
           Select a customer to view details
         </p>
@@ -18,7 +18,7 @@ export default function CustomerDetail({ customer, onClose }) {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-[#EAF8E7] p-5">
+    <div className="bg-white rounded-xl shadow-sm border p-5">
       <div className="flex justify-end">
         <button onClick={onClose} className="text-gray-400 hover:text-red-500">
           <FaTimes />
@@ -29,7 +29,7 @@ export default function CustomerDetail({ customer, onClose }) {
         <img
           src={customer.profileImage}
           alt={customer.name}
-          className="w-24 h-24 rounded-full object-cover border-4 border-[#EAF8E7]"
+          className="w-24 h-24 rounded-full object-cover border-4"
         />
 
         <h3 className="mt-4 text-lg font-bold text-gray-800">
@@ -42,28 +42,15 @@ export default function CustomerDetail({ customer, onClose }) {
       {/* Information */}
       <div className="mt-6 space-y-4">
         <div>
-          <p className="text-xs text-gray-400 mb-1">Customer ID</p>
+          <p className="text-xs text-gray-400 mb-1">Customer Info</p>
 
-          <div className="flex items-center gap-2 border border-[#EAF8E7] rounded-lg p-3">
-            <FaUser className="text-gray-400" />
-            <span>{customer.customerId}</span>
-          </div>
-        </div>
-
-        <div>
-          <p className="text-xs text-gray-400 mb-1">Phone</p>
-
-          <div className="flex items-center gap-2 border border-[#EAF8E7] rounded-lg p-3">
-            <FaPhone className="text-gray-400" />
+          <div className="flex items-center gap-2 border rounded-lg p-2 text-sm font-['lato'] mb-2">
+            <FaPhone className="text-black" />
             <span>{customer.phone}</span>
           </div>
-        </div>
 
-        <div>
-          <p className="text-xs text-gray-400 mb-1">Address</p>
-
-          <div className="flex items-center gap-2 border border-[#EAF8E7] rounded-lg p-3">
-            <FaMapMarkerAlt className="text-gray-400" />
+          <div className="flex items-center gap-2 border rounded-lg p-2 text-sm font-['Lato']">
+            <FaMapMarkerAlt className="text-black" />
             <span>{customer.address}</span>
           </div>
         </div>
@@ -71,7 +58,7 @@ export default function CustomerDetail({ customer, onClose }) {
 
       {/* Activity */}
       <div className="mt-6">
-        <h4 className="text-sm font-semibold text-gray-700 mb-2">Activity</h4>
+        <h4 className="text-xs text-gray-400 mb-1">Activity</h4>
 
         <p className="text-sm text-gray-500">
           Registration: {customer.joinDate}
@@ -105,18 +92,18 @@ export default function CustomerDetail({ customer, onClose }) {
 
       {/* Order Summary */}
       <div className="mt-6">
-        <h4 className="text-sm font-semibold text-gray-700 mb-3">
+        <h4 className="text-xs text-gray-400 mb-1">
           Order Overview
         </h4>
 
         <div className="grid grid-cols-3 gap-2">
-          <div className="border border-[#EAF8E7] rounded-lg p-3 text-center">
+          <div className="border rounded-lg p-3 text-center">
             <p className="text-lg font-bold">{customer.orderCount}</p>
 
             <p className="text-xs text-gray-500">Total</p>
           </div>
 
-          <div className="border border-[#EAF8E7] rounded-lg p-3 text-center">
+          <div className="border rounded-lg p-3 text-center">
             <p className="text-lg font-bold text-green-600">
               {customer.completedOrders}
             </p>
@@ -124,7 +111,7 @@ export default function CustomerDetail({ customer, onClose }) {
             <p className="text-xs text-gray-500">Completed</p>
           </div>
 
-          <div className="border border-[#EAF8E7] rounded-lg p-3 text-center">
+          <div className="border rounded-lg p-3 text-center">
             <p className="text-lg font-bold text-red-500">
               {customer.cancelledOrders}
             </p>

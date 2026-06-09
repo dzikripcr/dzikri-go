@@ -141,13 +141,13 @@ export default function Customers() {
         }`}
       >
         <div
-          className={`bg-white rounded-xl shadow-sm border border-[#EAF8E7] overflow-hidden ${
+          className={`bg-white rounded-xl shadow-sm border overflow-hidden ${
             selectedCustomer ? "lg:col-span-3" : "w-full"
           }`}
         >
           <Table
             headers={[
-              "No.",
+              "Customer ID",
               "Name",
               "Phone",
               "Order Count",
@@ -169,7 +169,8 @@ export default function Customers() {
                   ${selectedCustomer?.customerId === customer.customerId ? "bg-[#F7FCF5]" : ""}
                 `}
               >
-                <td className="p-4 text-gray-500">{index + 1}</td>
+
+                <td className="p-4 text-gray-500 font-medium">{customer.customerId}</td>
 
                 <td className="p-4 text-gray-700">{customer.name}</td>
 
@@ -181,8 +182,27 @@ export default function Customers() {
                   ${customer.totalSpend.toFixed(2)}
                 </td>
 
-                <td className="p-4">{customer.status}</td>
-
+                <td className="p-4">
+                  <span
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-sm font-medium 
+                      ${customer.status === "Active" ? " text-[#4EA674]" : 
+                        customer.status === "Inactive" ? "text-red-500" : 
+                        customer.status === "VIP" ? "text-yellow-600" : 
+                        "bg-gray-100 text-gray-600"}`
+                    }
+                  >
+                    {/* Indikator Titik (Dot) */}
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full 
+                        ${customer.status === "Active" ? "bg-[#4EA674]" : 
+                          customer.status === "Inactive" ? "bg-red-500" : 
+                          customer.status === "VIP" ? "bg-yellow-500" : 
+                          "bg-gray-500"}`
+                      }
+                    ></span>
+                    {customer.status}
+                  </span>
+                </td>
                 <td className="p-4 flex space-x-3 text-gray-400">
                   <Button type="edit">
                     <FaEdit />
