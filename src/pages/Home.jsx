@@ -17,6 +17,40 @@ import { FaStar, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
 import { BsCheckCircleFill } from "react-icons/bs";
 
+// ✅ POSISI DIPERBAIKI: Komponen Angka Animasi (Odometer) dipindah ke LUAR komponen utama
+// Ini mencegah animasi ke-reset saat parent component (Home) mengalami re-render karena scroll.
+const AnimatedCounter = ({ end, duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    let startTimestamp = null;
+    let animationFrameId = null;
+
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+
+      // Efek Easing (EaseOutExpo)
+      const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+
+      setCount(Math.floor(easeOut * end));
+
+      if (progress < 1) {
+        animationFrameId = window.requestAnimationFrame(step);
+      }
+    };
+
+    animationFrameId = window.requestAnimationFrame(step);
+
+    // Cleanup untuk membatalkan animasi jika komponen unmount sebelum selesai
+    return () => {
+      if (animationFrameId) window.cancelAnimationFrame(animationFrameId);
+    };
+  }, [end, duration]);
+
+  return <>{count.toLocaleString()}</>;
+};
+
 export default function Home() {
   // State untuk kontrol buka/tutup pop-up notifikasi
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -42,32 +76,6 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Komponen Angka Animasi (Odometer)
-  const AnimatedCounter = ({ end, duration = 2000 }) => {
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-      let startTimestamp = null;
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-
-        // Efek Easing (EaseOutExpo)
-        const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-
-        setCount(Math.floor(easeOut * end));
-
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        }
-      };
-
-      window.requestAnimationFrame(step);
-    }, [end, duration]);
-
-    return <>{count.toLocaleString()}</>;
-  };
 
   // Data Notifikasi Terintegrasi
   const notifications = [
@@ -488,10 +496,8 @@ export default function Home() {
             .animate-marquee-review {
               display: flex;
               width: max-content;
-              /* Durasi 40s untuk efek berjalan elegan dan santai */
               animation: marquee-review 40s linear infinite;
             }
-            /* Berhenti saat kursor diarahkan ke area ulasan */
             .review-container:hover .animate-marquee-review {
               animation-play-state: paused;
             }
@@ -502,7 +508,6 @@ export default function Home() {
           <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-gray-900">
             Our Happy Customers
           </h3>
-          {/* Elemen dekoratif bintang */}
           <div className="hidden md:flex gap-2 opacity-50">
             <FaStar className="text-gray-300 text-3xl" />
             <FaStar className="text-gray-300 text-4xl -mt-4" />
@@ -512,7 +517,6 @@ export default function Home() {
 
         {/* MARQUEE WRAPPER */}
         <div className="relative w-full review-container overflow-hidden pb-10">
-          {/* Gradient Blur di Kiri & Kanan untuk Efek Mewah (Fade out) */}
           <div className="absolute top-0 left-0 w-16 md:w-48 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
           <div className="absolute top-0 right-0 w-16 md:w-48 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
 
@@ -524,7 +528,6 @@ export default function Home() {
                     key={`${testi.id}-${arrayIndex}-${index}`}
                     className="w-[320px] md:w-[420px] flex-shrink-0 bg-white border border-gray-100 rounded-[32px] p-8 md:p-10 transition-all duration-500 ease-out hover:-translate-y-3 hover:border-gray-200 hover:shadow-[0_20px_50px_rgb(0,0,0,0.06)] group relative overflow-hidden"
                   >
-                    {/* Aksen kilau (shimmer) saat di hover */}
                     <div className="absolute top-0 left-[-100%] w-[50%] h-full bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-20deg] group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none z-0"></div>
 
                     <div className="relative z-10">
@@ -553,7 +556,6 @@ export default function Home() {
         {/* BUTTON VIEW ALL REVIEWS */}
         <div className="flex justify-center mt-12 relative z-20 px-8">
           <button className="group relative px-10 py-4 bg-transparent text-gray-900 font-bold text-lg rounded-full overflow-hidden border-2 border-gray-900 transition-all duration-300 cursor-pointer">
-            {/* Latar belakang hitam yang muncul dari bawah saat di-hover */}
             <div className="absolute inset-0 bg-gray-900 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
             <span className="relative z-10 flex items-center gap-3 group-hover:text-white transition-colors duration-300">
               View All Customer Reviews
@@ -650,84 +652,7 @@ export default function Home() {
                   Delivery Details
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Terms & Conditions
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Privacy Policy
-                </a>
-              </li>
             </ul>
-          </div>
-          <div>
-            <h4 className="font-bold tracking-widest mb-6 uppercase">FAQ</h4>
-            <ul className="space-y-4 text-sm text-gray-500">
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Account
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Manage Deliveries
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Orders
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Payments
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold tracking-widest mb-6 uppercase">
-              RESOURCES
-            </h4>
-            <ul className="space-y-4 text-sm text-gray-500">
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Free eBooks
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Development Tutorial
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  How to - Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Youtube Playlist
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-          <p>Boutique © 2025/2026, All Rights Reserved</p>
-          <div className="flex space-x-3 mt-4 md:mt-0">
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">
-              VISA
-            </div>
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
-              Mastercard
-            </div>
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
-              PayPal
-            </div>
           </div>
         </div>
       </footer>
