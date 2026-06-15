@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // Mengimpor data JSON produk
 import productsData from "../data/products.json";
 
@@ -8,7 +8,6 @@ import {
   FiShoppingCart,
   FiUser,
   FiChevronDown,
-  FiX,
   FiArrowLeft,
   FiArrowRight,
   FiMail,
@@ -22,20 +21,39 @@ export default function Home() {
   // State untuk kontrol buka/tutup pop-up notifikasi
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
+  // State untuk mendeteksi apakah layar sedang di-scroll
+  const [isScrolled, setIsScrolled] = useState(false);
+
   // Membagi data produk untuk 2 section langsung dari data yang di-import
   const newArrivals = productsData.slice(0, 4);
   const topSelling = productsData.slice(4, 8);
 
+  // Fungsi untuk memantau pergerakan Scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      // Jika scroll lebih dari 20px, ubah state isScrolled menjadi true
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Komponen Angka Animasi (Odometer)
   const AnimatedCounter = ({ end, duration = 2000 }) => {
     const [count, setCount] = useState(0);
 
-    React.useEffect(() => {
+    useEffect(() => {
       let startTimestamp = null;
       const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp;
         const progress = Math.min((timestamp - startTimestamp) / duration, 1);
 
-        // Efek Easing (EaseOutExpo) agar melambat di akhir (lebih elegan)
+        // Efek Easing (EaseOutExpo)
         const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
 
         setCount(Math.floor(easeOut * end));
@@ -45,15 +63,13 @@ export default function Home() {
         }
       };
 
-      // Memulai animasi
       window.requestAnimationFrame(step);
     }, [end, duration]);
 
-    // .toLocaleString() otomatis menambahkan titik/koma pemisah ribuan (misal: 30,000)
     return <>{count.toLocaleString()}</>;
   };
 
-  // Data Notifikasi Terintegrasi (Marketing Automation CRM & Logistik)
+  // Data Notifikasi Terintegrasi
   const notifications = [
     {
       id: 1,
@@ -97,7 +113,6 @@ export default function Home() {
     },
   ];
 
-  // Menghitung jumlah notifikasi yang belum dibaca secara dinamis
   const unreadCount = notifications.filter((n) => n.unread).length;
 
   const testimonials = [
@@ -120,11 +135,22 @@ export default function Home() {
 
   return (
     <div className="font-sans text-gray-900 bg-white">
-      {/* NAVBAR */}
-      <header className="flex items-center justify-between px-8 py-5 border-b relative z-50 bg-white">
-        <h1 className="text-3xl font-black uppercase tracking-tighter cursor-pointer">
+      {/* SMART STICKY NAVBAR DENGAN EFEK GLASSMORPHISM */}
+      <header
+        className={`sticky top-0 z-[100] transition-all duration-500 ease-in-out flex items-center justify-between px-8 ${
+          isScrolled
+            ? "py-3 bg-white/60 backdrop-blur-xl backdrop-saturate-150 shadow-sm border-b border-white/50"
+            : "py-5 bg-white border-b border-gray-200"
+        }`}
+      >
+        <h1
+          className={`font-black uppercase tracking-tighter cursor-pointer transition-all duration-500 ${
+            isScrolled ? "text-2xl" : "text-3xl"
+          }`}
+        >
           Boutique
         </h1>
+
         <nav className="hidden md:flex space-x-6 font-medium">
           <a href="#" className="hover:text-gray-600 flex items-center gap-1">
             Shop <FiChevronDown className="text-sm mt-0.5" />
@@ -139,26 +165,31 @@ export default function Home() {
             Brands
           </a>
         </nav>
+
         <div className="flex items-center space-x-5 w-full md:w-auto mt-4 md:mt-0 justify-end">
-          {/* SEARCH BOX DENGAN EFEK TRANSISI PREMIUM & INTERAKTIF */}
-          <div className="hidden lg:flex items-center bg-[#F0F0F0] px-4 py-2.5 rounded-full w-80 border border-transparent transition-all duration-500 ease-in-out group focus-within:w-[440px] focus-within:bg-white focus-within:border-gray-200 focus-within:shadow-xl focus-within:shadow-black/5">
-            <FiSearch className="text-gray-400 mr-2 text-xl transition-colors duration-300 group-focus-within:text-black" />
+          {/* SEARCH BOX */}
+          <div
+            className={`hidden lg:flex items-center px-4 py-2.5 rounded-full w-80 border transition-all duration-500 ease-in-out group focus-within:w-[440px] focus-within:bg-white focus-within:border-gray-200 focus-within:shadow-xl focus-within:shadow-black/5 ${
+              isScrolled
+                ? "bg-white/40 border-white/30 backdrop-blur-md"
+                : "bg-[#F0F0F0] border-transparent"
+            }`}
+          >
+            <FiSearch className="text-gray-500 mr-2 text-xl transition-colors duration-300 group-focus-within:text-black" />
             <input
               type="text"
               placeholder="Search for products..."
-              className="bg-transparent outline-none w-full text-sm text-gray-900 placeholder-gray-400"
+              className="bg-transparent outline-none w-full text-sm text-gray-900 placeholder-gray-500"
             />
           </div>
 
           {/* AREA NOTIFIKASI CRM */}
           <div className="relative">
-            {/* Tombol Lonceng */}
             <button
               onClick={() => setIsNotifOpen(!isNotifOpen)}
               className="text-2xl hover:text-gray-600 transition cursor-pointer relative flex items-center justify-center p-1 mt-1 outline-none"
             >
               <FiBell />
-              {/* Badge Angka Notif Unread */}
               {unreadCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold border-2 border-white">
                   {unreadCount}
@@ -166,10 +197,8 @@ export default function Home() {
               )}
             </button>
 
-            {/* Dropdown Box Notifikasi */}
             {isNotifOpen && (
               <div className="absolute right-[-40px] md:right-0 mt-4 w-[320px] md:w-[360px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden transition-all duration-300">
-                {/* Header Dropdown */}
                 <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                   <h3 className="font-extrabold text-base tracking-tight">
                     Notifikasi Baru
@@ -178,15 +207,11 @@ export default function Home() {
                     Tandai semua dibaca
                   </span>
                 </div>
-
-                {/* Isi List Notifikasi */}
                 <div className="max-h-[350px] overflow-y-auto">
                   {notifications.map((notif) => (
                     <div
                       key={notif.id}
-                      className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition duration-200 flex flex-col gap-1 ${
-                        notif.unread ? "bg-blue-50/40" : ""
-                      }`}
+                      className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition duration-200 flex flex-col gap-1 ${notif.unread ? "bg-blue-50/40" : ""}`}
                     >
                       <div className="flex items-start justify-between">
                         <h4 className="text-sm font-bold text-gray-900 leading-tight">
@@ -205,8 +230,6 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-
-                {/* Footer Dropdown */}
                 <div className="p-3 text-center border-t border-gray-100 hover:bg-black hover:text-white cursor-pointer transition-colors duration-300">
                   <span className="text-sm font-bold">
                     Lihat Semua Notifikasi
@@ -216,7 +239,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* Keranjang & User */}
           <button className="text-2xl hover:text-gray-600 transition cursor-pointer">
             <FiShoppingCart />
           </button>
@@ -282,7 +304,6 @@ export default function Home() {
 
       {/* BRANDS BANNER (INFINITE SCROLL ANIMATION) */}
       <div className="bg-black py-8 overflow-hidden relative flex items-center group">
-        {/* CSS Injeksi untuk Keyframes agar plug-and-play tanpa mengubah tailwind.config.js */}
         <style>
           {`
             @keyframes scroll {
@@ -294,23 +315,15 @@ export default function Home() {
               width: max-content;
               animation: scroll 35s linear infinite;
             }
-            /* Efek berhenti saat kursor di-hover ke area banner */
             .group:hover .animate-scroll {
               animation-play-state: paused;
             }
           `}
         </style>
-
-        {/* Efek Fade / Gradient Bayangan di Kiri dan Kanan */}
         <div className="absolute top-0 left-0 w-16 md:w-40 h-full bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
         <div className="absolute top-0 right-0 w-16 md:w-40 h-full bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
 
-        {/* Container yang Bergerak */}
         <div className="animate-scroll flex items-center gap-12 md:gap-24 px-6">
-          {/* Kita me-render list brand 2 KALI (menggunakan [...Array(2)]) 
-            agar saat list pertama mau habis, list kedua sudah menyambung.
-            Karena transform mentok di -50%, ini akan menciptakan ilusi loop tanpa batas.
-          */}
           {[...Array(2)].map((_, i) => (
             <React.Fragment key={i}>
               {[
@@ -326,8 +339,6 @@ export default function Home() {
                 "BALENCIAGA",
                 "LOUIS VUITTON",
                 "ARMANI",
-                "YVES SAINT LAURENT",
-                "FENDI",
               ].map((brand, index) => (
                 <span
                   key={`${brand}-${i}-${index}`}
@@ -353,7 +364,6 @@ export default function Home() {
           <h3 className="text-4xl font-black text-center mb-12 uppercase tracking-tight">
             {section.title}
           </h3>
-
           {!section.data || section.data.length === 0 ? (
             <p className="text-center text-gray-500">
               Tidak ada produk tersedia.
@@ -399,7 +409,6 @@ export default function Home() {
               ))}
             </div>
           )}
-
           <div className="text-center mt-10">
             <button className="border border-gray-200 bg-white cursor-pointer text-black px-16 py-3 rounded-full font-medium transition-all duration-300 ease-in-out hover:bg-black hover:text-white hover:border-black hover:shadow-lg w-full md:w-auto">
               View All
@@ -414,7 +423,6 @@ export default function Home() {
           <h3 className="text-4xl font-black text-center mb-12 uppercase tracking-tight">
             BROWSE BY DRESS STYLE
           </h3>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[600px]">
             {/* 1. CASUAL CARD */}
             <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto hover:shadow-2xl transition-all duration-300 cursor-pointer">
@@ -428,7 +436,6 @@ export default function Home() {
                 Casual
               </span>
             </div>
-
             {/* 2. FORMAL CARD */}
             <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto md:col-span-2 hover:shadow-2xl transition-all duration-300 cursor-pointer">
               <img
@@ -441,7 +448,6 @@ export default function Home() {
                 Formal
               </span>
             </div>
-
             {/* 3. PARTY CARD */}
             <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto md:col-span-2 hover:shadow-2xl transition-all duration-300 cursor-pointer">
               <img
@@ -454,7 +460,6 @@ export default function Home() {
                 Party
               </span>
             </div>
-
             {/* 4. GYM CARD */}
             <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto hover:shadow-2xl transition-all duration-300 cursor-pointer">
               <img
@@ -500,7 +505,7 @@ export default function Home() {
                 <FaStar />
               </div>
               <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
-                {testi.name}
+                {testi.name}{" "}
                 <BsCheckCircleFill className="text-green-500 text-base" />
               </h4>
               <p className="text-gray-600 leading-relaxed text-sm">
@@ -513,14 +518,12 @@ export default function Home() {
 
       {/* FOOTER & NEWSLETTER */}
       <footer className="bg-[#F0F0F0] mt-40 relative pt-32 pb-20 px-8">
-        {/* Newsletter Banner */}
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-7xl bg-black rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row justify-between items-center shadow-2xl">
           <h2 className="text-3xl md:text-4xl text-white font-black leading-tight mb-8 md:mb-0 md:w-1/2 uppercase tracking-tight">
             STAY UPTO DATE ABOUT
             <br />
             OUR LATEST OFFERS
           </h2>
-
           <div className="flex flex-col space-y-4 w-full md:w-[40%]">
             <div className="relative group">
               <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl group-focus-within:text-black transition-colors duration-300" />
@@ -530,20 +533,12 @@ export default function Home() {
                 className="pl-12 pr-6 py-4 rounded-full w-full outline-none text-black bg-white focus:ring-4 focus:ring-gray-300/50 transition-all duration-300"
               />
             </div>
-
-            <button
-              className="bg-white text-black font-extrabold px-6 py-4 rounded-full w-full 
-                         transition-all duration-300 ease-out relative outline-none
-                         hover:bg-white hover:scale-105 
-                         hover:shadow-[0_0_15px_#fff,0_0_30px_#fff,0_0_45px_rgba(255,255,255,0.6)]
-                         active:scale-95 active:shadow-[0_0_10px_#fff]"
-            >
+            <button className="bg-white text-black font-extrabold px-6 py-4 rounded-full w-full transition-all duration-300 ease-out relative outline-none hover:bg-white hover:scale-105 hover:shadow-[0_0_15px_#fff,0_0_30px_#fff,0_0_45px_rgba(255,255,255,0.6)] active:scale-95 active:shadow-[0_0_10px_#fff]">
               Subscribe to Newsletter
             </button>
           </div>
         </div>
 
-        {/* Footer Links */}
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10 border-b border-gray-300 pt-8 pb-12">
           <div className="md:col-span-1 space-y-6">
             <h3 className="text-3xl font-black uppercase tracking-tighter">
@@ -674,7 +669,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Copyright & Payments */}
         <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
           <p>Boutique © 2025/2026, All Rights Reserved</p>
           <div className="flex space-x-3 mt-4 md:mt-0">
