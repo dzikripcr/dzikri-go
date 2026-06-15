@@ -17,8 +17,6 @@ import { FaStar, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
 import { BsCheckCircleFill } from "react-icons/bs";
 
-// ✅ POSISI DIPERBAIKI: Komponen Angka Animasi (Odometer) dipindah ke LUAR komponen utama
-// Ini mencegah animasi ke-reset saat parent component (Home) mengalami re-render karena scroll.
 const AnimatedCounter = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
 
@@ -652,7 +650,84 @@ export default function Home() {
                   Delivery Details
                 </a>
               </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Terms & Conditions
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Privacy Policy
+                </a>
+              </li>
             </ul>
+          </div>
+          <div>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">FAQ</h4>
+            <ul className="space-y-4 text-sm text-gray-500">
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Account
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Manage Deliveries
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Orders
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Payments
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">
+              RESOURCES
+            </h4>
+            <ul className="space-y-4 text-sm text-gray-500">
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Free eBooks
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Development Tutorial
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  How to - Blog
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Youtube Playlist
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+          <p>Boutique © 2025/2026, All Rights Reserved</p>
+          <div className="flex space-x-3 mt-4 md:mt-0">
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">
+              VISA
+            </div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
+              Mastercard
+            </div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
+              PayPal
+            </div>
           </div>
         </div>
       </footer>
