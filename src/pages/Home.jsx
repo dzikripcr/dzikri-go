@@ -1,0 +1,508 @@
+import React from "react";
+// Mengimpor data JSON produk
+import productsData from "../data/products.json";
+
+// Mengimpor ikon-ikon dari react-icons
+import {
+  FiSearch,
+  FiShoppingCart,
+  FiUser,
+  FiChevronDown,
+  FiX,
+  FiArrowLeft,
+  FiArrowRight,
+  FiMail,
+} from "react-icons/fi";
+import { FaStar, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa";
+import { RiTwitterXFill } from "react-icons/ri";
+import { BsCheckCircleFill } from "react-icons/bs";
+
+export default function Home() {
+  // Membagi data produk untuk 2 section langsung dari data yang di-import
+  const newArrivals = productsData.slice(0, 4);
+  const topSelling = productsData.slice(4, 8);
+
+  const testimonials = [
+    {
+      id: 1,
+      name: "Sarah M.",
+      text: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece has exceeded my expectations.",
+    },
+    {
+      id: 2,
+      name: "Alex K.",
+      text: "Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.",
+    },
+    {
+      id: 3,
+      name: "James L.",
+      text: "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.",
+    },
+  ];
+
+  return (
+    <div className="font-sans text-gray-900 bg-white">
+      {/* NAVBAR */}
+      <header className="flex items-center justify-between px-8 py-5 border-b">
+        <h1 className="text-3xl font-black uppercase tracking-tighter cursor-pointer">
+          Boutique
+        </h1>
+        <nav className="hidden md:flex space-x-6 font-medium">
+          <a href="#" className="hover:text-gray-600 flex items-center gap-1">
+            Shop <FiChevronDown className="text-sm mt-0.5" />
+          </a>
+          <a href="#" className="hover:text-gray-600">
+            On Sale
+          </a>
+          <a href="#" className="hover:text-gray-600">
+            New Arrivals
+          </a>
+          <a href="#" className="hover:text-gray-600">
+            Brands
+          </a>
+        </nav>
+        <div className="flex items-center space-x-5 w-full md:w-auto mt-4 md:mt-0">
+          <div className="hidden lg:flex items-center bg-[#F0F0F0] px-4 py-2 rounded-full w-80">
+            <FiSearch className="text-gray-500 mr-2 text-xl" />
+            <input
+              type="text"
+              placeholder="Search for products..."
+              className="bg-transparent outline-none w-full text-sm"
+            />
+          </div>
+          <button className="text-2xl hover:text-gray-600 transition cursor-pointer">
+            <FiShoppingCart />
+          </button>
+          <button className="text-2xl hover:text-gray-600 transition cursor-pointer">
+            <FiUser />
+          </button>
+        </div>
+      </header>
+
+      {/* HERO SECTION */}
+      <section className="bg-[#F2F0F1] pt-16 md:pt-24 flex flex-col md:flex-row items-stretch overflow-hidden">
+        {/* KOLOM TEKS */}
+        <div className="px-28 md:w-1/2 space-y-6 md:pr-10 pb-16 md:pb-24 flex flex-col justify-center">
+          <h2 className="text-5xl md:text-7xl font-black leading-none uppercase tracking-tighter">
+            FIND CLOTHES
+            <br />
+            THAT MATCHES
+            <br />
+            YOUR STYLE
+          </h2>
+          <p className="text-gray-600 max-w-md leading-relaxed text-sm md:text-base">
+            Browse through our diverse range of meticulously crafted garments,
+            designed to bring out your individuality and cater to your sense of
+            style.
+          </p>
+          <button
+            className="bg-black text-white px-12 py-4 rounded-full font-medium 
+                   transition-all duration-300 ease-in-out 
+                   hover:bg-gray-800 hover:scale-105 hover:shadow-2xl hover:shadow-black/40
+                   active:scale-95 active:bg-black w-full md:w-auto"
+          >
+            Shop Now
+          </button>
+          <div className="flex flex-wrap gap-8 pt-6">
+            <div>
+              <p className="text-3xl md:text-4xl font-bold">200+</p>
+              <p className="text-sm text-gray-500">International Brands</p>
+            </div>
+            <div className="border-l border-gray-300 pl-8">
+              <p className="text-3xl md:text-4xl font-bold">2,000+</p>
+              <p className="text-sm text-gray-500">High-Quality Products</p>
+            </div>
+            <div className="border-l border-gray-300 pl-8 hidden sm:block">
+              <p className="text-3xl md:text-4xl font-bold">30,000+</p>
+              <p className="text-sm text-gray-500">Happy Customers</p>
+            </div>
+          </div>
+        </div>
+
+        {/* KOLOM GAMBAR */}
+        {/* items-end membuat isi kontainer ini menempel ke garis paling bawah */}
+        <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center items-end relative w-full px-8 md:px-0">
+          <img
+            src="../img/model.png"
+            alt="Hero Models"
+            className="w-full h-auto object-contain max-h-[600px] object-bottom"
+          />
+        </div>
+      </section>
+
+      {/* BRANDS BANNER */}
+      <div className="bg-black py-8 flex flex-wrap justify-center items-center gap-10 md:gap-20 px-4">
+        {["VERSACE", "ZARA", "GUCCI", "PRADA", "Calvin Klein"].map((brand) => (
+          <span
+            key={brand}
+            className="text-white text-2xl md:text-4xl font-serif font-bold tracking-wider opacity-90"
+          >
+            {brand}
+          </span>
+        ))}
+      </div>
+
+      {/* NEW ARRIVALS & TOP SELLING */}
+      {[
+        { title: "NEW ARRIVALS", data: newArrivals },
+        { title: "TOP SELLING", data: topSelling },
+      ].map((section, idx) => (
+        <section
+          key={idx}
+          className={`py-16 px-8 max-w-7xl mx-auto ${idx === 0 ? "border-b border-gray-200" : ""}`}
+        >
+          <h3 className="text-4xl font-black text-center mb-12 uppercase tracking-tight">
+            {section.title}
+          </h3>
+
+          {!section.data || section.data.length === 0 ? (
+            <p className="text-center text-gray-500">
+              Tidak ada produk tersedia.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+              {section.data.map((item) => (
+                <div
+                  key={item.id}
+                  className="cursor-pointer group flex flex-col"
+                >
+                  <div className="bg-[#F0EEED] aspect-[4/5] rounded-[20px] mb-4 overflow-hidden relative">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                    />
+                    {item.status !== "In Stock" && (
+                      <div
+                        className={`absolute top-3 left-3 px-3 py-1 text-xs font-bold rounded text-white ${item.status === "Out of Stock" ? "bg-red-500" : "bg-orange-500"}`}
+                      >
+                        {item.status}
+                      </div>
+                    )}
+                  </div>
+                  <h4 className="font-bold text-lg leading-tight mb-1">
+                    {item.name}
+                  </h4>
+                  <div className="flex items-center space-x-1 mb-2">
+                    {/* Menggunakan react-icons FaStar untuk sistem rating */}
+                    <FaStar className="text-[#FFC633] text-sm" />
+                    <FaStar className="text-[#FFC633] text-sm" />
+                    <FaStar className="text-[#FFC633] text-sm" />
+                    <FaStar className="text-[#FFC633] text-sm" />
+                    <FaStar className="text-gray-300 text-sm" />
+                    <span className="text-sm text-gray-500 ml-1">4.0/5</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <span className="text-2xl font-bold">
+                      ${item.price.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="text-center mt-10">
+            {/* Tombol View All di dalam section NEW ARRIVALS & TOP SELLING */}
+            <div className="text-center mt-10">
+              <button className="border border-gray-200 bg-white cursor-pointer text-black px-16 py-3 rounded-full font-medium transition-all duration-300 ease-in-out hover:bg-black hover:text-white hover:border-black hover:shadow-lg w-full md:w-auto">
+                View All
+              </button>
+            </div>
+          </div>
+        </section>
+      ))}
+
+      {/* BROWSE BY DRESS STYLE */}
+      <section className="px-8 py-10 max-w-7xl mx-auto">
+        <div className="bg-[#F0F0F0] rounded-[40px] px-8 py-16 md:px-16">
+          <h3 className="text-4xl font-black text-center mb-12 uppercase tracking-tight">
+            BROWSE BY DRESS STYLE
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[600px]">
+            {/* 1. CASUAL CARD (col-span-1) */}
+            <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto hover:shadow-2xl transition-all duration-300 cursor-pointer">
+              {/* Gambar Full Background */}
+              <img
+                src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80"
+                alt="Casual"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+              />
+              {/* Overlay Gradasi agar teks terbaca */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+              {/* Teks Kategori */}
+              <span className="absolute top-8 left-8 text-3xl font-bold text-white z-10 tracking-wide">
+                Casual
+              </span>
+            </div>
+
+            {/* 2. FORMAL CARD (col-span-2) */}
+            <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto md:col-span-2 hover:shadow-2xl transition-all duration-300 cursor-pointer">
+              {/* Gambar Full Background (Mengganti link yang rusak di lampiran) */}
+              <img
+                src="https://plus.unsplash.com/premium_photo-1661434624086-e02557c68815?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3MlMjBmb3JtYWx8ZW58MHx8MHx8fDA%3D"
+                alt="Formal"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+              <span className="absolute top-8 left-8 text-3xl font-bold text-white z-10 tracking-wide">
+                Formal
+              </span>
+            </div>
+
+            {/* 3. PARTY CARD (col-span-2) */}
+            <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto md:col-span-2 hover:shadow-2xl transition-all duration-300 cursor-pointer">
+              <img
+                src="https://images.unsplash.com/photo-1589810635657-232948472d98?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQzfHxkcmVzc3xlbnwwfHwwfHx8MA%3D%3D"
+                alt="Party"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+              <span className="absolute top-8 left-8 text-3xl font-bold text-white z-10 tracking-wide">
+                Party
+              </span>
+            </div>
+
+            {/* 4. GYM CARD (col-span-1) */}
+            <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto hover:shadow-2xl transition-all duration-300 cursor-pointer">
+              <img
+                src="https://images.unsplash.com/flagged/photo-1564714388616-9cdfa2b8063e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fG1vZGVsJTIwYmFqdSUyMGd5bXxlbnwwfHwwfHx8MA%3D%3D"
+                alt="Gym"
+                className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+              <span className="absolute top-8 left-8 text-3xl font-bold text-white z-10 tracking-wide">
+                Gym
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-16 px-8 max-w-7xl mx-auto">
+        <div className="flex justify-between items-end mb-10">
+          <h3 className="text-4xl font-black uppercase tracking-tight">
+            OUR HAPPY CUSTOMERS
+          </h3>
+          <div className="space-x-4 hidden md:flex items-center">
+            <button className="text-xl p-2 border border-gray-200 rounded-full hover:bg-black hover:text-white transition">
+              <FiArrowLeft />
+            </button>
+            <button className="text-xl p-2 border border-gray-200 rounded-full hover:bg-black hover:text-white transition">
+              <FiArrowRight />
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-6 overflow-x-auto pb-4 snap-x">
+          {testimonials.map((testi) => (
+            <div
+              key={testi.id}
+              className="border border-gray-200 rounded-[20px] p-8 min-w-[350px] flex-1 snap-center"
+            >
+              <div className="flex space-x-1 text-[#FFC633] mb-4 text-lg">
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+              </div>
+              <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
+                {testi.name}
+                {/* Menggunakan ikon centang verifikasi Bootstrap */}
+                <BsCheckCircleFill className="text-green-500 text-base" />
+              </h4>
+              <p className="text-gray-600 leading-relaxed text-sm">
+                "{testi.text}"
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FOOTER & NEWSLETTER */}
+      <footer className="bg-[#F0F0F0] mt-40 relative pt-32 pb-20 px-8">
+        {/* Newsletter Banner */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-7xl bg-black rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row justify-between items-center shadow-2xl">
+          <h2 className="text-3xl md:text-4xl text-white font-black leading-tight mb-8 md:mb-0 md:w-1/2 uppercase tracking-tight">
+            STAY UPTO DATE ABOUT
+            <br />
+            OUR LATEST OFFERS
+          </h2>
+
+          <div className="flex flex-col space-y-4 w-full md:w-[40%]">
+            <div className="relative group">
+              {/* Opsional: Tambahkan transisi juga pada input form agar senada */}
+              <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl group-focus-within:text-black transition-colors duration-300" />
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                className="pl-12 pr-6 py-4 rounded-full w-full outline-none text-black bg-white focus:ring-4 focus:ring-gray-300/50 transition-all duration-300"
+              />
+            </div>
+
+            {/* Tombol Subscribe dengan Efek Kilat / Neon Glow */}
+            <button
+              className="bg-white text-black font-extrabold px-6 py-4 rounded-full w-full 
+                   transition-all duration-300 ease-out relative
+                   hover:bg-white hover:scale-105 
+                   hover:shadow-[0_0_15px_#fff,0_0_30px_#fff,0_0_45px_rgba(255,255,255,0.6)]
+                   active:scale-95 active:shadow-[0_0_10px_#fff]"
+            >
+              Subscribe to Newsletter
+            </button>
+          </div>
+        </div>
+
+        {/* Footer Links */}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10 border-b border-gray-300 pt-8 pb-12">
+          <div className="md:col-span-1 space-y-6">
+            <h3 className="text-3xl font-black uppercase tracking-tighter">
+              Boutique
+            </h3>
+            <p className="text-sm text-gray-500 leading-relaxed">
+              We have clothes that suit your style and which you're proud to
+              wear. From women to men.
+            </p>
+            {/* Menggunakan ikon sosial media asli */}
+            <div className="flex space-x-3 pt-2">
+              <div className="w-9 h-9 rounded-full border border-gray-300 bg-white text-black flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition cursor-pointer text-lg">
+                <RiTwitterXFill />
+              </div>
+              <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center hover:opacity-80 transition cursor-pointer text-lg">
+                <FaFacebookF />
+              </div>
+              <div className="w-9 h-9 rounded-full border border-gray-300 bg-white text-black flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition cursor-pointer text-lg">
+                <FaInstagram />
+              </div>
+              <div className="w-9 h-9 rounded-full border border-gray-300 bg-white text-black flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition cursor-pointer text-lg">
+                <FaGithub />
+              </div>
+            </div>
+          </div>
+          <div>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">
+              COMPANY
+            </h4>
+            <ul className="space-y-4 text-sm text-gray-500">
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Works
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Career
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">HELP</h4>
+            <ul className="space-y-4 text-sm text-gray-500">
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Customer Support
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Delivery Details
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Terms & Conditions
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Privacy Policy
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">FAQ</h4>
+            <ul className="space-y-4 text-sm text-gray-500">
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Account
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Manage Deliveries
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Orders
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Payments
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">
+              RESOURCES
+            </h4>
+            <ul className="space-y-4 text-sm text-gray-500">
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Free eBooks
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Development Tutorial
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  How to - Blog
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Youtube Playlist
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Copyright & Payments */}
+        <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+          <p>Boutique © 2025/2026, All Rights Reserved</p>
+          <div className="flex space-x-3 mt-4 md:mt-0">
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">
+              VISA
+            </div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
+              Mastercard
+            </div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
+              PayPal
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

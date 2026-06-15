@@ -27,6 +27,8 @@ const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"));
 
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail"))
 
+const Home = React.lazy(() => import("./pages/Home"))
+
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Forgot from "./pages/auth/Forgot";
@@ -46,12 +48,16 @@ export default function App() {
           <Route path="/error401" element={<Error401 />} />
           <Route path="/error403" element={<Error403 />} />
 
+          {/* Admin */}
           <Route path="/" element={<Dashboard />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} /> 
         </Route>
+
+        {/* Member */}
+          <Route path="/home" element={<Home />} />
 
         {/* Route AuthLayout */}
         <Route element={<AuthLayout />}>
