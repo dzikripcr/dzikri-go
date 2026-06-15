@@ -103,7 +103,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#3A5B22] hover:bg-[#2d461a] text-white font-medium py-3.5 rounded-lg transition-all flex justify-center items-center shadow-sm disabled:opacity-70"
+          className="w-full bg-[#3A5B22] hover:bg-[#2d461a] text-white font-medium py-3.5 rounded-lg transition-all flex justify-center items-center shadow-sm disabled:opacity-70 cursor-pointer"
         >
           {loading ? <ImSpinner2 className="animate-spin text-lg" /> : "Login"}
         </button>
@@ -119,7 +119,7 @@ export default function Login() {
 
       {/* Social Login */}
       <div className="grid grid-cols-2 gap-4">
-        <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2.5 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
+        <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
           <img
             src="https://www.svgrepo.com/show/355037/google.svg"
             className="w-4"
@@ -127,10 +127,10 @@ export default function Login() {
           />{" "}
           Sign in with Google
         </button>
-        <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2.5 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
+        <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
           <img
-            src="https://www.svgrepo.com/show/445327/apple.svg"
-            className="w-4"
+            src="https://th.bing.com/th/id/OIP.9g4dkKVAUyciOuDI9_vEYQHaHa?w=163&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
+            className="w-8"
             alt="apple"
           />{" "}
           Sign in with Apple

@@ -11,7 +11,7 @@ import {
   FiArrowLeft,
   FiArrowRight,
   FiMail,
-  FiBell, // Ikon Lonceng Notifikasi
+  FiBell,
 } from "react-icons/fi";
 import { FaStar, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
