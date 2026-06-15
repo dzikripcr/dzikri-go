@@ -1,166 +1,179 @@
-// Register.jsx
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import HeaderSection from "../../components/HeaderSection";
+import AlertBox from "@/components/AlertBox";
+import LoadingSpinner from "@/components/LoadingSpinner";
+
+import { userAPI } from "../../services/userAPI";
 
 export default function Register() {
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+
+  const [message, setMessage] = useState("");
+
+  const [type, setType] = useState("info");
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setMessage("");
+
+    if (form.password.length < 6) {
+      setType("error");
+
+      setMessage("Password minimal 6 karakter");
+
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const users = await userAPI.fetchUser();
+
+      const checkEmail = users.find((user) => user.email === form.email);
+
+      if (checkEmail) {
+        setType("error");
+
+        setMessage("Email sudah terdaftar");
+
+        setLoading(false);
+
+        return;
+      }
+
+      await userAPI.createUser({
+        name: form.name,
+
+        email: form.email,
+
+        password: form.password,
+      });
+
+      setType("success");
+
+      setMessage("Register berhasil, silahkan login");  
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    } catch (error) {
+      setType("error");
+
+      setMessage("Register gagal");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div className="w-full">
-      <HeaderSection
-        title="Get Started Now"
-        subtitle=""
-      />
+      <HeaderSection title="Get Started Now" subtitle="Create your account" />
 
-      <form className="space-y-4">
-        {/* Full Name */}
+      {message && <AlertBox type={type}>{message}</AlertBox>}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block font-['Poppins'] text-[14px] font-medium text-[#000000] mb-2">
+          <label className="block font-['Poppins'] text-[14px] font-medium mb-2">
             Full Name
           </label>
 
           <input
-            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
             required
-            className="w-full border border-[#D9D9D9] rounded-lg px-4 py-3 text-sm outline-none focus:border-gray-500 transition-all placeholder:text-gray-300"
             placeholder="Enter your full name"
+            className="
+            w-full border border-[#D9D9D9]
+            rounded-lg px-4 py-3
+            "
           />
         </div>
 
-        {/* Email */}
         <div>
-          <label className="block font-['Poppins'] text-[14px] font-medium text-[#000000] mb-2">
+          <label className="block font-['Poppins'] text-[14px] font-medium mb-2">
             Email address
           </label>
 
           <input
+            name="email"
             type="email"
+            value={form.email}
+            onChange={handleChange}
             required
-            className="w-full border border-[#D9D9D9] rounded-lg px-4 py-3 text-sm outline-none focus:border-gray-500 transition-all placeholder:text-gray-300"
             placeholder="Enter your email"
+            className="
+            w-full border border-[#D9D9D9]
+            rounded-lg px-4 py-3
+            "
           />
         </div>
 
-        {/* Password */}
         <div>
-          <label className="block font-['Poppins'] text-[14px] font-medium text-[#000000] mb-2">
+          <label className="block font-['Poppins'] text-[14px] font-medium mb-2">
             Password
           </label>
 
           <input
+            name="password"
             type="password"
+            value={form.password}
+            onChange={handleChange}
             required
-            className="w-full border border-[#D9D9D9] rounded-lg px-4 py-3 text-sm outline-none focus:border-gray-500 transition-all placeholder:text-gray-300"
             placeholder="Enter your password"
+            className="
+            w-full border border-[#D9D9D9]
+            rounded-lg px-4 py-3
+            "
           />
         </div>
 
-        {/* Terms */}
         <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="terms"
-            className="w-4 h-4 rounded border-[#D9D9D9]"
-          />
+          <input type="checkbox" required className="w-4 h-4" />
 
-          <label
-            htmlFor="terms"
-            className="text-[14px] text-gray-600 font-['Poppins']"
-          >
+          <label className="text-sm text-gray-600">
             I agree with terms and conditions
           </label>
         </div>
 
-        {/* Button */}
         <button
-          type="submit"
-          className="w-full bg-[#3A5B22] hover:bg-[#2d461a] text-white font-medium py-3 rounded-lg transition-all shadow-sm cursor-pointer"
+          disabled={loading}
+          className="
+          w-full
+          bg-[#3A5B22]
+          hover:bg-[#2d461a]
+          text-white
+          py-3
+          rounded-lg
+          "
         >
-          Create Account
+          {loading ? <LoadingSpinner text="Creating..." /> : "Create Account"}
         </button>
       </form>
 
-      {/* Separator */}
-      <div className="relative my-8 text-center">
-        <hr className="border-[#D9D9D9]" />
-
-        <span
-          className="
-          absolute 
-          top-1/2 
-          left-1/2 
-          -translate-x-1/2 
-          -translate-y-1/2 
-          bg-white 
-          px-3 
-          text-[12px] 
-          text-gray-400 
-          font-['Poppins']
-          "
-        >
-          Or
-        </span>
-      </div>
-
-      {/* Social Login */}
-      <div className="grid grid-cols-2 gap-4">
-        <button
-          className="
-          flex 
-          items-center 
-          justify-center 
-          gap-2 
-          border 
-          border-[#D9D9D9] 
-          py-2 
-          rounded-lg 
-          text-[13px] 
-          font-medium 
-          font-['Poppins']
-          hover:bg-gray-50
-          transition-all
-          "
-        >
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            className="w-4"
-            alt="google"
-          />
-          Sign up with Google
-        </button>
-
-        <button
-          className="
-          flex 
-          items-center 
-          justify-center 
-          gap-2 
-          border 
-          border-[#D9D9D9] 
-          py-2
-          rounded-lg 
-          text-[13px] 
-          font-medium 
-          font-['Poppins']
-          hover:bg-gray-50
-          transition-all
-          "
-        >
-          <img
-            src="https://th.bing.com/th/id/OIP.9g4dkKVAUyciOuDI9_vEYQHaHa?w=163&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
-            className="w-8"
-            alt="apple"
-          />
-          Sign up with Apple
-        </button>
-      </div>
-
-      {/* Footer */}
       <div className="mt-10 text-center">
-        <p className="text-[14px] text-gray-600 font-['Poppins']">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-[#000000] font-bold hover:underline"
-          >
+        <p className="text-sm text-gray-600">
+          Already have an account?
+          <Link to="/" className="ml-2 font-bold">
             Sign In
           </Link>
         </p>

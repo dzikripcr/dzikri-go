@@ -49,7 +49,7 @@ export default function App() {
           <Route path="/error403" element={<Error403 />} />
 
           {/* Admin */}
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/products" element={<Products />} />
@@ -61,7 +61,7 @@ export default function App() {
 
         {/* Route AuthLayout */}
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot" element={<Forgot />} />
         </Route>

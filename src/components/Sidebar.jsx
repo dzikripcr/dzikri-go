@@ -44,7 +44,7 @@ export default function Sidebar() {
       <div id="sidebar-menu" className="flex-1">
         <ul>
           <li>
-            <NavLink to="/" className={menuClass}>
+            <NavLink to="/dashboard" className={menuClass}>
               <FaHome className="text-[16px]" />
               <span>Dashboard</span>
             </NavLink>
@@ -95,7 +95,7 @@ export default function Sidebar() {
 
           {/* Logout */}
           <Link
-            to="/login"
+            to="/"
             className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-red-500 transition-colors"
             title="Logout"
           >

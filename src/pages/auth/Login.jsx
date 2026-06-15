@@ -1,38 +1,57 @@
 import { useState } from "react";
-import { BsFillExclamationDiamondFill } from "react-icons/bs";
-import { ImSpinner2 } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import HeaderSection from "../../components/HeaderSection";
-import AlertError from "@/components/Alert";
+import AlertBox from "@/components/AlertBox";
+import LoadingSpinner from "@/components/LoadingSpinner";
+
+import { userAPI } from "../../services/userAPI";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [dataForm, setDataForm] = useState({ email: "", password: "" });
 
-  const handleChange = (evt) => {
-    const { name, value } = evt.target;
-    setDataForm({ ...dataForm, [name]: value });
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState("");
+
+  const [dataForm, setDataForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setDataForm({
+      ...dataForm,
+
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setLoading(true);
+
     setError("");
 
-    axios
-      .post("https://dummyjson.com/user/login", {
-        username: dataForm.email,
-        password: dataForm.password,
-      })
-      .then(() => navigate("/"))
-      .catch((err) =>
-        setError(err.response?.data?.message || "Authentication failed"),
-      )
-      .finally(() => setLoading(false));
+    try {
+      const users = await userAPI.fetchUser();
+
+      const user = users.find(
+        (item) =>
+          item.email === dataForm.email && item.password === dataForm.password,
+      );
+
+      if (!user) {
+        throw new Error("Email atau password salah");
+      }
+
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -42,108 +61,59 @@ export default function Login() {
         subtitle="Enter your Credentials to access your account"
       />
 
-      {error && (
-        <AlertError message={error} />
-      )}
+      {error && <AlertBox type="error">{error}</AlertBox>}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          {/* Label: Poppins, 14px, Medium */}
-          <label className="block font-['Poppins'] text-[14px] font-medium text-[#000000] mb-2">
+          <label className="block text-[14px] font-medium mb-2">
             Email address
           </label>
+
           <input
             name="email"
-            type="text"
-            onChange={handleChange}
+            type="email"
             required
-            className="w-full border border-[#D9D9D9] rounded-lg px-4 py-3 text-sm outline-none focus:border-gray-500 transition-all placeholder:text-gray-300"
+            onChange={handleChange}
+            className="
+            w-full border rounded-lg px-4 py-3
+            "
             placeholder="Enter your email"
           />
         </div>
 
         <div>
-          <div className="flex justify-between items-center mb-2">
-            {/* Label: Poppins, 14px, Medium */}
-            <label className="block font-['Poppins'] text-[14px] font-medium text-[#000000]">
-              Password
-            </label>
-            <Link
-              to="/forgot"
-              className="text-[12px] text-[#0C2A92] hover:underline"
-            >
-              forgot password
-            </Link>
-          </div>
+          <label className="block text-[14px] font-medium mb-2">Password</label>
+
           <input
             name="password"
             type="password"
-            onChange={handleChange}
             required
-            className="w-full border border-[#D9D9D9] rounded-lg px-4 py-3 text-sm outline-none focus:border-gray-500 transition-all placeholder:text-gray-300"
+            onChange={handleChange}
+            className="
+            w-full border rounded-lg px-4 py-3
+            "
             placeholder="Enter your password"
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="remember"
-            className="w-4 h-4 rounded border-[#D9D9D9]"
-          />
-          <label
-            htmlFor="remember"
-            className="text-[14px] text-gray-600 font-['Poppins']"
-          >
-            Remember for 30 days
-          </label>
-        </div>
-
-        {/* Button: Background #3A5B22 */}
         <button
-          type="submit"
           disabled={loading}
-          className="w-full bg-[#3A5B22] hover:bg-[#2d461a] text-white font-medium py-3.5 rounded-lg transition-all flex justify-center items-center shadow-sm disabled:opacity-70 cursor-pointer"
+          className="
+          w-full
+          bg-[#3A5B22]
+          text-white
+          py-3
+          rounded-lg
+          "
         >
-          {loading ? <ImSpinner2 className="animate-spin text-lg" /> : "Login"}
+          {loading ? <LoadingSpinner /> : "Login"}
         </button>
       </form>
 
-      {/* Or Separator */}
-      <div className="relative my-8 text-center">
-        <hr className="border-[#D9D9D9]" />
-        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-[12px] text-gray-400 font-['Poppins']">
-          Or
-        </span>
-      </div>
-
-      {/* Social Login */}
-      <div className="grid grid-cols-2 gap-4">
-        <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            className="w-4"
-            alt="google"
-          />{" "}
-          Sign in with Google
-        </button>
-        <button className="flex items-center justify-center gap-2 border border-[#D9D9D9] py-2 rounded-lg text-[13px] font-medium font-['Poppins'] hover:bg-gray-50 transition-all">
-          <img
-            src="https://th.bing.com/th/id/OIP.9g4dkKVAUyciOuDI9_vEYQHaHa?w=163&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
-            className="w-8"
-            alt="apple"
-          />{" "}
-          Sign in with Apple
-        </button>
-      </div>
-
       <div className="mt-10 text-center">
-        <p className="text-[14px] text-gray-600 font-['Poppins']">
-          Don't have an account?{" "}
-          <Link
-            to="/register"
-            className="text-[#000000] font-bold hover:underline"
-          >
+        <p className="text-sm text-gray-600">
+          Don't have an account?
+          <Link to="/register" className="ml-2 font-bold">
             Sign Up
           </Link>
         </p>
