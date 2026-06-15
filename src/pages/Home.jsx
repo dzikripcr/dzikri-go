@@ -26,6 +26,33 @@ export default function Home() {
   const newArrivals = productsData.slice(0, 4);
   const topSelling = productsData.slice(4, 8);
 
+  const AnimatedCounter = ({ end, duration = 2000 }) => {
+    const [count, setCount] = useState(0);
+
+    React.useEffect(() => {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+
+        // Efek Easing (EaseOutExpo) agar melambat di akhir (lebih elegan)
+        const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+
+        setCount(Math.floor(easeOut * end));
+
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+
+      // Memulai animasi
+      window.requestAnimationFrame(step);
+    }, [end, duration]);
+
+    // .toLocaleString() otomatis menambahkan titik/koma pemisah ribuan (misal: 30,000)
+    return <>{count.toLocaleString()}</>;
+  };
+
   // Data Notifikasi Terintegrasi (Marketing Automation CRM & Logistik)
   const notifications = [
     {
@@ -113,7 +140,6 @@ export default function Home() {
           </a>
         </nav>
         <div className="flex items-center space-x-5 w-full md:w-auto mt-4 md:mt-0 justify-end">
-          
           {/* SEARCH BOX DENGAN EFEK TRANSISI PREMIUM & INTERAKTIF */}
           <div className="hidden lg:flex items-center bg-[#F0F0F0] px-4 py-2.5 rounded-full w-80 border border-transparent transition-all duration-500 ease-in-out group focus-within:w-[440px] focus-within:bg-white focus-within:border-gray-200 focus-within:shadow-xl focus-within:shadow-black/5">
             <FiSearch className="text-gray-400 mr-2 text-xl transition-colors duration-300 group-focus-within:text-black" />
@@ -225,15 +251,21 @@ export default function Home() {
           </button>
           <div className="flex flex-wrap gap-8 pt-6">
             <div>
-              <p className="text-3xl md:text-4xl font-bold">200+</p>
+              <p className="text-3xl md:text-4xl font-bold">
+                <AnimatedCounter end={198} duration={1500} />+
+              </p>
               <p className="text-sm text-gray-500">International Brands</p>
             </div>
             <div className="border-l border-gray-300 pl-8">
-              <p className="text-3xl md:text-4xl font-bold">2,000+</p>
+              <p className="text-3xl md:text-4xl font-bold">
+                <AnimatedCounter end={2786} duration={2000} />+
+              </p>
               <p className="text-sm text-gray-500">High-Quality Products</p>
             </div>
             <div className="border-l border-gray-300 pl-8 hidden sm:block">
-              <p className="text-3xl md:text-4xl font-bold">30,000+</p>
+              <p className="text-3xl md:text-4xl font-bold">
+                <AnimatedCounter end={31298} duration={2500} />+
+              </p>
               <p className="text-sm text-gray-500">Happy Customers</p>
             </div>
           </div>
@@ -248,16 +280,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BRANDS BANNER */}
-      <div className="bg-black py-8 flex flex-wrap justify-center items-center gap-10 md:gap-20 px-4">
-        {["VERSACE", "ZARA", "GUCCI", "PRADA", "Calvin Klein"].map((brand) => (
-          <span
-            key={brand}
-            className="text-white text-2xl md:text-4xl font-serif font-bold tracking-wider opacity-90"
-          >
-            {brand}
-          </span>
-        ))}
+      {/* BRANDS BANNER (INFINITE SCROLL ANIMATION) */}
+      <div className="bg-black py-8 overflow-hidden relative flex items-center group">
+        {/* CSS Injeksi untuk Keyframes agar plug-and-play tanpa mengubah tailwind.config.js */}
+        <style>
+          {`
+            @keyframes scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-scroll {
+              display: flex;
+              width: max-content;
+              animation: scroll 35s linear infinite;
+            }
+            /* Efek berhenti saat kursor di-hover ke area banner */
+            .group:hover .animate-scroll {
+              animation-play-state: paused;
+            }
+          `}
+        </style>
+
+        {/* Efek Fade / Gradient Bayangan di Kiri dan Kanan */}
+        <div className="absolute top-0 left-0 w-16 md:w-40 h-full bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-16 md:w-40 h-full bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+
+        {/* Container yang Bergerak */}
+        <div className="animate-scroll flex items-center gap-12 md:gap-24 px-6">
+          {/* Kita me-render list brand 2 KALI (menggunakan [...Array(2)]) 
+            agar saat list pertama mau habis, list kedua sudah menyambung.
+            Karena transform mentok di -50%, ini akan menciptakan ilusi loop tanpa batas.
+          */}
+          {[...Array(2)].map((_, i) => (
+            <React.Fragment key={i}>
+              {[
+                "VERSACE",
+                "ZARA",
+                "GUCCI",
+                "PRADA",
+                "Calvin Klein",
+                "CHANEL",
+                "DIOR",
+                "BURBERRY",
+                "HERMÈS",
+                "BALENCIAGA",
+                "LOUIS VUITTON",
+                "ARMANI",
+                "YVES SAINT LAURENT",
+                "FENDI",
+              ].map((brand, index) => (
+                <span
+                  key={`${brand}-${i}-${index}`}
+                  className="text-white text-2xl md:text-4xl font-serif font-bold tracking-widest opacity-90 whitespace-nowrap hover:text-gray-300 hover:scale-110 transition-all duration-300 cursor-default"
+                >
+                  {brand}
+                </span>
+              ))}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
 
       {/* NEW ARRIVALS & TOP SELLING */}
@@ -412,7 +493,11 @@ export default function Home() {
               className="border border-gray-200 rounded-[20px] p-8 min-w-[350px] flex-1 snap-center"
             >
               <div className="flex space-x-1 text-[#FFC633] mb-4 text-lg">
-                <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
               </div>
               <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
                 {testi.name}
@@ -484,39 +569,107 @@ export default function Home() {
             </div>
           </div>
           <div>
-            <h4 className="font-bold tracking-widest mb-6 uppercase">COMPANY</h4>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">
+              COMPANY
+            </h4>
             <ul className="space-y-4 text-sm text-gray-500">
-              <li><a href="#" className="hover:text-black transition">About</a></li>
-              <li><a href="#" className="hover:text-black transition">Features</a></li>
-              <li><a href="#" className="hover:text-black transition">Works</a></li>
-              <li><a href="#" className="hover:text-black transition">Career</a></li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  About
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Works
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Career
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold tracking-widest mb-6 uppercase">HELP</h4>
             <ul className="space-y-4 text-sm text-gray-500">
-              <li><a href="#" className="hover:text-black transition">Customer Support</a></li>
-              <li><a href="#" className="hover:text-black transition">Delivery Details</a></li>
-              <li><a href="#" className="hover:text-black transition">Terms & Conditions</a></li>
-              <li><a href="#" className="hover:text-black transition">Privacy Policy</a></li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Customer Support
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Delivery Details
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Terms & Conditions
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Privacy Policy
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold tracking-widest mb-6 uppercase">FAQ</h4>
             <ul className="space-y-4 text-sm text-gray-500">
-              <li><a href="#" className="hover:text-black transition">Account</a></li>
-              <li><a href="#" className="hover:text-black transition">Manage Deliveries</a></li>
-              <li><a href="#" className="hover:text-black transition">Orders</a></li>
-              <li><a href="#" className="hover:text-black transition">Payments</a></li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Account
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Manage Deliveries
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Orders
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Payments
+                </a>
+              </li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold tracking-widest mb-6 uppercase">RESOURCES</h4>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">
+              RESOURCES
+            </h4>
             <ul className="space-y-4 text-sm text-gray-500">
-              <li><a href="#" className="hover:text-black transition">Free eBooks</a></li>
-              <li><a href="#" className="hover:text-black transition">Development Tutorial</a></li>
-              <li><a href="#" className="hover:text-black transition">How to - Blog</a></li>
-              <li><a href="#" className="hover:text-black transition">Youtube Playlist</a></li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Free eBooks
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Development Tutorial
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  How to - Blog
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-black transition">
+                  Youtube Playlist
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -525,9 +678,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
           <p>Boutique © 2025/2026, All Rights Reserved</p>
           <div className="flex space-x-3 mt-4 md:mt-0">
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">VISA</div>
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">Mastercard</div>
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">PayPal</div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">
+              VISA
+            </div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
+              Mastercard
+            </div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
+              PayPal
+            </div>
           </div>
         </div>
       </footer>
