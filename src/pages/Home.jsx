@@ -113,13 +113,14 @@ export default function Home() {
           </a>
         </nav>
         <div className="flex items-center space-x-5 w-full md:w-auto mt-4 md:mt-0 justify-end">
-          {/* Search Box */}
-          <div className="hidden lg:flex items-center bg-[#F0F0F0] px-4 py-2 rounded-full w-80">
-            <FiSearch className="text-gray-500 mr-2 text-xl" />
+          
+          {/* SEARCH BOX DENGAN EFEK TRANSISI PREMIUM & INTERAKTIF */}
+          <div className="hidden lg:flex items-center bg-[#F0F0F0] px-4 py-2.5 rounded-full w-80 border border-transparent transition-all duration-500 ease-in-out group focus-within:w-[440px] focus-within:bg-white focus-within:border-gray-200 focus-within:shadow-xl focus-within:shadow-black/5">
+            <FiSearch className="text-gray-400 mr-2 text-xl transition-colors duration-300 group-focus-within:text-black" />
             <input
               type="text"
               placeholder="Search for products..."
-              className="bg-transparent outline-none w-full text-sm"
+              className="bg-transparent outline-none w-full text-sm text-gray-900 placeholder-gray-400"
             />
           </div>
 
@@ -165,7 +166,6 @@ export default function Home() {
                         <h4 className="text-sm font-bold text-gray-900 leading-tight">
                           {notif.title}
                         </h4>
-                        {/* Titik indikator belum dibaca */}
                         {notif.unread && (
                           <span className="w-2 h-2 bg-blue-600 rounded-full mt-1 flex-shrink-0"></span>
                         )}
@@ -200,9 +200,8 @@ export default function Home() {
         </div>
       </header>
 
-      {/* HERO SECTION (Sudah Diperbaiki Agar Gambar Mentok ke Bawah) */}
+      {/* HERO SECTION */}
       <section className="bg-[#F2F0F1] pt-16 md:pt-24 flex flex-col md:flex-row items-stretch overflow-hidden">
-        {/* KOLOM TEKS */}
         <div className="px-8 md:px-28 md:w-1/2 space-y-6 md:pr-10 pb-16 md:pb-24 flex flex-col justify-center">
           <h2 className="text-5xl md:text-7xl font-black leading-none uppercase tracking-tighter">
             FIND CLOTHES
@@ -216,7 +215,6 @@ export default function Home() {
             designed to bring out your individuality and cater to your sense of
             style.
           </p>
-          {/* Tombol Shop Now Premium Transition */}
           <button
             className="bg-black text-white px-12 py-4 rounded-full font-medium 
                        transition-all duration-300 ease-in-out 
@@ -241,7 +239,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* KOLOM GAMBAR (Rata Bawah Sempurna) */}
         <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center items-end relative w-full px-8 md:px-0">
           <img
             src="../img/model.png"
@@ -322,7 +319,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Tombol View All - Berubah Menjadi Warna Utama Hitam Saat Di-hover */}
           <div className="text-center mt-10">
             <button className="border border-gray-200 bg-white cursor-pointer text-black px-16 py-3 rounded-full font-medium transition-all duration-300 ease-in-out hover:bg-black hover:text-white hover:border-black hover:shadow-lg w-full md:w-auto">
               View All
@@ -416,11 +412,7 @@ export default function Home() {
               className="border border-gray-200 rounded-[20px] p-8 min-w-[350px] flex-1 snap-center"
             >
               <div className="flex space-x-1 text-[#FFC633] mb-4 text-lg">
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
-                <FaStar />
+                <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
               </div>
               <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
                 {testi.name}
@@ -454,7 +446,6 @@ export default function Home() {
               />
             </div>
 
-            {/* Tombol Subscribe Ber-Efek Kilat / Neon Glow Putih Terang */}
             <button
               className="bg-white text-black font-extrabold px-6 py-4 rounded-full w-full 
                          transition-all duration-300 ease-out relative outline-none
@@ -493,107 +484,39 @@ export default function Home() {
             </div>
           </div>
           <div>
-            <h4 className="font-bold tracking-widest mb-6 uppercase">
-              COMPANY
-            </h4>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">COMPANY</h4>
             <ul className="space-y-4 text-sm text-gray-500">
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Features
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Works
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Career
-                </a>
-              </li>
+              <li><a href="#" className="hover:text-black transition">About</a></li>
+              <li><a href="#" className="hover:text-black transition">Features</a></li>
+              <li><a href="#" className="hover:text-black transition">Works</a></li>
+              <li><a href="#" className="hover:text-black transition">Career</a></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold tracking-widest mb-6 uppercase">HELP</h4>
             <ul className="space-y-4 text-sm text-gray-500">
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Customer Support
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Delivery Details
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Terms & Conditions
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Privacy Policy
-                </a>
-              </li>
+              <li><a href="#" className="hover:text-black transition">Customer Support</a></li>
+              <li><a href="#" className="hover:text-black transition">Delivery Details</a></li>
+              <li><a href="#" className="hover:text-black transition">Terms & Conditions</a></li>
+              <li><a href="#" className="hover:text-black transition">Privacy Policy</a></li>
             </ul>
           </div>
           <div>
             <h4 className="font-bold tracking-widest mb-6 uppercase">FAQ</h4>
             <ul className="space-y-4 text-sm text-gray-500">
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Account
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Manage Deliveries
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Orders
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Payments
-                </a>
-              </li>
+              <li><a href="#" className="hover:text-black transition">Account</a></li>
+              <li><a href="#" className="hover:text-black transition">Manage Deliveries</a></li>
+              <li><a href="#" className="hover:text-black transition">Orders</a></li>
+              <li><a href="#" className="hover:text-black transition">Payments</a></li>
             </ul>
           </div>
           <div>
-            <h4 className="font-bold tracking-widest mb-6 uppercase">
-              RESOURCES
-            </h4>
+            <h4 className="font-bold tracking-widest mb-6 uppercase">RESOURCES</h4>
             <ul className="space-y-4 text-sm text-gray-500">
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Free eBooks
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Development Tutorial
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  How to - Blog
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-black transition">
-                  Youtube Playlist
-                </a>
-              </li>
+              <li><a href="#" className="hover:text-black transition">Free eBooks</a></li>
+              <li><a href="#" className="hover:text-black transition">Development Tutorial</a></li>
+              <li><a href="#" className="hover:text-black transition">How to - Blog</a></li>
+              <li><a href="#" className="hover:text-black transition">Youtube Playlist</a></li>
             </ul>
           </div>
         </div>
@@ -602,15 +525,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
           <p>Boutique © 2025/2026, All Rights Reserved</p>
           <div className="flex space-x-3 mt-4 md:mt-0">
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">
-              VISA
-            </div>
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
-              Mastercard
-            </div>
-            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">
-              PayPal
-            </div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">VISA</div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">Mastercard</div>
+            <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs">PayPal</div>
           </div>
         </div>
       </footer>
