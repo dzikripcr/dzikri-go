@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // Mengimpor data JSON produk
 import productsData from "../data/products.json";
 
@@ -12,15 +12,66 @@ import {
   FiArrowLeft,
   FiArrowRight,
   FiMail,
+  FiBell, // Ikon Lonceng Notifikasi
 } from "react-icons/fi";
 import { FaStar, FaFacebookF, FaInstagram, FaGithub } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
 import { BsCheckCircleFill } from "react-icons/bs";
 
 export default function Home() {
+  // State untuk kontrol buka/tutup pop-up notifikasi
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+
   // Membagi data produk untuk 2 section langsung dari data yang di-import
   const newArrivals = productsData.slice(0, 4);
   const topSelling = productsData.slice(4, 8);
+
+  // Data Notifikasi Terintegrasi (Marketing Automation CRM & Logistik)
+  const notifications = [
+    {
+      id: 1,
+      type: "shipping",
+      title: "Pesanan Dikirim 🚚",
+      desc: "Hore! Paket 'Elegant Silk Dress' Anda sedang dalam perjalanan oleh kurir menuju alamat tujuan.",
+      time: "2 jam yang lalu",
+      unread: true,
+    },
+    {
+      id: 2,
+      type: "promo",
+      title: "Diskon 50% Khusus Hari Ini! ✨",
+      desc: "Gunakan kode voucher WEEKEND50 untuk semua koleksi Casual. Jangan sampai kehabisan!",
+      time: "5 jam yang lalu",
+      unread: true,
+    },
+    {
+      id: 3,
+      type: "event",
+      title: "Midnight Sale Dimulai 🕛",
+      desc: "Dapatkan penawaran terbaik diskon hingga 70% mulai jam 12 malam nanti. Siapkan keranjang belanjamu!",
+      time: "1 hari yang lalu",
+      unread: false,
+    },
+    {
+      id: 4,
+      type: "chat",
+      title: "Pesan dari CS Boutique 💬",
+      desc: "Halo kak, ukuran M untuk produk 'Vintage Pearl Necklace' yang kakak tanyakan sudah restock kembali ya.",
+      time: "2 hari yang lalu",
+      unread: false,
+    },
+    {
+      id: 5,
+      type: "voucher",
+      title: "Voucher Cashback Rp 50.000 🎉",
+      desc: "Selamat! Voucher cashback loyalitas pelanggan telah ditambahkan otomatis ke dalam akun Anda.",
+      time: "3 hari yang lalu",
+      unread: false,
+    },
+  ];
+
+  // Menghitung jumlah notifikasi yang belum dibaca secara dinamis
+  const unreadCount = notifications.filter((n) => n.unread).length;
 
   const testimonials = [
     {
@@ -43,7 +94,7 @@ export default function Home() {
   return (
     <div className="font-sans text-gray-900 bg-white">
       {/* NAVBAR */}
-      <header className="flex items-center justify-between px-8 py-5 border-b">
+      <header className="flex items-center justify-between px-8 py-5 border-b relative z-50 bg-white">
         <h1 className="text-3xl font-black uppercase tracking-tighter cursor-pointer">
           Boutique
         </h1>
@@ -61,7 +112,8 @@ export default function Home() {
             Brands
           </a>
         </nav>
-        <div className="flex items-center space-x-5 w-full md:w-auto mt-4 md:mt-0">
+        <div className="flex items-center space-x-5 w-full md:w-auto mt-4 md:mt-0 justify-end">
+          {/* Search Box */}
           <div className="hidden lg:flex items-center bg-[#F0F0F0] px-4 py-2 rounded-full w-80">
             <FiSearch className="text-gray-500 mr-2 text-xl" />
             <input
@@ -70,6 +122,75 @@ export default function Home() {
               className="bg-transparent outline-none w-full text-sm"
             />
           </div>
+
+          {/* AREA NOTIFIKASI CRM */}
+          <div className="relative">
+            {/* Tombol Lonceng */}
+            <button
+              onClick={() => setIsNotifOpen(!isNotifOpen)}
+              className="text-2xl hover:text-gray-600 transition cursor-pointer relative flex items-center justify-center p-1 mt-1 outline-none"
+            >
+              <FiBell />
+              {/* Badge Angka Notif Unread */}
+              {unreadCount > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold border-2 border-white">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {/* Dropdown Box Notifikasi */}
+            {isNotifOpen && (
+              <div className="absolute right-[-40px] md:right-0 mt-4 w-[320px] md:w-[360px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden transition-all duration-300">
+                {/* Header Dropdown */}
+                <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                  <h3 className="font-extrabold text-base tracking-tight">
+                    Notifikasi Baru
+                  </h3>
+                  <span className="text-xs text-blue-600 cursor-pointer hover:underline font-semibold">
+                    Tandai semua dibaca
+                  </span>
+                </div>
+
+                {/* Isi List Notifikasi */}
+                <div className="max-h-[350px] overflow-y-auto">
+                  {notifications.map((notif) => (
+                    <div
+                      key={notif.id}
+                      className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition duration-200 flex flex-col gap-1 ${
+                        notif.unread ? "bg-blue-50/40" : ""
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <h4 className="text-sm font-bold text-gray-900 leading-tight">
+                          {notif.title}
+                        </h4>
+                        {/* Titik indikator belum dibaca */}
+                        {notif.unread && (
+                          <span className="w-2 h-2 bg-blue-600 rounded-full mt-1 flex-shrink-0"></span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600 leading-relaxed pr-2">
+                        {notif.desc}
+                      </p>
+                      <span className="text-[10px] text-gray-400 font-medium mt-1">
+                        {notif.time}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Footer Dropdown */}
+                <div className="p-3 text-center border-t border-gray-100 hover:bg-black hover:text-white cursor-pointer transition-colors duration-300">
+                  <span className="text-sm font-bold">
+                    Lihat Semua Notifikasi
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Keranjang & User */}
           <button className="text-2xl hover:text-gray-600 transition cursor-pointer">
             <FiShoppingCart />
           </button>
@@ -79,10 +200,10 @@ export default function Home() {
         </div>
       </header>
 
-      {/* HERO SECTION */}
+      {/* HERO SECTION (Sudah Diperbaiki Agar Gambar Mentok ke Bawah) */}
       <section className="bg-[#F2F0F1] pt-16 md:pt-24 flex flex-col md:flex-row items-stretch overflow-hidden">
         {/* KOLOM TEKS */}
-        <div className="px-28 md:w-1/2 space-y-6 md:pr-10 pb-16 md:pb-24 flex flex-col justify-center">
+        <div className="px-8 md:px-28 md:w-1/2 space-y-6 md:pr-10 pb-16 md:pb-24 flex flex-col justify-center">
           <h2 className="text-5xl md:text-7xl font-black leading-none uppercase tracking-tighter">
             FIND CLOTHES
             <br />
@@ -95,11 +216,12 @@ export default function Home() {
             designed to bring out your individuality and cater to your sense of
             style.
           </p>
+          {/* Tombol Shop Now Premium Transition */}
           <button
             className="bg-black text-white px-12 py-4 rounded-full font-medium 
-                   transition-all duration-300 ease-in-out 
-                   hover:bg-gray-800 hover:scale-105 hover:shadow-2xl hover:shadow-black/40
-                   active:scale-95 active:bg-black w-full md:w-auto"
+                       transition-all duration-300 ease-in-out 
+                       hover:bg-gray-800 hover:scale-105 hover:shadow-2xl hover:shadow-black/40
+                       active:scale-95 active:bg-black w-full md:w-auto"
           >
             Shop Now
           </button>
@@ -119,8 +241,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* KOLOM GAMBAR */}
-        {/* items-end membuat isi kontainer ini menempel ke garis paling bawah */}
+        {/* KOLOM GAMBAR (Rata Bawah Sempurna) */}
         <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center items-end relative w-full px-8 md:px-0">
           <img
             src="../img/model.png"
@@ -184,7 +305,6 @@ export default function Home() {
                     {item.name}
                   </h4>
                   <div className="flex items-center space-x-1 mb-2">
-                    {/* Menggunakan react-icons FaStar untuk sistem rating */}
                     <FaStar className="text-[#FFC633] text-sm" />
                     <FaStar className="text-[#FFC633] text-sm" />
                     <FaStar className="text-[#FFC633] text-sm" />
@@ -202,13 +322,11 @@ export default function Home() {
             </div>
           )}
 
+          {/* Tombol View All - Berubah Menjadi Warna Utama Hitam Saat Di-hover */}
           <div className="text-center mt-10">
-            {/* Tombol View All di dalam section NEW ARRIVALS & TOP SELLING */}
-            <div className="text-center mt-10">
-              <button className="border border-gray-200 bg-white cursor-pointer text-black px-16 py-3 rounded-full font-medium transition-all duration-300 ease-in-out hover:bg-black hover:text-white hover:border-black hover:shadow-lg w-full md:w-auto">
-                View All
-              </button>
-            </div>
+            <button className="border border-gray-200 bg-white cursor-pointer text-black px-16 py-3 rounded-full font-medium transition-all duration-300 ease-in-out hover:bg-black hover:text-white hover:border-black hover:shadow-lg w-full md:w-auto">
+              View All
+            </button>
           </div>
         </section>
       ))}
@@ -221,27 +339,23 @@ export default function Home() {
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[600px]">
-            {/* 1. CASUAL CARD (col-span-1) */}
+            {/* 1. CASUAL CARD */}
             <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto hover:shadow-2xl transition-all duration-300 cursor-pointer">
-              {/* Gambar Full Background */}
               <img
                 src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80"
                 alt="Casual"
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
               />
-              {/* Overlay Gradasi agar teks terbaca */}
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
-              {/* Teks Kategori */}
               <span className="absolute top-8 left-8 text-3xl font-bold text-white z-10 tracking-wide">
                 Casual
               </span>
             </div>
 
-            {/* 2. FORMAL CARD (col-span-2) */}
+            {/* 2. FORMAL CARD */}
             <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto md:col-span-2 hover:shadow-2xl transition-all duration-300 cursor-pointer">
-              {/* Gambar Full Background (Mengganti link yang rusak di lampiran) */}
               <img
-                src="https://plus.unsplash.com/premium_photo-1661434624086-e02557c68815?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZHJlc3MlMjBmb3JtYWx8ZW58MHx8MHx8fDA%3D"
+                src="https://plus.unsplash.com/premium_photo-1661434624086-e02557c68815?w=600&auto=format&fit=crop&q=60"
                 alt="Formal"
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
               />
@@ -251,10 +365,10 @@ export default function Home() {
               </span>
             </div>
 
-            {/* 3. PARTY CARD (col-span-2) */}
+            {/* 3. PARTY CARD */}
             <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto md:col-span-2 hover:shadow-2xl transition-all duration-300 cursor-pointer">
               <img
-                src="https://images.unsplash.com/photo-1589810635657-232948472d98?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQzfHxkcmVzc3xlbnwwfHwwfHx8MA%3D%3D"
+                src="https://images.unsplash.com/photo-1589810635657-232948472d98?w=600&auto=format&fit=crop&q=60"
                 alt="Party"
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
               />
@@ -264,10 +378,10 @@ export default function Home() {
               </span>
             </div>
 
-            {/* 4. GYM CARD (col-span-1) */}
+            {/* 4. GYM CARD */}
             <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto hover:shadow-2xl transition-all duration-300 cursor-pointer">
               <img
-                src="https://images.unsplash.com/flagged/photo-1564714388616-9cdfa2b8063e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fG1vZGVsJTIwYmFqdSUyMGd5bXxlbnwwfHwwfHx8MA%3D%3D"
+                src="https://images.unsplash.com/flagged/photo-1564714388616-9cdfa2b8063e?w=600&auto=format&fit=crop&q=60"
                 alt="Gym"
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
               />
@@ -310,7 +424,6 @@ export default function Home() {
               </div>
               <h4 className="font-bold text-xl mb-3 flex items-center gap-2">
                 {testi.name}
-                {/* Menggunakan ikon centang verifikasi Bootstrap */}
                 <BsCheckCircleFill className="text-green-500 text-base" />
               </h4>
               <p className="text-gray-600 leading-relaxed text-sm">
@@ -333,7 +446,6 @@ export default function Home() {
 
           <div className="flex flex-col space-y-4 w-full md:w-[40%]">
             <div className="relative group">
-              {/* Opsional: Tambahkan transisi juga pada input form agar senada */}
               <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl group-focus-within:text-black transition-colors duration-300" />
               <input
                 type="email"
@@ -342,13 +454,13 @@ export default function Home() {
               />
             </div>
 
-            {/* Tombol Subscribe dengan Efek Kilat / Neon Glow */}
+            {/* Tombol Subscribe Ber-Efek Kilat / Neon Glow Putih Terang */}
             <button
               className="bg-white text-black font-extrabold px-6 py-4 rounded-full w-full 
-                   transition-all duration-300 ease-out relative
-                   hover:bg-white hover:scale-105 
-                   hover:shadow-[0_0_15px_#fff,0_0_30px_#fff,0_0_45px_rgba(255,255,255,0.6)]
-                   active:scale-95 active:shadow-[0_0_10px_#fff]"
+                         transition-all duration-300 ease-out relative outline-none
+                         hover:bg-white hover:scale-105 
+                         hover:shadow-[0_0_15px_#fff,0_0_30px_#fff,0_0_45px_rgba(255,255,255,0.6)]
+                         active:scale-95 active:shadow-[0_0_10px_#fff]"
             >
               Subscribe to Newsletter
             </button>
@@ -365,7 +477,6 @@ export default function Home() {
               We have clothes that suit your style and which you're proud to
               wear. From women to men.
             </p>
-            {/* Menggunakan ikon sosial media asli */}
             <div className="flex space-x-3 pt-2">
               <div className="w-9 h-9 rounded-full border border-gray-300 bg-white text-black flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition cursor-pointer text-lg">
                 <RiTwitterXFill />
