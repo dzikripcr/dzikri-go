@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useAuth } from "../../context/AuthContext";
 import HeaderSection from "../../components/HeaderSection";
 import AlertBox from "@/components/AlertBox";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -8,6 +8,8 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import { userAPI } from "../../services/userAPI";
 
 export default function Login() {
+  const { login } = useAuth();
+
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -46,7 +48,13 @@ export default function Login() {
         throw new Error("Email atau password salah");
       }
 
-      navigate("/dashboard");
+      login(user);
+
+      if (user.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       setError(err.message);
     }

@@ -9,6 +9,7 @@ import { Link, NavLink } from "react-router-dom";
 import { TbHanger } from "react-icons/tb";
 import { FaHome } from "react-icons/fa";
 import { BsBoxSeam } from "react-icons/bs";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
 
 export default function Sidebar() {
   const menuClass = ({ isActive }) =>
@@ -67,6 +68,12 @@ export default function Sidebar() {
               <span>Product</span>
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/users" className={menuClass}>
+              <AiOutlineUsergroupAdd className="text-[16px]"/>
+              <span>Users</span>
+            </NavLink>
+          </li>
         </ul>
       </div>
 
@@ -95,7 +102,7 @@ export default function Sidebar() {
 
           {/* Logout */}
           <Link
-            to="/"
+            to="/login"
             className="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-red-500 transition-colors"
             title="Logout"
           >

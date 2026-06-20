@@ -1,38 +1,44 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 import {
   FiSearch,
   FiShoppingCart,
   FiUser,
   FiChevronDown,
   FiBell,
+  FiLogOut,
 } from "react-icons/fi";
 
+import { useAuth } from "../../context/AuthContext";
+
 export default function Header() {
-  // State untuk kontrol buka/tutup pop-up notifikasi
+  const { user, logout } = useAuth();
+
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
-  // State untuk kontrol buka/tutup dropdown menu "Shop"
   const [isShopOpen, setIsShopOpen] = useState(false);
 
-  // State untuk mendeteksi apakah layar sedang di-scroll
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Fungsi untuk scroll otomatis (smooth) ke section terkait di halaman Home
-  // berdasarkan id yang sudah dipasang pada masing-masing komponen section.
   const scrollToSection = (sectionId) => {
     const target = document.getElementById(sectionId);
+
     if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
-    // Tutup dropdown Shop & notifikasi setelah navigasi
+
     setIsShopOpen(false);
     setIsNotifOpen(false);
   };
 
-  // Fungsi untuk memantau pergerakan Scroll
   useEffect(() => {
     const handleScroll = () => {
-      // Jika scroll lebih dari 20px, ubah state isScrolled menjadi true
       if (window.scrollY > 20) {
         setIsScrolled(true);
       } else {
@@ -41,237 +47,413 @@ export default function Header() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  // Data Notifikasi Terintegrasi
   const notifications = [
     {
       id: 1,
-      type: "shipping",
       title: "Pesanan Dikirim 🚚",
-      desc: "Hore! Paket 'Elegant Silk Dress' Anda sedang dalam perjalanan oleh kurir menuju alamat tujuan.",
-      time: "2 jam yang lalu",
+      desc: "Paket Anda sedang perjalanan",
+      time: "2 jam lalu",
       unread: true,
     },
+
     {
       id: 2,
-      type: "promo",
-      title: "Diskon 50% Khusus Hari Ini! ✨",
-      desc: "Gunakan kode voucher WEEKEND50 untuk semua koleksi Casual. Jangan sampai kehabisan!",
-      time: "5 jam yang lalu",
+      title: "Diskon 50% ✨",
+      desc: "Promo khusus hari ini",
+      time: "5 jam lalu",
       unread: true,
     },
+
     {
       id: 3,
-      type: "event",
-      title: "Midnight Sale Dimulai 🕛",
-      desc: "Dapatkan penawaran terbaik diskon hingga 70% mulai jam 12 malam nanti. Siapkan keranjang belanjamu!",
-      time: "1 hari yang lalu",
-      unread: false,
-    },
-    {
-      id: 4,
-      type: "chat",
-      title: "Pesan dari CS Boutique 💬",
-      desc: "Halo kak, ukuran M untuk produk 'Vintage Pearl Necklace' yang kakak tanyakan sudah restock kembali ya.",
-      time: "2 hari yang lalu",
-      unread: false,
-    },
-    {
-      id: 5,
-      type: "voucher",
-      title: "Voucher Cashback Rp 50.000 🎉",
-      desc: "Selamat! Voucher cashback loyalitas pelanggan telah ditambahkan otomatis ke dalam akun Anda.",
-      time: "3 hari yang lalu",
+      title: "Midnight Sale",
+      desc: "Diskon sampai 70%",
+      time: "1 hari lalu",
       unread: false,
     },
   ];
 
-  const unreadCount = notifications.filter((n) => n.unread).length;
+  const unreadCount = notifications.filter((item) => item.unread).length;
 
   return (
     <header
-      className={`sticky top-0 z-[100] transition-all duration-500 ease-in-out flex items-center justify-between px-8 ${
-        isScrolled
-          ? "py-3 bg-white/60 backdrop-blur-xl backdrop-saturate-150 shadow-sm border-b border-white/50"
-          : "py-5 bg-white border-b border-gray-200"
-      }`}
+      className={`
+    sticky top-0 z-[100]
+    flex items-center justify-between px-8
+
+    transition-all duration-500
+
+    ${
+      isScrolled
+        ? "py-3 bg-white/60 backdrop-blur-xl shadow"
+        : "py-5 bg-white border-b"
+    }
+
+    `}
     >
+      {/* LOGO */}
+
       <h1
         onClick={() => scrollToSection("hero")}
-        className={`font-black uppercase tracking-tighter cursor-pointer transition-all duration-500 ${
-          isScrolled ? "text-2xl" : "text-3xl"
-        }`}
+        className="
+            font-black
+            uppercase
+            tracking-tighter
+            cursor-pointer
+            text-3xl
+            "
       >
-        Boutique
+        BOUTIQUE
       </h1>
 
-      <nav className="hidden md:flex space-x-6 font-medium">
-        <button
-          onClick={() => scrollToSection("hero")}
-          className="hover:text-gray-600 cursor-pointer"
-        >
-          Home
-        </button>
-        {/* SHOP - dropdown ke beberapa section produk */}
+      {/* MENU */}
+
+      <nav
+        className="
+            hidden md:flex
+            space-x-6
+            font-medium
+            "
+      >
+        <button onClick={() => scrollToSection("hero")}>Home</button>
+
         <div className="relative">
           <button
             onClick={() => {
               setIsShopOpen(!isShopOpen);
-              setIsNotifOpen(false);
             }}
-            className="hover:text-gray-600 flex items-center gap-1 outline-none cursor-pointer"
+            className="
+                flex items-center gap-1
+                "
           >
-            Shop{" "}
-            <FiChevronDown
-              className={`text-sm mt-0.5 transition-transform duration-300 ${
-                isShopOpen ? "rotate-180" : ""
-              }`}
-            />
+            Shop
+            <FiChevronDown />
           </button>
 
           {isShopOpen && (
-            <div className="absolute left-0 mt-3 w-56 bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden transition-all duration-300">
+            <div
+              className="
+                absolute
+                top-8
+                left-0
+                w-48
+                bg-white
+                rounded-xl
+                shadow-xl
+                border
+                p-2
+                "
+            >
               <button
                 onClick={() => scrollToSection("new-arrivals")}
-                className="w-full text-left px-5 py-3 text-sm font-medium hover:bg-gray-50 transition cursor-pointer"
+                className="block w-full text-left p-3 hover:bg-gray-100"
               >
                 New Arrivals
               </button>
+
               <button
                 onClick={() => scrollToSection("top-selling")}
-                className="w-full text-left px-5 py-3 text-sm font-medium hover:bg-gray-50 transition cursor-pointer border-t border-gray-100"
+                className="block w-full text-left p-3 hover:bg-gray-100"
               >
                 Top Selling
               </button>
+
               <button
                 onClick={() => scrollToSection("dress-style")}
-                className="w-full text-left px-5 py-3 text-sm font-medium hover:bg-gray-50 transition cursor-pointer border-t border-gray-100"
+                className="block w-full text-left p-3 hover:bg-gray-100"
               >
-                Browse by Style
+                Style
               </button>
             </div>
           )}
         </div>
 
-        {/* NEW ARRIVALS */}
-        <button
-          onClick={() => scrollToSection("new-arrivals")}
-          className="hover:text-gray-600 cursor-pointer"
-        >
+        <button onClick={() => scrollToSection("new-arrivals")}>
           New Arrivals
         </button>
 
-        {/* ON SALE - sementara diarahkan ke section Top Selling */}
-        <button
-          onClick={() => scrollToSection("top-selling")}
-          className="hover:text-gray-600 cursor-pointer"
-        >
-          On Sale
-        </button>
+        <button onClick={() => scrollToSection("top-selling")}>On Sale</button>
 
-        {/* BRANDS */}
-        <button
-          onClick={() => scrollToSection("dress-style")}
-          className="hover:text-gray-600 cursor-pointer"
-        >
-          Brands
-        </button>
-
-        {/* TESTIMONIALS */}
-        <button
-          onClick={() => scrollToSection("testimonials")}
-          className="hover:text-gray-600 cursor-pointer"
-        >
+        <button onClick={() => scrollToSection("testimonials")}>
           Testimonials
         </button>
       </nav>
 
-      <div className="flex items-center space-x-5 w-full md:w-auto mt-4 md:mt-0 justify-end">
+      {/* RIGHT AREA */}
+      <div
+        className="
+            flex
+            items-center
+            gap-5
+            "
+      >
         {/* SEARCH BOX */}
         <div
-          className={`hidden lg:flex items-center px-4 py-2.5 rounded-full w-80 border transition-all duration-500 ease-in-out group focus-within:w-[440px] focus-within:bg-white focus-within:border-gray-200 focus-within:shadow-xl focus-within:shadow-black/5 ${
+          className={`
+            hidden lg:flex 
+            items-center
+            px-4
+            py-2.5
+            rounded-full
+            w-80
+            border
+            transition-all
+            duration-500
+            ease-in-out
+            group
+            focus-within:w-[440px]
+            focus-within:bg-white
+            focus-within:border-gray-200
+            focus-within:shadow-xl
+            focus-within:shadow-black/5
+            ${
             isScrolled
-              ? "bg-white/40 border-white/30 backdrop-blur-md"
-              : "bg-[#F0F0F0] border-transparent"
-          }`}
+                ? "bg-white/40 border-white/30 backdrop-blur-md"
+                : "bg-[#F0F0F0] border-transparent"
+            }
+        `}
         >
-          <FiSearch className="text-gray-500 mr-2 text-xl transition-colors duration-300 group-focus-within:text-black" />
+          <FiSearch
+            className="
+            text-gray-500
+            mr-2
+            text-xl
+            transition-colors
+            duration-300
+            group-focus-within:text-black
+            "
+          />
+
           <input
             type="text"
             placeholder="Search for products..."
-            className="bg-transparent outline-none w-full text-sm text-gray-900 placeholder-gray-500"
+            className="
+            bg-transparent
+            outline-none
+            w-full
+            text-sm
+            text-gray-900
+            placeholder-gray-500
+            "
           />
         </div>
 
-        {/* AREA NOTIFIKASI CRM */}
-        <div className="relative">
-          <button
-            onClick={() => {
-              setIsNotifOpen(!isNotifOpen);
-              setIsShopOpen(false);
-            }}
-            className="text-2xl hover:text-gray-600 transition cursor-pointer relative flex items-center justify-center p-1 mt-1 outline-none"
+        {/* GUEST */}
+
+        {!user ? (
+          <Link
+            to="/login"
+            className="
+                group
+                relative
+                overflow-hidden
+                flex
+                items-center
+                justify-center
+                gap-2
+                bg-black
+                text-white
+                px-10
+                py-3.5
+                rounded-full
+                font-medium
+                tracking-wide
+                shadow-xl
+                shadow-black/20
+                transition-all
+                duration-300
+                ease-out
+                hover:bg-gray-800
+                hover:scale-105
+                hover:-translate-y-1
+                hover:shadow-2xl
+                hover:shadow-black/40
+                active:scale-95
+                cursor-pointer
+            "
           >
-            <FiBell />
-            {unreadCount > 0 && (
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold border-2 border-white">
-                {unreadCount}
-              </span>
-            )}
-          </button>
+            {/* efek cahaya */}
+            <span
+              className="
+                absolute
+                inset-0
+                bg-gradient-to-r
+                from-transparent
+                via-white/30
+                to-transparent
+                translate-x-[-120%]
+                group-hover:translate-x-[120%]
+                transition-transform
+                duration-700
+                ease-in-out
+                "
+            ></span>
 
-          {isNotifOpen && (
-            <div className="absolute right-[-40px] md:right-0 mt-4 w-[320px] md:w-[360px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden transition-all duration-300">
-              <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 className="font-extrabold text-base tracking-tight">
-                  Notifikasi Baru
-                </h3>
-                <span className="text-xs text-blue-600 cursor-pointer hover:underline font-semibold">
-                  Tandai semua dibaca
-                </span>
-              </div>
-              <div className="max-h-[350px] overflow-y-auto">
-                {notifications.map((notif) => (
-                  <div
-                    key={notif.id}
-                    className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition duration-200 flex flex-col gap-1 ${
-                      notif.unread ? "bg-blue-50/40" : ""
-                    }`}
+            <span
+              className="
+                relative
+                z-10
+                "
+            >
+              Login
+            </span>
+
+            <span
+              className="
+                relative
+                z-10
+                transition-transform
+                duration-300
+                group-hover:translate-x-1
+                "
+            >
+              →
+            </span>
+          </Link>
+        ) : (
+          <>
+            {/* NOTIFICATION */}
+
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setIsNotifOpen(!isNotifOpen);
+                  setIsProfileOpen(false);
+                }}
+                className="
+                    text-2xl
+                    relative
+                    "
+              >
+                <FiBell />
+
+                {unreadCount > 0 && (
+                  <span
+                    className="
+                        absolute
+                        top-[-5px]
+                        right-[-5px]
+                        bg-red-500
+                        text-white
+                        text-xs
+                        rounded-full
+                        w-5
+                        h-5
+                        flex
+                        items-center
+                        justify-center
+                        "
                   >
-                    <div className="flex items-start justify-between">
-                      <h4 className="text-sm font-bold text-gray-900 leading-tight">
-                        {notif.title}
-                      </h4>
-                      {notif.unread && (
-                        <span className="w-2 h-2 bg-blue-600 rounded-full mt-1 flex-shrink-0"></span>
-                      )}
-                    </div>
-                    <p className="text-xs text-gray-600 leading-relaxed pr-2">
-                      {notif.desc}
-                    </p>
-                    <span className="text-[10px] text-gray-400 font-medium mt-1">
-                      {notif.time}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div className="p-3 text-center border-t border-gray-100 hover:bg-black hover:text-white cursor-pointer transition-colors duration-300">
-                <span className="text-sm font-bold">
-                  Lihat Semua Notifikasi
-                </span>
-              </div>
-            </div>
-          )}
-        </div>
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
 
-        <button className="text-2xl hover:text-gray-600 transition cursor-pointer">
-          <FiShoppingCart />
-        </button>
-        <button className="text-2xl hover:text-gray-600 transition cursor-pointer">
-          <FiUser />
-        </button>
+              {isNotifOpen && (
+                <div
+                  className="
+                    absolute
+                    right-0
+                    mt-4
+                    w-80
+                    bg-white
+                    rounded-xl
+                    shadow-xl
+                    border
+                    overflow-hidden
+                    "
+                >
+                  <div
+                    className="
+                        p-4
+                        font-bold
+                        border-b
+                        "
+                  >
+                    Notification
+                  </div>
+
+                  {notifications.map((item) => (
+                    <div
+                      key={item.id}
+                      className="
+                        p-4
+                        hover:bg-gray-50
+                        border-b
+                        "
+                    >
+                      <div className="font-semibold">{item.title}</div>
+
+                      <p className="text-sm text-gray-500">{item.desc}</p>
+
+                      <span className="text-xs text-gray-400">{item.time}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* CART */}
+
+            <button className="text-2xl">
+              <FiShoppingCart />
+            </button>
+
+            {/* PROFILE */}
+
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setIsProfileOpen(!isProfileOpen);
+                  setIsNotifOpen(false);
+                }}
+                className="text-2xl"
+              >
+                <FiUser />
+              </button>
+
+              {isProfileOpen && (
+                <div
+                  className="
+                    absolute
+                    right-0
+                    mt-4
+                    w-48
+                    bg-white
+                    border
+                    shadow-xl
+                    rounded-xl
+                    p-3
+                    "
+                >
+                  <p className="font-bold">{user.name}</p>
+
+                  <p className="text-sm text-gray-500">{user.role}</p>
+
+                  <button
+                    onClick={logout}
+                    className="
+                        mt-3
+                        flex
+                        items-center
+                        gap-2
+                        text-red-500
+                        "
+                  >
+                    <FiLogOut />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </header>
   );
