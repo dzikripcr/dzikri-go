@@ -27,7 +27,7 @@ const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"));
 
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail"))
 
-const Home = React.lazy(() => import("./pages/Home"))
+const Home = React.lazy(() => import("./pages/crm/Home"))
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";

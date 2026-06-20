@@ -18,7 +18,7 @@ export default function Footer() {
           {/* Navigation */}
           <div className="flex items-center gap-6 text-sm font-medium text-gray-600">
             <Link
-              to="/"
+              to="/dashboard"
               className="hover:text-[#4EA674] transition-colors"
             >
               Dashboard
