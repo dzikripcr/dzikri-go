@@ -9,7 +9,7 @@ import TopSelling from "@/components/crm/TopSelling";
 import DressStyle from "@/components/crm/DressStyle";
 import Testimonials from "@/components/crm/Testimonials";
 import Footer from "@/components/crm/Footer";
-import Chat from "@/components/crm/chat";
+import Chat from "@/components/crm/Chat";
 
 export default function Home() {
   // Membagi data produk untuk 2 section langsung dari data yang di-import
