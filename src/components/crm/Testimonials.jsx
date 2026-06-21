@@ -23,7 +23,7 @@ export default function Testimonials() {
   ];
 
   return (
-    <section id="testimonials" className="py-24 relative overflow-hidden bg-gradient-to-b from-white via-[#fafafa] to-white">
+    <section id="testimonials" className="scroll-mt-24 py-24 relative overflow-hidden bg-gradient-to-b from-white via-[#fafafa] to-white">
       {/* CSS Khusus untuk Marquee Review */}
       <style>
         {`

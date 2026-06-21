@@ -3,6 +3,9 @@ import "./assets/tailwind.css";
 
 import { Route, Routes } from "react-router-dom";
 
+// Komponen global - auto scroll ke atas tiap pindah route
+const ScrollToTop= React.lazy(() => import("./components/crm/ScrollToTop"));
+
 // =====================
 // Pages Lazy Load
 // =====================
@@ -18,6 +21,8 @@ const Products = React.lazy(() => import("./pages/Products"));
 const User = React.lazy(() => import("./pages/User"));
 
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
+
+const ProductDetailCRM = React.lazy(() => import("./components/crm/Productdetail"));
 
 const Home = React.lazy(() => import("./pages/crm/Home"));
 
@@ -52,9 +57,12 @@ import ProtectedAdmin from "./components/ProtectedAdmin";
 export default function App() {
   return (
     <Suspense fallback={<Loading />}>
+      <ScrollToTop />
       <Routes>
 
         <Route path="/" element={<Home />} />
+
+        <Route path="/product/:id" element={<ProductDetailCRM />} />
 
         <Route
           element={

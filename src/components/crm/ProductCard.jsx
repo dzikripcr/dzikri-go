@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
 export default function ProductCard({ item }) {
   return (
-    <div className="cursor-pointer group flex flex-col">
+    <Link to={`/product/${item.id}`} className="cursor-pointer group flex flex-col">
       <div className="bg-[#F0EEED] aspect-[4/5] rounded-[20px] mb-4 overflow-hidden relative">
         <img
           src={item.image}
@@ -32,6 +33,6 @@ export default function ProductCard({ item }) {
       <div className="flex items-center space-x-3">
         <span className="text-2xl font-bold">${item.price.toFixed(2)}</span>
       </div>
-    </div>
+    </Link>
   );
 }

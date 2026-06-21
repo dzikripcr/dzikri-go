@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import {
   FiSearch,
@@ -15,6 +15,9 @@ import { useAuth } from "../../context/AuthContext";
 export default function Header() {
   const { user, logout } = useAuth();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [isNotifOpen, setIsNotifOpen] = useState(false);
 
   const [isShopOpen, setIsShopOpen] = useState(false);
@@ -23,14 +26,23 @@ export default function Header() {
 
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // scrollToSection sekarang "sadar route":
+  // - Kalau user sedang berada di halaman Home ("/"), langsung scroll ke section.
+  // - Kalau user sedang di halaman lain (misal /product/:id), pindah ke Home dulu
+  //   sambil membawa instruksi section tujuan lewat router state, lalu Home.jsx
+  //   yang akan melakukan scroll setelah halamannya selesai dirender.
   const scrollToSection = (sectionId) => {
-    const target = document.getElementById(sectionId);
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollTo: sectionId } });
+    } else {
+      const target = document.getElementById(sectionId);
 
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      if (target) {
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
     }
 
     setIsShopOpen(false);
@@ -121,7 +133,7 @@ export default function Header() {
             font-medium
             "
       >
-        <button onClick={() => scrollToSection("hero")}>Home</button>
+        <button className="cursor-pointer" onClick={() => scrollToSection("hero")}>Home</button>
 
         <div className="relative">
           <button
@@ -130,6 +142,7 @@ export default function Header() {
             }}
             className="
                 flex items-center gap-1
+                cursor-pointer
                 "
           >
             Shop
@@ -152,21 +165,21 @@ export default function Header() {
             >
               <button
                 onClick={() => scrollToSection("new-arrivals")}
-                className="block w-full text-left p-3 hover:bg-gray-100"
+                className="block w-full text-left p-3 hover:bg-gray-100 cursor-pointer"
               >
                 New Arrivals
               </button>
 
               <button
                 onClick={() => scrollToSection("top-selling")}
-                className="block w-full text-left p-3 hover:bg-gray-100"
+                className="block w-full text-left p-3 hover:bg-gray-100 cursor-pointer"
               >
                 Top Selling
               </button>
 
               <button
                 onClick={() => scrollToSection("dress-style")}
-                className="block w-full text-left p-3 hover:bg-gray-100"
+                className="block w-full text-left p-3 hover:bg-gray-100 cursor-pointer"
               >
                 Style
               </button>
@@ -174,13 +187,13 @@ export default function Header() {
           )}
         </div>
 
-        <button onClick={() => scrollToSection("new-arrivals")}>
+        <button className="cursor-pointer" onClick={() => scrollToSection("new-arrivals")}>
           New Arrivals
         </button>
 
-        <button onClick={() => scrollToSection("top-selling")}>On Sale</button>
+        <button className="cursor-pointer" onClick={() => scrollToSection("top-selling")}>On Sale</button>
 
-        <button onClick={() => scrollToSection("testimonials")}>
+        <button className="cursor-pointer" onClick={() => scrollToSection("testimonials")}>
           Testimonials
         </button>
       </nav>
