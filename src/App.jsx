@@ -52,7 +52,9 @@ import Forgot from "./pages/auth/Forgot";
 
 import Loading from "./components/Loading";
 
-import ProtectedAdmin from "./components/ProtectedAdmin";
+const ProtectedAdmin = React.lazy(() => import("./components/ProtectedAdmin"));
+
+const RequireMember = React.lazy(() => import("./components/RequireMember"));
 
 export default function App() {
   return (
@@ -62,7 +64,14 @@ export default function App() {
 
         <Route path="/" element={<Home />} />
 
-        <Route path="/product/:id" element={<ProductDetailCRM />} />
+        <Route
+          path="/product/:id"
+          element={
+            <RequireMember>
+              <ProductDetailCRM />
+            </RequireMember>
+          }
+        />
 
         <Route
           element={

@@ -5,7 +5,7 @@ export default function ProtectedAdmin({ children }) {
   const { user } = useAuth();
 
   if (!user || user.role !== "admin") {
-    return <Navigate to="/home" />;
+    return <Navigate to="/" />; // sebelumnya "/home"
   }
 
   return children;

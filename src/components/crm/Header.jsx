@@ -121,7 +121,7 @@ export default function Header() {
             text-3xl
             "
       >
-        BOUTIQUE
+        Boutiquera
       </h1>
 
       {/* MENU */}

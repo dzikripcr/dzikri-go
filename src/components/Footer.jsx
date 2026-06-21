@@ -44,6 +44,13 @@ export default function Footer() {
             >
               Product
             </Link>
+
+            <Link
+              to="/users"
+              className="hover:text-[#4EA674] transition-colors"
+            >
+              User
+            </Link>
           </div>
         </div>
 

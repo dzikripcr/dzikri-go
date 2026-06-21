@@ -30,7 +30,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10 border-b border-gray-300 pt-8 pb-12">
         <div className="md:col-span-1 space-y-6">
           <h3 className="text-3xl font-black uppercase tracking-tighter">
-            Boutique
+            Boutiquera
           </h3>
           <p className="text-sm text-gray-500 leading-relaxed">
             We have clothes that suit your style and which you're proud to
@@ -158,7 +158,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-        <p>Boutique © 2025/2026, All Rights Reserved</p>
+        <p>Boutiquera © 2025/2026, All Rights Reserved</p>
         <div className="flex space-x-3 mt-4 md:mt-0">
           <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">
             VISA

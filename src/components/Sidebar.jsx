@@ -26,14 +26,14 @@ export default function Sidebar() {
     >
       {/* Logo */}
       <div id="sidebar-logo" className="flex items-center space-x-2 mb-10">
-        <div className="text-[#4EA674] text-2xl">
+        <div className="text-black text-2xl">
           <TbHanger />
         </div>
         <span
           id="logo-title"
-          className="font-bold text-2xl text-gray-900 tracking-wide"
+          className="font-bold text-2xl text-gray-900 tracking-wide uppercase"
         >
-          BOUTIQUE
+          Boutiquera
         </span>
       </div>
 
