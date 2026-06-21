@@ -4,7 +4,7 @@ import "./assets/tailwind.css";
 import { Route, Routes } from "react-router-dom";
 
 // Komponen global - auto scroll ke atas tiap pindah route
-const ScrollToTop = React.lazy(() => import("./components/crm/ScrollToTop"));
+const ScrollToTop = React.lazy(() => import("./components/crm/Scrolltotop"));
 
 // =====================
 // Pages Lazy Load
