@@ -8,9 +8,16 @@ import {
   FiChevronDown,
   FiBell,
   FiLogOut,
+  FiAward,
 } from "react-icons/fi";
 
 import { useAuth } from "../../context/AuthContext";
+import {
+  getLevelFromPoints,
+  getMemberStatus,
+  STATUS_BADGE_CLASSES,
+  LEVEL_BADGE_CLASSES,
+} from "../../services/membership";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -25,6 +32,18 @@ export default function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // NOTE: field membership (points, orderCount, totalSpend, isActive) belum
+  // ada di AuthContext saat ini, jadi dipasang fallback dulu di sini supaya
+  // dropdown tidak error. Begitu field ini sudah dikirim backend dan
+  // disimpan di "user", fallback ini otomatis terpakai sebagai default saja.
+  const points = user?.points ?? 0;
+  const orderCount = user?.orderCount ?? 0;
+  const totalSpend = user?.totalSpend ?? 0;
+  const isActive = user?.isActive ?? true;
+
+  const level = getLevelFromPoints(points);
+  const status = getMemberStatus({ isActive, orderCount, totalSpend, level });
 
   // scrollToSection sekarang "sadar route":
   // - Kalau user sedang berada di halaman Home ("/"), langsung scroll ke section.
@@ -453,30 +472,98 @@ export default function Header() {
                     absolute
                     right-0
                     mt-4
-                    w-48
+                    w-64
                     bg-white
                     border
                     shadow-xl
-                    rounded-xl
-                    p-3
+                    rounded-2xl
+                    p-4
                     "
                 >
-                  <p className="font-bold">{user.name}</p>
+                  {/* 1. Nama + Role */}
+                  <p className="font-bold">Aulia Rahman</p>
+                  <p className="text-sm text-gray-500">Member</p>
 
-                  <p className="text-sm text-gray-500">{user.role}</p>
+                  {/* 2 & 3. Status Member + Level Membership */}
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    <span
+                      className={`
+                        px-2.5 py-1 rounded-full
+                        text-[11px] font-bold
+                        bg-purple-100 text-purple-700
+                      `}
+                    >
+                      VIP
+                    </span>
 
+                    <span
+                      className={`
+                        flex items-center gap-1 px-2.5 py-1 rounded-full
+                        text-[11px] font-bold
+                        bg-blue-100 text-blue-700
+                      `}
+                    >
+                      <FiAward className="text-xs" />
+                      Platinum
+                    </span>
+                  </div>
+
+                  {/* 4. Button menuju kelola Profile */}
                   <button
-                    onClick={logout}
+                    onClick={() => {
+                      setIsProfileOpen(false);
+                      navigate("/profile");
+                    }}
                     className="
-                        mt-3
+                        mt-4
+                        w-full
                         flex
                         items-center
+                        justify-center
                         gap-2
-                        text-red-500
+                        bg-black
+                        text-white
+                        text-sm
+                        font-medium
+                        py-2.5
+                        rounded-full
+                        transition-all
+                        duration-300
+                        hover:bg-gray-800
                         cursor-pointer
                         "
                   >
-                    <FiLogOut />
+                    <FiUser />
+                    Profile Member
+                  </button>
+
+                  {/* 5. Button Logout */}
+                  <button
+                    onClick={logout}
+                    className="
+                      mt-2
+                      w-full
+                      flex
+                      items-center
+                      justify-center
+                      gap-2
+                      text-red-500
+                      text-sm
+                      font-medium
+                      py-2
+                      rounded-full
+                      cursor-pointer
+                      transition-all
+                      duration-300
+                      ease-in-out
+                      hover:bg-red-500
+                      hover:text-white
+                      hover:shadow-md
+                      hover:scale-[1.02]
+                      active:scale-95
+                    "
+                  >
+                    <FiLogOut className="transition-transform duration-300 group-hover:translate-x-1" />
                     Logout
                   </button>
                 </div>

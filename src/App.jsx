@@ -4,7 +4,7 @@ import "./assets/tailwind.css";
 import { Route, Routes } from "react-router-dom";
 
 // Komponen global - auto scroll ke atas tiap pindah route
-const ScrollToTop= React.lazy(() => import("./components/crm/ScrollToTop"));
+const ScrollToTop = React.lazy(() => import("./components/crm/ScrollToTop"));
 
 // =====================
 // Pages Lazy Load
@@ -22,7 +22,9 @@ const User = React.lazy(() => import("./pages/User"));
 
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
 
-const ProductDetailCRM = React.lazy(() => import("./components/crm/Productdetail"));
+const ProductDetailCRM = React.lazy(
+  () => import("./components/crm/Productdetail"),
+);
 
 const Home = React.lazy(() => import("./pages/crm/Home"));
 
@@ -56,12 +58,13 @@ const ProtectedAdmin = React.lazy(() => import("./components/ProtectedAdmin"));
 
 const RequireMember = React.lazy(() => import("./components/RequireMember"));
 
+const ProfileMember = React.lazy(() => import("./components/crm/ProfileMember"));
+
 export default function App() {
   return (
     <Suspense fallback={<Loading />}>
       <ScrollToTop />
       <Routes>
-
         <Route path="/" element={<Home />} />
 
         <Route
@@ -69,6 +72,15 @@ export default function App() {
           element={
             <RequireMember>
               <ProductDetailCRM />
+            </RequireMember>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <RequireMember>
+              <ProfileMember />
             </RequireMember>
           }
         />

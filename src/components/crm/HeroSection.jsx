@@ -21,11 +21,9 @@ export default function HeroSection() {
           style.
         </p>
         <button
-          className="bg-black text-white px-12 py-4 rounded-full font-medium 
-             transition-all duration-300 ease-in-out 
-             hover:bg-gray-800 hover:scale-105 
-             hover:shadow-[0_0_15px_rgba(255,255,255,0.8),0_0_30px_rgba(255,255,255,0.5),0_0_45px_rgba(255,255,255,0.3)]
-             active:scale-95 active:bg-black active:shadow-[0_0_10px_rgba(255,255,255,0.6)] w-full md:w-auto cursor-pointer"
+          className="bg-black text-white font-medium py-4 rounded-full w-full transition-all duration-300 ease-out relative outline-none
+                hover:bg-black hover:scale-105 hover:shadow-[0_0_15px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3),0_0_45px_rgba(0,0,0,0.2)]
+                active:scale-95 active:shadow-[0_0_10px_rgba(0,0,0,0.4)] cursor-pointer"
         >
           Shop Now
         </button>
