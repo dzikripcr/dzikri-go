@@ -65,28 +65,46 @@ export default function Header() {
     };
   }, []);
 
+  // Data Notifikasi Terintegrasi
   const notifications = [
     {
       id: 1,
+      type: "shipping",
       title: "Pesanan Dikirim 🚚",
-      desc: "Paket Anda sedang perjalanan",
-      time: "2 jam lalu",
+      desc: "Hore! Paket 'Elegant Silk Dress' Anda sedang dalam perjalanan oleh kurir menuju alamat tujuan.",
+      time: "2 jam yang lalu",
       unread: true,
     },
-
     {
       id: 2,
-      title: "Diskon 50% ✨",
-      desc: "Promo khusus hari ini",
-      time: "5 jam lalu",
+      type: "promo",
+      title: "Diskon 50% Khusus Hari Ini! ✨",
+      desc: "Gunakan kode voucher WEEKEND50 untuk semua koleksi Casual. Jangan sampai kehabisan!",
+      time: "5 jam yang lalu",
       unread: true,
     },
-
     {
       id: 3,
-      title: "Midnight Sale",
-      desc: "Diskon sampai 70%",
-      time: "1 hari lalu",
+      type: "event",
+      title: "Midnight Sale Dimulai 🕛",
+      desc: "Dapatkan penawaran terbaik diskon hingga 70% mulai jam 12 malam nanti. Siapkan keranjang belanjamu!",
+      time: "1 hari yang lalu",
+      unread: false,
+    },
+    {
+      id: 4,
+      type: "chat",
+      title: "Pesan dari CS Boutique 💬",
+      desc: "Halo kak, ukuran M untuk produk 'Vintage Pearl Necklace' yang kakak tanyakan sudah restock kembali ya.",
+      time: "2 hari yang lalu",
+      unread: false,
+    },
+    {
+      id: 5,
+      type: "voucher",
+      title: "Voucher Cashback Rp 50.000 🎉",
+      desc: "Selamat! Voucher cashback loyalitas pelanggan telah ditambahkan otomatis ke dalam akun Anda.",
+      time: "3 hari yang lalu",
       unread: false,
     },
   ];
@@ -133,7 +151,12 @@ export default function Header() {
             font-medium
             "
       >
-        <button className="cursor-pointer" onClick={() => scrollToSection("hero")}>Home</button>
+        <button
+          className="cursor-pointer"
+          onClick={() => scrollToSection("hero")}
+        >
+          Home
+        </button>
 
         <div className="relative">
           <button
@@ -187,13 +210,24 @@ export default function Header() {
           )}
         </div>
 
-        <button className="cursor-pointer" onClick={() => scrollToSection("new-arrivals")}>
+        <button
+          className="cursor-pointer"
+          onClick={() => scrollToSection("new-arrivals")}
+        >
           New Arrivals
         </button>
 
-        <button className="cursor-pointer" onClick={() => scrollToSection("top-selling")}>On Sale</button>
+        <button
+          className="cursor-pointer"
+          onClick={() => scrollToSection("top-selling")}
+        >
+          On Sale
+        </button>
 
-        <button className="cursor-pointer" onClick={() => scrollToSection("testimonials")}>
+        <button
+          className="cursor-pointer"
+          onClick={() => scrollToSection("testimonials")}
+        >
           Testimonials
         </button>
       </nav>
@@ -226,7 +260,7 @@ export default function Header() {
             focus-within:shadow-xl
             focus-within:shadow-black/5
             ${
-            isScrolled
+              isScrolled
                 ? "bg-white/40 border-white/30 backdrop-blur-md"
                 : "bg-[#F0F0F0] border-transparent"
             }
@@ -333,88 +367,70 @@ export default function Header() {
           <>
             {/* NOTIFICATION */}
 
+            {/* AREA NOTIFIKASI CRM */}
             <div className="relative">
               <button
                 onClick={() => {
                   setIsNotifOpen(!isNotifOpen);
-                  setIsProfileOpen(false);
+                  setIsShopOpen(false);
                 }}
-                className="
-                    text-2xl
-                    relative
-                    "
+                className="text-2xl hover:text-gray-600 transition cursor-pointer relative flex items-center justify-center p-1 mt-1 outline-none"
               >
                 <FiBell />
-
                 {unreadCount > 0 && (
-                  <span
-                    className="
-                        absolute
-                        top-[-5px]
-                        right-[-5px]
-                        bg-red-500
-                        text-white
-                        text-xs
-                        rounded-full
-                        w-5
-                        h-5
-                        flex
-                        items-center
-                        justify-center
-                        "
-                  >
+                  <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold border-2 border-white">
                     {unreadCount}
                   </span>
                 )}
               </button>
 
               {isNotifOpen && (
-                <div
-                  className="
-                    absolute
-                    right-0
-                    mt-4
-                    w-80
-                    bg-white
-                    rounded-xl
-                    shadow-xl
-                    border
-                    overflow-hidden
-                    "
-                >
-                  <div
-                    className="
-                        p-4
-                        font-bold
-                        border-b
-                        "
-                  >
-                    Notification
+                <div className="absolute right-[-40px] md:right-0 mt-4 w-[320px] md:w-[360px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden transition-all duration-300">
+                  <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                    <h3 className="font-extrabold text-base tracking-tight">
+                      Notifikasi Baru
+                    </h3>
+                    <span className="text-xs text-blue-600 cursor-pointer hover:underline font-semibold">
+                      Tandai semua dibaca
+                    </span>
                   </div>
-
-                  {notifications.map((item) => (
-                    <div
-                      key={item.id}
-                      className="
-                        p-4
-                        hover:bg-gray-50
-                        border-b
-                        "
-                    >
-                      <div className="font-semibold">{item.title}</div>
-
-                      <p className="text-sm text-gray-500">{item.desc}</p>
-
-                      <span className="text-xs text-gray-400">{item.time}</span>
-                    </div>
-                  ))}
+                  <div className="max-h-[350px] overflow-y-auto">
+                    {notifications.map((notif) => (
+                      <div
+                        key={notif.id}
+                        className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition duration-200 flex flex-col gap-1 ${
+                          notif.unread ? "bg-blue-50/40" : ""
+                        }`}
+                      >
+                        <div className="flex items-start justify-between">
+                          <h4 className="text-sm font-bold text-gray-900 leading-tight">
+                            {notif.title}
+                          </h4>
+                          {notif.unread && (
+                            <span className="w-2 h-2 bg-blue-600 rounded-full mt-1 flex-shrink-0"></span>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-600 leading-relaxed pr-2">
+                          {notif.desc}
+                        </p>
+                        <span className="text-[10px] text-gray-400 font-medium mt-1">
+                          {notif.time}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="p-3 text-center border-t border-gray-100 hover:bg-black hover:text-white cursor-pointer transition-colors duration-300">
+                    <span className="text-sm font-bold">
+                      Lihat Semua Notifikasi
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
 
             {/* CART */}
 
-            <button className="text-2xl">
+            <button className="text-2xl cursor-pointer">
               <FiShoppingCart />
             </button>
 
@@ -426,7 +442,7 @@ export default function Header() {
                   setIsProfileOpen(!isProfileOpen);
                   setIsNotifOpen(false);
                 }}
-                className="text-2xl"
+                className="text-2xl cursor-pointer"
               >
                 <FiUser />
               </button>
@@ -457,6 +473,7 @@ export default function Header() {
                         items-center
                         gap-2
                         text-red-500
+                        cursor-pointer
                         "
                   >
                     <FiLogOut />
