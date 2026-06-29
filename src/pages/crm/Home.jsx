@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 // Mengimpor data JSON produk
 import productsData from "@/data/products.json";
 import Header from "@/components/crm/Header";
-import HeroSection from "@/components/crm/HeroSection";
+import HeroSection from "@/components/hero/HeroSection";
 import BrandsBanner from "@/components/crm/BrandsBanner";
 import NewArrivals from "@/components/crm/NewArrivals";
 import TopSelling from "@/components/crm/TopSelling";
