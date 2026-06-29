@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import productsData from "@/data/products.json";
 import Header from "@/components/crm/Header";
 import HeroSection from "@/components/hero/HeroSection";
+import MembershipSection from "@/components/membership/MembershipSection";
 import BrandsBanner from "@/components/crm/BrandsBanner";
 import NewArrivals from "@/components/crm/NewArrivals";
 import TopSelling from "@/components/crm/TopSelling";
@@ -47,6 +48,7 @@ export default function Home() {
       <NewArrivals products={newArrivals} />
       <TopSelling products={topSelling} />
       <DressStyle />
+      <MembershipSection />
       <Testimonials />
       <Footer />
       <Chat />

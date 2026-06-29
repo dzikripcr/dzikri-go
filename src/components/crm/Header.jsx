@@ -231,16 +231,9 @@ export default function Header() {
 
         <button
           className="cursor-pointer"
-          onClick={() => scrollToSection("new-arrivals")}
+          onClick={() => scrollToSection("membership")}
         >
-          New Arrivals
-        </button>
-
-        <button
-          className="cursor-pointer"
-          onClick={() => scrollToSection("top-selling")}
-        >
-          On Sale
+          Membership
         </button>
 
         <button

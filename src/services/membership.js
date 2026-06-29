@@ -26,8 +26,8 @@ export function calculatePointsFromPurchase(purchaseAmount) {
 // ---------------------------------------------------------------------------
 export const LEVEL_TIERS = [
   { name: "Silver", min: 0 },
-  { name: "Platinum", min: 500 },
-  { name: "Gold", min: 1500 },
+  { name: "Gold", min: 500 },
+  { name: "Platinum", min: 1500 },
 ];
 
 export function getLevelFromPoints(points) {
