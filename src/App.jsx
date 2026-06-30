@@ -87,9 +87,7 @@ export default function App() {
 
         <Route
           element={
-            <ProtectedAdmin>
               <MainLayout />
-            </ProtectedAdmin>
           }
         >
           <Route path="/dashboard" element={<Dashboard />} />
