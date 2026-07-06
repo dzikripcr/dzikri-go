@@ -52,7 +52,7 @@ export default function Login() {
 
       login(user);
 
-      if (user.role === "admin") {
+      if (["admin", "superadmin"].includes(user.role)) {
         navigate("/dashboard");
       } else {
         const redirectTo = location.state?.from

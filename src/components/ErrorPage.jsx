@@ -30,8 +30,8 @@ export default function ErrorPage(props) {
 
       {/* Action Button */}
       <Link
-        to="/"
-        className="mt-10 bg-gray-900 text-white px-10 py-3 rounded-full shadow-xl hover:bg-gray-800 hover:-translate-y-1 transition-all duration-300 text-sm font-medium tracking-widest"
+        to="/dashboard"
+        className="mt-10 bg-[#4EA674] text-white px-10 py-3 rounded-full shadow-xl hover:bg-[#4ea674b4] hover:-translate-y-1 transition-all duration-300 text-sm font-medium tracking-widest"
       >
         BACK TO DASHBOARD
       </Link>

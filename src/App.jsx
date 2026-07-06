@@ -61,21 +61,25 @@ import Forgot from "./pages/auth/Forgot";
 // Component
 
 import Loading from "./components/Loading";
+import RoleGuard from "./components/RoleGuard";
 
+// Tidak diapakai untuk sementara, karena cross chesk project PFL
 const ProtectedAdmin = React.lazy(() => import("./components/ProtectedAdmin"));
 
 const RequireMember = React.lazy(() => import("./components/RequireMember"));
 
-const ProfileMember = React.lazy(() => import("./components/crm/ProfileMember"));
+const ProfileMember = React.lazy(
+  () => import("./components/crm/ProfileMember"),
+);
 
 export default function App() {
   return (
     <Suspense fallback={<Loading />}>
       <ScrollToTop />
-      <Routes>
 
+      <Routes>
         {/* CRM LAYOUT */}
-        
+
         <Route path="/" element={<Home />} />
 
         <Route
@@ -98,32 +102,98 @@ export default function App() {
 
         {/* MAIN LAYOUT */}
 
-        <Route
-          element={
-              <MainLayout />
-          }
-        >
+        <Route element={<MainLayout />}>
           {/* MAIN ROUTES */}
 
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <Dashboard />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/orders" element={<Orders />} />
+          <Route
+            path="/orders"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <Orders />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/customers" element={<Customers />} />
+          <Route
+            path="/customers"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <Customers />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/products" element={<Products />} />
+          <Route
+            path="/products"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <Products />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/products/:id" element={<ProductDetail />} />
+          <Route
+            path="/products/:id"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <ProductDetail />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/users" element={<User />} />
+          <Route
+            path="/transaksi"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <Transaksi />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/transaksi" element={<Transaksi />} />
+          <Route
+            path="/kategori-produk"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <KategoriProduk />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/kategori-produk" element={<KategoriProduk />} />
+          <Route
+            path="/kupon"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <Kupon />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/kupon" element={<Kupon />} />
+          <Route
+            path="/feedback"
+            element={
+              <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                <Feedback />
+              </RoleGuard>
+            }
+          />
 
-          <Route path="/feedback" element={<Feedback />} />
+          <Route 
+            path="/users" 
+            element={
+              <RoleGuard allowedRoles={["superadmin"]}>
+                <User />
+              </RoleGuard>
+            } 
+          />
 
           {/* ERROR PAGE */}
 
