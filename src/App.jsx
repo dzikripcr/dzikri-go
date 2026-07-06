@@ -20,6 +20,14 @@ const Products = React.lazy(() => import("./pages/Products"));
 
 const User = React.lazy(() => import("./pages/User"));
 
+const Transaksi = React.lazy(() => import("./pages/Transaksi"));
+
+const KategoriProduk = React.lazy(() => import("./pages/KategoriProduk"));
+
+const Kupon = React.lazy(() => import("./pages/Kupon"));
+
+const Feedback = React.lazy(() => import("./pages/Feedback"));
+
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
 
 const ProductDetailCRM = React.lazy(
@@ -65,6 +73,9 @@ export default function App() {
     <Suspense fallback={<Loading />}>
       <ScrollToTop />
       <Routes>
+
+        {/* CRM LAYOUT */}
+        
         <Route path="/" element={<Home />} />
 
         <Route
@@ -85,11 +96,15 @@ export default function App() {
           }
         />
 
+        {/* MAIN LAYOUT */}
+
         <Route
           element={
               <MainLayout />
           }
         >
+          {/* MAIN ROUTES */}
+
           <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/orders" element={<Orders />} />
@@ -101,11 +116,27 @@ export default function App() {
           <Route path="/products/:id" element={<ProductDetail />} />
 
           <Route path="/users" element={<User />} />
+
+          <Route path="/transaksi" element={<Transaksi />} />
+
+          <Route path="/kategori-produk" element={<KategoriProduk />} />
+
+          <Route path="/kupon" element={<Kupon />} />
+
+          <Route path="/feedback" element={<Feedback />} />
+
+          {/* ERROR PAGE */}
+
+          <Route path="/error400" element={<Error400 />} />
+
+          <Route path="/error401" element={<Error401 />} />
+
+          <Route path="/error403" element={<Error403 />} />
+
+          <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* ==========================
-    AUTH
-========================== */}
+        {/*AUTH LAYOUT*/}
 
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
