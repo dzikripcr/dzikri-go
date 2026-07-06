@@ -7,9 +7,6 @@ import { FaWhatsapp } from "react-icons/fa";
 // Format internasional TANPA tanda "+" (contoh: 62812xxxxxxx)
 const CS_WHATSAPP_NUMBER = "6281234567890";
 
-// =======================================================
-// DATA TOPIK & JAWABAN TEMPLATE CUSTOMER SERVICE - TEMA BOUTIQUE
-// =======================================================
 const topics = {
   produk: {
     label: "Info Produk & Ukuran",

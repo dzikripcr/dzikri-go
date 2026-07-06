@@ -1,6 +1,6 @@
-import { useAuth } from "../../context/AuthContext";
-import { getLevelFromPoints } from "../../services/membership";
-import { calculatePointsFromPurchase } from "../../services/membership";
+import { useAuth } from "@/context/AuthContext";
+import { getLevelFromPoints } from "@/services/membership";
+import { calculatePointsFromPurchase } from "@/services/membership";
 import RewardProgress from "./RewardProgress";
 import CTAButton from "./CTAButton";
 import { FiStar, FiInfo } from "react-icons/fi";
@@ -9,7 +9,7 @@ function GuestPointView() {
   const examplePoints = calculatePointsFromPurchase(100000);
 
   return (
-    <div className="bg-white border border-zinc-100 rounded-3xl p-8 shadow-lg flex flex-col">
+    <div className="bg-white border border-zinc-100 rounded-3xl p-8 shadow-lg flex flex-col mb-10">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center">
           <FiStar className="text-lg text-zinc-500" />

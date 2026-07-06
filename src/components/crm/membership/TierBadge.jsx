@@ -1,4 +1,4 @@
-import { cn } from "../../lib/utils";
+import { cn } from "../../../lib/utils";
 
 const variants = {
   stone: "bg-zinc-200/80 text-zinc-700 border border-zinc-300",

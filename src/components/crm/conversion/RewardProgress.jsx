@@ -1,4 +1,4 @@
-import { getLevelProgress } from "../../services/membership";
+import { getLevelProgress } from "@/services/membership";
 
 export default function RewardProgress({ points = 0 }) {
   const progress = getLevelProgress(points);

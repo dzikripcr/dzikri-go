@@ -1,5 +1,5 @@
 import { FiCheck, FiX } from "react-icons/fi";
-import { cn } from "../../lib/utils";
+import { cn } from "../../../lib/utils";
 
 export default function BenefitList({ benefits, textColor = "text-zinc-900" }) {
   return (

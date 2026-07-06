@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { FiUser, FiShoppingBag } from "react-icons/fi";
-import MemberCard from "../crm/MemberCard";
+import MemberCard from "./MemberCard";
 import { getLevelFromPoints, getMemberStatus } from "../../services/membership";
 import Avatar from "../Avatar";
-import AnimatedCounter from "../crm/AnimatedCounter";
+import AnimatedCounter from "./AnimatedCounter";
 
 export default function MemberHero({ user }) {
   const navigate = useNavigate();

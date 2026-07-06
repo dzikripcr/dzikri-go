@@ -1,5 +1,5 @@
-import { useAuth } from "../../context/AuthContext";
-import { getLevelFromPoints } from "../../services/membership";
+import { useAuth } from "@/context/AuthContext";
+import { getLevelFromPoints } from "@/services/membership";
 import CTAButton from "./CTAButton";
 import { FiTag, FiGift } from "react-icons/fi";
 

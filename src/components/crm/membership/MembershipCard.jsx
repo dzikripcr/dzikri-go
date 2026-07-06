@@ -1,7 +1,7 @@
 import TierBadge from "./TierBadge";
 import BenefitList from "./BenefitList";
 import { FiAward } from "react-icons/fi";
-import { cn } from "../../lib/utils";
+import { cn } from "../../../lib/utils";
 
 export default function MembershipCard({ tier }) {
   const { name, description, featured, benefits, gradient, border, textColor, badgeVariant } = tier;

@@ -4,11 +4,10 @@ import { useLocation } from "react-router-dom";
 // Mengimpor data JSON produk
 import productsData from "@/data/products.json";
 import Header from "@/components/crm/Header";
-import HeroSection from "@/components/hero/HeroSection";
-import MembershipSection from "@/components/membership/MembershipSection";
-import MemberOffer from "@/components/conversion/MemberOffer";
-import MemberPointCard from "@/components/conversion/MemberPointCard";
-import ConversionFooter from "@/components/conversion/ConversionFooter";
+import HeroSection from "@/components/crm/HeroSection";
+import MembershipSection from "@/components/crm/membership/MembershipSection";
+import MemberOffer from "@/components/crm/conversion/MemberOffer";
+import MemberPointCard from "@/components/crm/conversion/MemberPointCard";
 import BrandsBanner from "@/components/crm/BrandsBanner";
 import NewArrivals from "@/components/crm/NewArrivals";
 import TopSelling from "@/components/crm/TopSelling";
@@ -56,8 +55,6 @@ export default function Home() {
         <MemberOffer />
         <MemberPointCard />
       </section>
-
-      <ConversionFooter />
       <Testimonials />
       <Footer />
       <Chat />
