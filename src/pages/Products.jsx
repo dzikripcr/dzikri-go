@@ -8,6 +8,8 @@ import Table from "../components/Table";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
+import AlertBox from "../components/AlertBox";
+import DeleteModal from "../components/DeleteModal";
 import { produkAPI } from "../services/produkAPI";
 import { kategoriProdukAPI } from "../services/kategoriAPI";
 
@@ -16,6 +18,12 @@ export default function Products() {
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+
+  // State untuk Alert Box
+  const [alert, setAlert] = useState({ show: false, message: "", type: "info" });
+
+  // State untuk Delete Confirmation Modal
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -38,12 +46,21 @@ export default function Products() {
       setCategories(katData);
     } catch (error) {
       console.error("Gagal sinkronisasi data Supabase:", error.message);
+      showAlert("Gagal memuat data", "error");
     }
   };
 
   useEffect(() => {
     loadData();
   }, []);
+
+  // Fungsi pembantu untuk memunculkan alert sementara
+  const showAlert = (message, type = "success") => {
+    setAlert({ show: true, message, type });
+    setTimeout(() => {
+      setAlert({ show: false, message: "", type: "info" });
+    }, 3000);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -104,24 +121,33 @@ export default function Products() {
 
       if (formData.id) {
         await produkAPI.updateProduk(formData.id, payload);
+        showAlert("Produk berhasil diperbarui!", "success");
       } else {
         await produkAPI.createProduk(payload);
+        showAlert("Produk baru berhasil ditambahkan!", "success");
       }
 
       setIsModalOpen(false);
       loadData();
     } catch (error) {
-      alert("Gagal memproses data produk: " + error.message);
+      showAlert("Gagal memproses data produk: " + error.message, "error");
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Hapus produk ini secara permanen?")) return;
+  const handleDeleteClick = (id) => {
+    setDeleteModal({ isOpen: true, id });
+  };
+
+  const confirmDelete = async () => {
     try {
-      await produkAPI.deleteProduk(id);
+      await produkAPI.deleteProduk(deleteModal.id);
+      showAlert("Produk berhasil dihapus!", "success");
       loadData();
     } catch (error) {
       console.error(error);
+      showAlert("Gagal menghapus produk!", "error");
+    } finally {
+      setDeleteModal({ isOpen: false, id: null });
     }
   };
 
@@ -154,6 +180,14 @@ export default function Products() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen relative">
+      
+      {/* Alert Box */}
+      {alert.show && (
+        <div className="mb-4 animate-fade-in-down w-full">
+          <AlertBox type={alert.type}>{alert.message}</AlertBox>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-6">
         <Button onClick={openAddModal} type="add">
           <FaPlus className="mr-2" /> Add Product
@@ -227,7 +261,7 @@ export default function Products() {
                   <Button type="edit" onClick={() => openEditModal(product)}>
                     <FaEdit />
                   </Button>
-                  <Button type="hapus" onClick={() => handleDelete(product.id)}>
+                  <Button type="hapus" onClick={() => handleDeleteClick(product.id)}>
                     <FaTrashAlt />
                   </Button>
                   <Link to={`/products/${product.id}`} className="text-emerald-400 hover:text-emerald-500 mt-1">
@@ -250,6 +284,14 @@ export default function Products() {
           handleSubmit={handleSubmit}
         />
       )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, id: null })}
+        onConfirm={confirmDelete}
+        message="Apakah Anda yakin ingin menghapus produk ini secara permanen?"
+      />
     </div>
   );
 }

@@ -116,7 +116,7 @@ export default function UserModal({
             </button>
             <button
               disabled={uploading}
-              className="bg-[#4EA674] text-white px-5 py-2 rounded-md disabled:opacity-60"
+              className="bg-[#4EA674]/80 hover:bg-[#4EA674] text-white px-5 py-2 rounded-md text-sm font-medium"
             >
               {uploading ? "Saving..." : "Save User"}
             </button>

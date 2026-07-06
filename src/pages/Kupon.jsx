@@ -6,10 +6,17 @@ import Button from "../components/Button";
 import InputField from "../components/InputField";
 import SelectField from "../components/SelectField";
 import KuponModal from "../components/KuponModal";
+import AlertBox from "../components/AlertBox";
+import DeleteModal from "../components/DeleteModal";
+import { kuponAPI } from "../services/kuponAPI";
 
 export default function Kupon() {
   const [kuponList, setKuponList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // State untuk Alert Box & Delete Modal
+  const [alert, setAlert] = useState({ show: false, message: "", type: "info" });
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
   const [formData, setFormData] = useState({
     code: "",
@@ -27,13 +34,25 @@ export default function Kupon() {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const loadKupon = async () => {
-    const data = await kuponAPI.fetchKupon();
-    setKuponList(data);
+    try {
+      const data = await kuponAPI.fetchKupon();
+      setKuponList(data);
+    } catch (error) {
+      console.error(error);
+      showAlert("Gagal memuat data kupon", "error");
+    }
   };
 
   useEffect(() => {
     loadKupon();
   }, []);
+
+  const showAlert = (message, type = "success") => {
+    setAlert({ show: true, message, type });
+    setTimeout(() => {
+      setAlert({ show: false, message: "", type: "info" });
+    }, 3000);
+  };
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,7 +63,6 @@ export default function Kupon() {
   };
 
   const openAddModal = () => {
-
     setFormData({
       code: "",
       name: "",
@@ -67,38 +85,48 @@ export default function Kupon() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.id) {
-      await kuponAPI.updateKupon(formData.id, formData);
-    } else {
-      await kuponAPI.createKupon(formData);
-    }
-
-    setIsModalOpen(false);
-
-    setFormData({
-      code: "",
-      name: "",
-      discountType: "percentage",
-      discountValue: "",
-      minPurchase: "",
-      maxUsage: "",
-      validFrom: "",
-      validUntil: "",
-      status: "Active",
-    });
-    loadKupon();
-  };
-
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Apakah anda yakin ingin menghapus kupon ini?",
-    );
-    if (!confirmDelete) return;
     try {
-      await kuponAPI.deleteKupon(id);
+      if (formData.id) {
+        await kuponAPI.updateKupon(formData.id, formData);
+        showAlert("Kupon berhasil diperbarui!", "success");
+      } else {
+        await kuponAPI.createKupon(formData);
+        showAlert("Kupon baru berhasil ditambahkan!", "success");
+      }
+
+      setIsModalOpen(false);
+      setFormData({
+        code: "",
+        name: "",
+        discountType: "percentage",
+        discountValue: "",
+        minPurchase: "",
+        maxUsage: "",
+        validFrom: "",
+        validUntil: "",
+        status: "Active",
+      });
       loadKupon();
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      showAlert("Gagal menyimpan data kupon", "error");
+    }
+  };
+
+  const handleDeleteClick = (id) => {
+    setDeleteModal({ isOpen: true, id });
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await kuponAPI.deleteKupon(deleteModal.id);
+      showAlert("Kupon berhasil dihapus!", "success");
+      loadKupon();
+    } catch (error) {
+      console.error(error);
+      showAlert("Gagal menghapus kupon!", "error");
+    } finally {
+      setDeleteModal({ isOpen: false, id: null });
     }
   };
 
@@ -118,7 +146,15 @@ export default function Kupon() {
   });
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-6 bg-gray-50 min-h-screen relative">
+      
+      {/* Alert Box */}
+      {alert.show && (
+        <div className="mb-4 animate-fade-in-down w-full">
+          <AlertBox type={alert.type}>{alert.message}</AlertBox>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-6">
         <Button type="add" onClick={openAddModal}>
           <FaPlus className="mr-2" />
@@ -196,7 +232,7 @@ export default function Kupon() {
                   <Button type="edit" onClick={() => openEditModal(item)}>
                     <FaEdit />
                   </Button>
-                  <Button type="hapus" onClick={() => handleDelete(item.id)}>
+                  <Button type="hapus" onClick={() => handleDeleteClick(item.id)}>
                     <FaTrashAlt />
                   </Button>
                 </td>
@@ -215,6 +251,14 @@ export default function Kupon() {
           handleSubmit={handleSubmit}
         />
       )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, id: null })}
+        onConfirm={confirmDelete}
+        message="Apakah Anda yakin ingin menghapus kupon ini?"
+      />
     </div>
   );
 }
