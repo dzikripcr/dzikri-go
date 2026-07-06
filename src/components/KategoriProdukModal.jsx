@@ -51,10 +51,16 @@ export default function KategoriProdukModal({
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" className="bg-gray-100 text-gray-600 hover:bg-gray-200" onClick={onClose}>
+            <Button
+              type="button"
+              className="bg-gray-100 text-gray-600 hover:bg-gray-200"
+              onClick={onClose}
+            >
               Batal
             </Button>
-            <Button type="submit">Simpan</Button>
+            <Button type="submit">
+              {formData.id ? "Simpan Perubahan" : "Tambah Kategori"}
+            </Button>
           </div>
         </form>
       </div>

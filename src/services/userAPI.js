@@ -1,5 +1,5 @@
 import axios from "axios";
-import { supabase } from "./SupabaseClient";
+import { supabase } from "../services/SupabaseClient";
 
 const API_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/user";
 const API_KEY = "sb_publishable_kzt9cJe9q0rWdbJLdjgyBw_6YgjDHay";

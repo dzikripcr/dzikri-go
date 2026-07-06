@@ -10,6 +10,8 @@ export default function Button({ children, onChange, onClick, type= "primary" })
     add : "bg-[#4EA674] text-white px-5 py-2 rounded-md flex items-center text-sm font-semibold transition-colors shadow-sm",
     edit: "hover:text-blue-500",
     hapus: "hover:text-red-500",
+    submit: "bg-[#4EA674] text-white px-5 py-2 rounded-md disabled:opacity-60",
+    cancel: "px-4 py-2 rounded hover:bg-gray-100"
   };
 
   return (

@@ -195,7 +195,7 @@ export default function Customers() {
           ) : (
             <Table
               headers={[
-                "ID",
+                "No.",
                 "Name",
                 "Phone",
                 "Order Count",
@@ -204,7 +204,7 @@ export default function Customers() {
                 "Action",
               ]}
             >
-              {customers.map((customer) => (
+              {customers.map((customer, index) => (
                 <tr
                   key={customer.id}
                   onClick={() => setSelectedCustomer(customer)}
@@ -213,10 +213,10 @@ export default function Customers() {
                     ${selectedCustomer?.id === customer.id ? "bg-[#F7FCF5]" : ""}
                   `}
                 >
-                  <td className="p-4 text-gray-500 font-medium">{customer.id}</td>
+                  <td className="p-4 text-gray-500">{index + 1}</td>
                   <td className="p-4 text-gray-700">{customer.name}</td>
                   <td className="p-4 text-gray-500">{customer.phone}</td>
-                  <td className="p-4 text-center">{customer.order_count}</td>
+                  <td className="p-4">{customer.order_count}</td>
                   <td className="p-4 font-medium text-gray-800">${Number(customer.total_spend || 0).toFixed(2)}</td>
                   <td className="p-4">
                     <span

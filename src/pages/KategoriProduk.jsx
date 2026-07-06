@@ -5,6 +5,7 @@ import Table from "../components/Table";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
 import KategoriProdukModal from "../components/KategoriProdukModal";
+import { kategoriProdukAPI } from "../services/kategoriAPI";
 
 export default function KategoriProduk() {
   const [kategoriList, setKategoriList] = useState([]);
@@ -18,8 +19,12 @@ export default function KategoriProduk() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const loadKategori = async () => {
-    const data = await kategoriProdukAPI.fetchKategori();
-    setKategoriList(data);
+    try {
+      const data = await kategoriProdukAPI.fetchKategori();
+      setKategoriList(data);
+    } catch (error) {
+      console.error("Gagal memuat kategori:", error.message);
+    }
   };
 
   useEffect(() => {
@@ -45,37 +50,33 @@ export default function KategoriProduk() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (formData.id) {
-      await kategoriProdukAPI.updateKategori(formData.id, formData);
-    } else {
-      await kategoriProdukAPI.createKategori(formData);
+    try {
+      if (formData.id) {
+        await kategoriProdukAPI.updateKategori(formData.id, formData);
+      } else {
+        await kategoriProdukAPI.createKategori(formData);
+      }
+      setIsModalOpen(false);
+      setFormData({ category: "", description: "" });
+      loadKategori();
+    } catch (error) {
+      alert("Error saving data: " + error.message);
     }
-
-    setIsModalOpen(false);
-
-    setFormData({
-      category: "",
-      description: "",
-    });
-    loadKategori();
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Apakah anda yakin ingin menghapus kategori ini?",
-    );
+    const confirmDelete = window.confirm("Apakah anda yakin ingin menghapus kategori ini?");
     if (!confirmDelete) return;
     try {
       await kategoriProdukAPI.deleteKategori(id);
       loadKategori();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const filteredKategori = kategoriList.filter((item) =>
-    item.category.toLowerCase().includes(searchTerm.toLowerCase()),
+    item.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
