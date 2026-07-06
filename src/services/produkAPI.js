@@ -1,29 +1,57 @@
+import axios from "axios";
 import { supabase } from "../services/SupabaseClient";
 
+const API_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/produk";
+const API_KEY = "sb_publishable_kzt9cJe9q0rWdbJLdjgyBw_6YgjDHay";
+
+const headers = {
+  apikey: API_KEY,
+  Authorization: `Bearer ${API_KEY}`,
+  "Content-Type": "application/json",
+};
+
 export const produkAPI = {
-  fetchProduk: async () => {
-    const { data, error } = await supabase
-      .from("produk")
-      .select(`
-        *,
-        kategori_produk (id, category)
-      `)
-      .order("id", { ascending: true });
-    if (error) throw error;
-    return data;
+  async fetchProduk() {
+    const response = await axios.get(
+      `${API_URL}?select=*,kategori_produk(id,category)&order=id.asc`, 
+      { headers }
+    );
+    return response.data;
   },
 
-  uploadImage: async (file) => {
+  async createProduk(data) {
+    const response = await axios.post(API_URL, data, {
+      headers: { ...headers, Prefer: "return=representation" },
+    });
+    return response.data[0];
+  },
+
+  async deleteProduk(id) {
+    const response = await axios.delete(`${API_URL}?id=eq.${id}`, {
+      headers,
+    });
+    return response.data;
+  },
+
+  async updateProduk(id, data) {
+    const response = await axios.patch(`${API_URL}?id=eq.${id}`, data, {
+      headers,
+    });
+    return response.data;
+  },
+
+  async uploadImage(file, identifier = "product") {
     if (!file) return null;
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random()}_${Date.now()}.${fileExt}`;
+    
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${identifier}-${Math.random()}_${Date.now()}.${fileExt}`;
     const filePath = `products/${fileName}`;
 
-    const { error: uploadError } = await supabase.storage
+    const { error } = await supabase.storage
       .from("product-images")
-      .upload(filePath, file);
+      .upload(filePath, file, { upsert: true });
 
-    if (uploadError) throw uploadError;
+    if (error) throw error;
 
     const { data } = supabase.storage
       .from("product-images")
@@ -31,32 +59,4 @@ export const produkAPI = {
 
     return data.publicUrl;
   },
-
-  createProduk: async (produkData) => {
-    const { data, error } = await supabase
-      .from("produk")
-      .insert([produkData])
-      .select();
-    if (error) throw error;
-    return data;
-  },
-
-  updateProduk: async (id, produkData) => {
-    const { data, error } = await supabase
-      .from("produk")
-      .update(produkData)
-      .eq("id", id)
-      .select();
-    if (error) throw error;
-    return data;
-  },
-
-  deleteProduk: async (id) => {
-    const { error } = await supabase
-      .from("produk")
-      .delete()
-      .eq("id", id);
-    if (error) throw error;
-    return true;
-  }
 };

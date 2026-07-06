@@ -1,40 +1,42 @@
-import { supabase } from "../services/SupabaseClient";
+import axios from "axios";
+
+const API_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/kategori_produk";
+const API_KEY = "sb_publishable_kzt9cJe9q0rWdbJLdjgyBw_6YgjDHay";
+
+const headers = {
+  apikey: API_KEY,
+  Authorization: `Bearer ${API_KEY}`,
+  "Content-Type": "application/json",
+};
 
 export const kategoriProdukAPI = {
-  fetchKategori: async () => {
-    const { data, error } = await supabase
-      .from("kategori_produk")
-      .select("*")
-      .order("id", { ascending: true });
-    if (error) throw error;
-    return data;
+  async fetchKategori() {
+    const response = await axios.get(`${API_URL}?select=*&order=id.asc`, { 
+      headers 
+    });
+    return response.data;
   },
 
-  createKategori: async (kategoriData) => {
-    const { data, error } = await supabase
-      .from("kategori_produk")
-      .insert([{ category: kategoriData.category, description: kategoriData.description }])
-      .select();
-    if (error) throw error;
-    return data;
+  async createKategori(data) {
+    const payload = { category: data.category, description: data.description };
+    const response = await axios.post(API_URL, payload, {
+      headers: { ...headers, Prefer: "return=representation" },
+    });
+    return response.data[0];
   },
 
-  updateKategori: async (id, kategoriData) => {
-    const { data, error } = await supabase
-      .from("kategori_produk")
-      .update({ category: kategoriData.category, description: kategoriData.description })
-      .eq("id", id)
-      .select();
-    if (error) throw error;
-    return data;
+  async deleteKategori(id) {
+    const response = await axios.delete(`${API_URL}?id=eq.${id}`, {
+      headers,
+    });
+    return response.data;
   },
 
-  deleteKategori: async (id) => {
-    const { error } = await supabase
-      .from("kategori_produk")
-      .delete()
-      .eq("id", id);
-    if (error) throw error;
-    return true;
+  async updateKategori(id, data) {
+    const payload = { category: data.category, description: data.description };
+    const response = await axios.patch(`${API_URL}?id=eq.${id}`, payload, {
+      headers,
+    });
+    return response.data;
   }
 };

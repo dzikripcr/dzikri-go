@@ -9,12 +9,6 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-// Frontend (Kupon.jsx / KuponModal.jsx) uses English camelCase
-// field names and Title-case status values. DB columns are
-// Indonesian snake_case with lowercase status values. These
-// helpers translate both directions so neither page needed to
-// be rewritten.
-
 const STATUS_TO_DB = {
   Active: "aktif",
   Inactive: "tidak aktif",
