@@ -12,6 +12,7 @@ import AlertBox from "../components/AlertBox";
 import DeleteModal from "../components/DeleteModal";
 import { produkAPI } from "../services/produkAPI";
 import { kategoriProdukAPI } from "../services/kategoriAPI";
+import Badge from "@/components/Badge";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -224,6 +225,7 @@ export default function Products() {
               placeholder="All Category"
               options={[
                 { label: "All Category", value: "all" },
+                { label: "All Category", value: "all" },
                 ...categories.map((cat) => ({
                   label: cat.category,
                   value: String(cat.id),
@@ -256,7 +258,12 @@ export default function Products() {
                 <td className="p-4 text-gray-600">{product.kategori_produk?.category || "Uncategorized"}</td>
                 <td className="p-4 font-bold text-gray-800">${parseFloat(product.price).toFixed(2)}</td>
                 <td className="p-4 text-gray-800 font-medium">{product.stock}</td>
-                <td className="p-4">{product.status}</td>
+                
+                {/* 2. Implementasi Badge dinamis pada kolom status */}
+                <td className="p-4">
+                  <Badge type={product.status}>{product.status}</Badge>
+                </td>
+
                 <td className="p-4 flex space-x-3 text-gray-400">
                   <Button type="edit" onClick={() => openEditModal(product)}>
                     <FaEdit />

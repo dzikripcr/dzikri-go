@@ -9,6 +9,7 @@ import AlertBox from "../components/AlertBox";
 import DeleteModal from "../components/DeleteModal";
 import TransaksiModal from "../components/TransaksiModal";
 import { transaksiAPI } from "../services/transaksiAPI";
+import Badge from "@/components/Badge";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -215,7 +216,7 @@ export default function Transaksi() {
                   {item.date ? new Date(item.date).toLocaleDateString("id-ID") : "-"}
                 </td>
                 <td className="p-4 text-gray-600 capitalize">{item.payment}</td>
-                <td className="p-4 capitalize">{item.status}</td>
+                <td className="p-4 capitalize"><Badge type={item.status}>{item.status}</Badge></td>
                 <td className="p-4 flex space-x-3 text-gray-400">
                   <Button type="edit" onClick={() => openEditModal(item)}>
                     <FaEdit />
