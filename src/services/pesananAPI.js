@@ -1,3 +1,4 @@
+// pesananAPI.js
 import axios from "axios";
 
 const API_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/pesanan";
@@ -23,6 +24,8 @@ export const pesananAPI = {
       id_transaksi: data.id_transaksi,
       id_produk: data.id_produk,
       product_name: data.product_name,
+      total_kuantitas: data.total_kuantitas,
+      total_belanja: data.total_belanja,
       date: data.date,
       payment: data.payment,
       status: data.status,
@@ -38,6 +41,8 @@ export const pesananAPI = {
       id_transaksi: data.id_transaksi,
       id_produk: data.id_produk,
       product_name: data.product_name,
+      total_kuantitas: data.total_kuantitas,
+      total_belanja: data.total_belanja,
       date: data.date,
       payment: data.payment,
       status: data.status,

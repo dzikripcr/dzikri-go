@@ -12,10 +12,9 @@ const headers = {
 
 export const produkAPI = {
   async fetchProduk() {
-    const response = await axios.get(
-      `${API_URL}?select=*,kategori_produk(id,category)&order=id.asc`, 
-      { headers }
-    );
+    const response = await axios.get(`${API_URL}?select=*&order=id.asc`, {
+      headers,
+    });
     return response.data;
   },
 
@@ -42,7 +41,7 @@ export const produkAPI = {
 
   async uploadImage(file, identifier = "product") {
     if (!file) return null;
-    
+
     const fileExt = file.name.split(".").pop();
     const fileName = `${identifier}-${Math.random()}_${Date.now()}.${fileExt}`;
     const filePath = `products/${fileName}`;
