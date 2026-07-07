@@ -10,6 +10,7 @@ import DeleteModal from "../components/DeleteModal";
 import OrderModal from "../components/OrderModal";
 import { pesananAPI } from "../services/pesananAPI";
 import { produkAPI } from "../services/produkAPI";
+import Badge from "@/components/Badge";
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -268,8 +269,16 @@ export default function Orders() {
                 <td className="p-4 text-gray-600">
                   {item.date ? new Date(item.date).toLocaleDateString("id-ID") : "-"}
                 </td>
-                <td className="p-4 text-gray-600 capitalize">{item.payment}</td>
-                <td className="p-4">{item.status}</td>
+                <td className="p-4">
+                  <Badge type={item.payment === "paid" ? "berhasil" : "gagal"}>
+                    <span className="capitalize">{item.payment}</span>
+                  </Badge>
+                </td>
+                <td className="p-4">
+                  <Badge type={item.status ? item.status.toLowerCase() : "pending"}>
+                    {item.status}
+                  </Badge>
+                </td>
                 <td className="p-4 flex space-x-3 text-gray-400">
                   <Button type="edit" onClick={() => openEditModal(item)}>
                     <FaEdit />

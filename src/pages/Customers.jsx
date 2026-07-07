@@ -4,6 +4,7 @@ import CustomersChart from "../components/CustomersChart";
 import Card from "../components/Card";
 import Table from "../components/Table";
 import Button from "../components/Button";
+import Badge from "../components/Badge";
 import CustomerDetail from "../pages/CustomerDetail";
 import { customerAPI } from "../services/customerAPI";
 import AlertBox from "../components/AlertBox";
@@ -69,8 +70,8 @@ export default function Customers() {
   };
 
   const handleEditClick = (e, customer) => {
-    e.stopPropagation(); // Mencegah baris tabel terpilih (menampilkan panel detail)
-    setEditFormData(customer); // Masukkan data customer ke form
+    e.stopPropagation(); 
+    setEditFormData(customer); 
     setIsEditModalOpen(true);
   };
 
@@ -87,14 +88,12 @@ export default function Customers() {
     setIsUploading(true);
     
     try {
-      // Panggil API untuk update (sesuaikan nama function di customerAPI kamu)
       await customerAPI.updateCustomer(editFormData.id, editFormData);
       
       showAlert("Data customer berhasil diperbarui!", "success");
       setIsEditModalOpen(false);
       loadCustomers();
       
-      // Jika data yang diedit sedang dibuka di panel kanan, update juga panelnya
       if (selectedCustomer?.id === editFormData.id) {
         setSelectedCustomer({ ...selectedCustomer, ...editFormData });
       }
@@ -218,17 +217,15 @@ export default function Customers() {
                   <td className="p-4 text-gray-500">{customer.phone}</td>
                   <td className="p-4">{customer.order_count}</td>
                   <td className="p-4 font-medium text-gray-800">${Number(customer.total_spend || 0).toFixed(2)}</td>
+                  
+                  {/* 2. Bagian Status yang sudah disederhanakan menggunakan Badge */}
                   <td className="p-4">
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-sm font-medium
-                        ${customer.status === "Aktif" ? "text-[#4EA674]" : "text-red-500"}`}
-                    >
-                      <span className={`w-1.5 h-1.5 rounded-full ${customer.status === "Aktif" ? "bg-[#4EA674]" : "bg-red-500"}`}></span>
+                    <Badge type={customer.status === "active" ? "berhasil" : "gagal"}>
                       {customer.status}
-                    </span>
+                    </Badge>
                   </td>
+
                   <td className="p-4 flex space-x-3 text-gray-400">
-                    {/* 🔥 Pasang onClick handler ke tombol Edit */}
                     <Button type="edit" onClick={(e) => handleEditClick(e, customer)}>
                       <FaEdit />
                     </Button>
@@ -260,7 +257,7 @@ export default function Customers() {
         message="Apakah Anda yakin ingin menghapus customer ini? Data yang dihapus tidak dapat dikembalikan."
       />
 
-      {/*  Pop Up Customer Modal */}
+      {/* Pop Up Customer Modal */}
       {isEditModalOpen && (
         <CustomerModal
           onClose={() => setIsEditModalOpen(false)}
