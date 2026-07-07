@@ -1,13 +1,3 @@
-// utils/membership.js
-//
-// Logika loyalty membership untuk Boutique.
-// Taruh file ini di src/utils/membership.js (sesuaikan path import di komponen
-// jika lokasinya berbeda pada project Anda).
-
-// ---------------------------------------------------------------------------
-// 1. POINT — didapat setiap user checkout, berdasarkan rentang total belanja
-//    pada transaksi tersebut. Sesuaikan angka di bawah dengan kebijakan toko.
-// ---------------------------------------------------------------------------
 const PURCHASE_POINT_TIERS = [
   { min: 1000, points: 100 },
   { min: 500, points: 50 },

@@ -1,4 +1,3 @@
-// feedbackAPI.js
 import axios from "axios";
 
 const API_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/feedback";
