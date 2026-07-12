@@ -25,7 +25,7 @@ export default function ProductSection({ id, title, products, showBorder = false
       )}
       <div className="text-center mt-10">
         <button className="border border-gray-200 bg-white cursor-pointer text-black px-16 py-3 rounded-full font-medium transition-all duration-300 ease-in-out hover:bg-black hover:text-white hover:border-black hover:shadow-lg w-full md:w-auto">
-          View All
+          Lihat Semua
         </button>
       </div>
     </section>

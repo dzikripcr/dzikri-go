@@ -3,90 +3,90 @@
     "id": "PRD001",
     "name": "Elegant Silk Dress",
     "category": "Dresses",
-    "price": 120.0,
+    "price": 1800000,
     "stock": 45,
-    "status": "In Stock",
+    "status": "Stok Tersedia",
     "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&q=80"
   },
   {
     "id": "PRD002",
     "name": "Classic Leather Handbag",
     "category": "Accessories",
-    "price": 250.0,
+    "price": 3750000,
     "stock": 12,
-    "status": "Low Stock",
+    "status": "Stok Menipis",
     "image": "https://images.unsplash.com/photo-1629374029669-aab2f060553b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGZhc2hpb24lMjBtb2RlbHxlbnwwfHwwfHx8MA%3D%3D"
   },
   {
     "id": "PRD003",
     "name": "Vintage Pearl Necklace",
     "category": "Jewelry",
-    "price": 85.5,
+    "price": 1250000,
     "stock": 30,
-    "status": "In Stock",
+    "status": "Stok Tersedia",
     "image": "https://images.unsplash.com/photo-1601762603339-fd61e28b698a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZmFzaGlvbnxlbnwwfHwwfHx8MA%3D%3D"
   },
   {
     "id": "PRD004",
     "name": "Cashmere Winter Coat",
     "category": "Outerwear",
-    "price": 320.0,
+    "price": 4800000,
     "stock": 5,
-    "status": "Low Stock",
+    "status": "Stok Menipis",
     "image": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=500&q=80"
   },
   {
     "id": "PRD005",
     "name": "Satin Evening Gown",
     "category": "Dresses",
-    "price": 180.0,
+    "price": 2700000,
     "stock": 0,
-    "status": "Out of Stock",
+    "status": "Stok Habis",
     "image": "https://images.unsplash.com/photo-1568252542512-9fe8fe9c87bb?w=500&q=80"
   },
   {
     "id": "PRD006",
     "name": "Suede Ankle Boots",
     "category": "Shoes",
-    "price": 145.0,
+    "price": 2150000,
     "stock": 22,
-    "status": "In Stock",
+    "status": "Stok Tersedia",
     "image": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGZhc2hpb258ZW58MHx8MHx8fDA%3D"
   },
   {
     "id": "PRD007",
     "name": "Floral Summer Blouse",
     "category": "Tops",
-    "price": 55.0,
+    "price": 850000,
     "stock": 60,
-    "status": "In Stock",
+    "status": "Stok Tersedia",
     "image": "https://media.istockphoto.com/id/595359290/id/foto/wanita-mode-mengenakan-topi-kacamata-hitam-jaket-tas-berpose-di-kota.webp?a=1&b=1&s=612x612&w=0&k=20&c=HVmGfh2_pjg7pQKJzSZrE0HlHsrL80-9iQl2ZmzIyzM="
   },
   {
     "id": "PRD008",
     "name": "High-Waist Tailored Trousers",
     "category": "Bottoms",
-    "price": 75.0,
+    "price": 1100000,
     "stock": 18,
-    "status": "In Stock",
+    "status": "Stok Tersedia",
     "image": "https://images.unsplash.com/photo-1608748010899-18f300247112?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGZhc2hpb258ZW58MHx8MHx8fDA%3D"
   },
   {
     "id": "PRD009",
     "name": "Designer Sunglasses",
     "category": "Accessories",
-    "price": 199.99,
+    "price": 2999000,
     "stock": 8,
-    "status": "Low Stock",
+    "status": "Stok Menipis",
     "image": "https://images.unsplash.com/photo-1632149877166-f75d49000351?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjZ8fGZhc2hpb258ZW58MHx8MHx8fDA%3D"
   },
   {
     "id": "PRD010",
     "name": "Velvet Hair Bow",
     "category": "Accessories",
-    "price": 15.0,
+    "price": 225000,
     "stock": 100,
-    "status": "In Stock",
+    "status": "Stok Tersedia",
     "image": "https://images.unsplash.com/photo-1554412933-514a83d2f3c8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTJ8fGZhc2hpb258ZW58MHx8MHx8fDA%3D"
   }
 ]

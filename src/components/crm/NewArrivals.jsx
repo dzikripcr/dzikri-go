@@ -5,9 +5,9 @@ export default function NewArrivals({ products }) {
   return (
     <ProductSection
       id="new-arrivals"
-      title="NEW ARRIVALS"
+      title="PRODUK TERBARU"
       products={products}
       showBorder
     />
   );
-}
+} 
