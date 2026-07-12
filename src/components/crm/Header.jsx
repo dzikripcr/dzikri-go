@@ -12,10 +12,7 @@ import {
 } from "react-icons/fi";
 
 import { useAuth } from "../../context/AuthContext";
-import {
-  getLevelFromPoints,
-  getMemberStatus,
-} from "../../services/membership";
+import { getLevelFromPoints, getMemberStatus } from "../../services/membership";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -175,6 +172,8 @@ export default function Header() {
           Home
         </button>
 
+        {/* MENU PRODUK - BARU DITAMBAHKAN */}
+
         {/* CONDITIONAL RENDERING: Menu Shop */}
         {user && (
           // Pasang shopRef membungkus button pemicu dan jendela dropdown-nya
@@ -183,7 +182,7 @@ export default function Header() {
               onClick={() => setIsShopOpen(!isShopOpen)}
               className="flex items-center gap-1 cursor-pointer hover:text-gray-600 transition"
             >
-              Shop
+              Toko
               <FiChevronDown />
             </button>
 
@@ -193,13 +192,13 @@ export default function Header() {
                   onClick={() => scrollToSection("new-arrivals")}
                   className="block w-full text-left p-3 hover:bg-gray-100 cursor-pointer rounded-lg text-sm"
                 >
-                  New Arrivals
+                  Produk Baru
                 </button>
                 <button
                   onClick={() => scrollToSection("top-selling")}
                   className="block w-full text-left p-3 hover:bg-gray-100 cursor-pointer rounded-lg text-sm"
                 >
-                  Top Selling
+                  Paling Laris
                 </button>
                 <button
                   onClick={() => scrollToSection("dress-style")}
@@ -212,6 +211,15 @@ export default function Header() {
           </div>
         )}
 
+        {user && (
+          <button
+              onClick={() => navigate("/produk")}
+              className="cursor-pointer hover:text-gray-600 transition"
+            >
+              Produk
+            </button>
+        )}
+
         {/* CONDITIONAL RENDERING: Menu Why Us & Membership */}
         {!user && (
           <>
@@ -219,7 +227,7 @@ export default function Header() {
               className="cursor-pointer hover:text-gray-600 transition"
               onClick={() => scrollToSection("alasan")}
             >
-              Why Us
+              Fitur
             </button>
 
             <button
@@ -235,7 +243,7 @@ export default function Header() {
           className="cursor-pointer hover:text-gray-600 transition"
           onClick={() => scrollToSection("testimonials")}
         >
-          Testimonials
+          Testimoni
         </button>
       </nav>
 
@@ -283,7 +291,9 @@ export default function Header() {
           >
             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-120%] group-hover:translate-x-[120%] transition-transform duration-700 ease-in-out"></span>
             <span className="relative z-10">Login</span>
-            <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+            <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
           </Link>
         ) : (
           <>
@@ -309,7 +319,9 @@ export default function Header() {
               {isNotifOpen && (
                 <div className="absolute right-[-40px] md:right-0 mt-4 w-[320px] md:w-[360px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden">
                   <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                    <h3 className="font-extrabold text-base tracking-tight">Notifikasi Baru</h3>
+                    <h3 className="font-extrabold text-base tracking-tight">
+                      Notifikasi Baru
+                    </h3>
                     <span className="text-xs text-blue-600 cursor-pointer hover:underline font-semibold">
                       Tandai semua dibaca
                     </span>
@@ -323,16 +335,26 @@ export default function Header() {
                         }`}
                       >
                         <div className="flex items-start justify-between">
-                          <h4 className="text-sm font-bold text-gray-900 leading-tight">{notif.title}</h4>
-                          {notif.unread && <span className="w-2 h-2 bg-blue-600 rounded-full mt-1 flex-shrink-0"></span>}
+                          <h4 className="text-sm font-bold text-gray-900 leading-tight">
+                            {notif.title}
+                          </h4>
+                          {notif.unread && (
+                            <span className="w-2 h-2 bg-blue-600 rounded-full mt-1 flex-shrink-0"></span>
+                          )}
                         </div>
-                        <p className="text-xs text-gray-600 leading-relaxed pr-2">{notif.desc}</p>
-                        <span className="text-[10px] text-gray-400 font-medium mt-1">{notif.time}</span>
+                        <p className="text-xs text-gray-600 leading-relaxed pr-2">
+                          {notif.desc}
+                        </p>
+                        <span className="text-[10px] text-gray-400 font-medium mt-1">
+                          {notif.time}
+                        </span>
                       </div>
                     ))}
                   </div>
                   <div className="p-3 text-center border-t border-gray-100 hover:bg-black hover:text-white cursor-pointer transition-colors duration-300">
-                    <span className="text-sm font-bold">Lihat Semua Notifikasi</span>
+                    <span className="text-sm font-bold">
+                      Lihat Semua Notifikasi
+                    </span>
                   </div>
                 </div>
               )}
