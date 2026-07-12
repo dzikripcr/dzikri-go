@@ -8,21 +8,21 @@ export default function Footer() {
     <footer className="bg-[#F0F0F0] mt-40 relative pt-32 pb-20 px-8">
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-7xl bg-black rounded-[40px] p-8 md:p-12 flex flex-col md:flex-row justify-between items-center shadow-2xl">
         <h2 className="text-3xl md:text-4xl text-white font-black leading-tight mb-8 md:mb-0 md:w-1/2 uppercase tracking-tight">
-          STAY UPTO DATE ABOUT
+          DAPATKAN INFORMASI TERBARU
           <br />
-          OUR LATEST OFFERS
+          TENTANG PENAWARAN KAMI
         </h2>
         <div className="flex flex-col space-y-4 w-full md:w-[40%]">
           <div className="relative group">
             <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl group-focus-within:text-black transition-colors duration-300" />
             <input
               type="email"
-              placeholder="Enter your email address"
+              placeholder="Masukkan alamat email Anda"
               className="pl-12 pr-6 py-4 rounded-full w-full outline-none text-black bg-white focus:ring-4 focus:ring-gray-300/50 transition-all duration-300"
             />
           </div>
           <button className="bg-white text-black font-extrabold px-6 py-4 rounded-full w-full transition-all duration-300 ease-out relative outline-none hover:bg-white hover:scale-105 hover:shadow-[0_0_15px_#fff,0_0_30px_#fff,0_0_45px_rgba(255,255,255,0.6)] active:scale-95 active:shadow-[0_0_10px_#fff]">
-            Subscribe to Newsletter
+            Berlangganan Buletin
           </button>
         </div>
       </div>
@@ -33,8 +33,8 @@ export default function Footer() {
             Boutiquera
           </h3>
           <p className="text-sm text-gray-500 leading-relaxed">
-            We have clothes that suit your style and which you're proud to
-            wear. From women to men.
+            Kami menyediakan pakaian yang sesuai dengan gaya Anda dan bangga untuk Anda
+            kenakan. Mulai dari koleksi wanita hingga pria.
           </p>
           <div className="flex space-x-3 pt-2">
             <div className="w-9 h-9 rounded-full border border-gray-300 bg-white text-black flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition cursor-pointer text-lg">
@@ -53,52 +53,52 @@ export default function Footer() {
         </div>
         <div>
           <h4 className="font-bold tracking-widest mb-6 uppercase">
-            COMPANY
+            PERUSAHAAN
           </h4>
           <ul className="space-y-4 text-sm text-gray-500">
             <li>
               <a href="#" className="hover:text-black transition">
-                About
+                Tentang Kami
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Features
+                Fitur
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Works
+                Karya
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Career
+                Karier
               </a>
             </li>
           </ul>
         </div>
         <div>
-          <h4 className="font-bold tracking-widest mb-6 uppercase">HELP</h4>
+          <h4 className="font-bold tracking-widest mb-6 uppercase">BANTUAN</h4>
           <ul className="space-y-4 text-sm text-gray-500">
             <li>
               <a href="#" className="hover:text-black transition">
-                Customer Support
+                Dukungan Pelanggan
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Delivery Details
+                Detail Pengiriman
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Terms & Conditions
+                Syarat & Ketentuan
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Privacy Policy
+                Kebijakan Privasi
               </a>
             </li>
           </ul>
@@ -108,49 +108,49 @@ export default function Footer() {
           <ul className="space-y-4 text-sm text-gray-500">
             <li>
               <a href="#" className="hover:text-black transition">
-                Account
+                Akun
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Manage Deliveries
+                Kelola Pengiriman
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Orders
+                Pesanan
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Payments
+                Pembayaran
               </a>
             </li>
           </ul>
         </div>
         <div>
           <h4 className="font-bold tracking-widest mb-6 uppercase">
-            RESOURCES
+            SUMBER DAYA
           </h4>
           <ul className="space-y-4 text-sm text-gray-500">
             <li>
               <a href="#" className="hover:text-black transition">
-                Free eBooks
+                eBook Gratis
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Development Tutorial
+                Tutorial Pengembangan
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                How to - Blog
+                Panduan - Blog
               </a>
             </li>
             <li>
               <a href="#" className="hover:text-black transition">
-                Youtube Playlist
+                Playlist Youtube
               </a>
             </li>
           </ul>
@@ -158,7 +158,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-        <p>Boutiquera © 2025/2026, All Rights Reserved</p>
+        <p>Boutiquera © 2025/2026, Hak Cipta Dilindungi Undang-Undang</p>
         <div className="flex space-x-3 mt-4 md:mt-0">
           <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">
             VISA

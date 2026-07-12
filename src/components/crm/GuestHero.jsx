@@ -7,16 +7,19 @@ export default function GuestHero() {
       className="scroll-mt-24 bg-[#F2F0F1] pt-16 md:pt-24 flex flex-col md:flex-row items-stretch overflow-hidden"
     >
       <div className="px-8 md:px-28 md:w-1/2 space-y-6 md:pr-10 pb-16 md:pb-24 flex flex-col justify-center">
-        <h2 className="text-5xl md:text-7xl font-black leading-none uppercase tracking-tighter">
-          Discover Your
-          <br />
-          Signature Style
-        </h2>
+        <span className="text-xs font-bold uppercase tracking-widest text-red-500 block mb-3">
+            Eksklusif untuk Member Baru ✨
+          </span>
+          <h2 className="text-5xl md:text-7xl font-black leading-none uppercase tracking-tighter">
+            Temukan
+            <br />
+            Gaya Khasmu
+          </h2>
         <p className="text-gray-600 max-w-md leading-relaxed text-sm md:text-base">
-          Exclusive collection designed for modern identity.
-          Browse through our diverse range of meticulously crafted garments,
-          designed to bring out your individuality and cater to your sense of
-          style.
+          Koleksi eksklusif yang dirancang untuk identitas modern. Jelajahi
+          beragam pilihan pakaian yang dibuat dengan penuh ketelitian, dirancang
+          khusus untuk menonjolkan keunikan dirimu dan memenuhi setiap selera
+          gayamu.
         </p>
         <div className="flex flex-wrap gap-4 pt-2">
           <Link
@@ -26,7 +29,7 @@ export default function GuestHero() {
               hover:bg-black hover:text-white hover:scale-105
               transition-all duration-300 ease-out active:scale-95"
           >
-            Register Now
+            Daftar Sekarang
           </Link>
         </div>
       </div>

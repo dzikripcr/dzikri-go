@@ -8,17 +8,52 @@ export default function Testimonials() {
     {
       id: 1,
       name: "Sarah M.",
-      text: "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece has exceeded my expectations.",
+      text: "Saya sangat kagum dengan kualitas dan model pakaian dari Boutiquera. Mulai dari pakaian kasual hingga gaun malam, setiap produknya benar-benar melebihi ekspektasi saya.",
     },
     {
       id: 2,
       name: "Alex K.",
-      text: "Finding clothes that align with my personal style used to be a challenge until I discovered Shop.co. The range of options they offer is truly remarkable, catering to a variety of tastes and occasions.",
+      text: "Mencari pakaian yang pas dengan gaya personal saya dulunya sulit, sampai akhirnya saya menemukan Boutiquera. Pilihan koleksinya sangat lengkap untuk berbagai acara.",
     },
     {
       id: 3,
       name: "James L.",
-      text: "As someone who's always on the lookout for unique fashion pieces, I'm thrilled to have stumbled upon Shop.co. The selection of clothes is not only diverse but also on-point with the latest trends.",
+      text: "Sebagai orang yang selalu mencari fashion unik, saya senang sekali menemukan Boutiquera. Pilihan pakaiannya tidak hanya beragam, tetapi juga selalu mengikuti tren terbaru.",
+    },
+    {
+      id: 4,
+      name: "Amanda R.",
+      text: "Bahan kainnya premium sekali! Saat dipakai sangat nyaman dan potongannya pas di badan. Sudah beberapa kali belanja di sini dan tidak pernah kecewa dengan kualitasnya.",
+    },
+    {
+      id: 5,
+      name: "Dimas S.",
+      text: "Pelayanan keanggotaannya luar biasa. Sejak bergabung jadi member, saya dapat banyak diskon eksklusif dan gratis ongkir. Pengirimannya juga sangat cepat sampai rumah.",
+    },
+    {
+      id: 6,
+      name: "Citra T.",
+      text: "Gaun yang saya beli untuk acara formal kemarin mendapat banyak pujian. Desainnya terlihat sangat mewah dan elegan, mirip butik desainer papan atas tetapi harga tetap masuk akal.",
+    },
+    {
+      id: 7,
+      name: "Rian D.",
+      text: "Koleksi pakaian kasual pria di sini potongannya rapi dan bahannya tidak panas. Sangat cocok untuk dipakai kerja harian maupun saat santai di akhir pekan.",
+    },
+    {
+      id: 8,
+      name: "Nadia W.",
+      text: "Fitur pre-order untuk member benar-benar membantu saya mengamankan koleksi limited edition sebelum kehabisan. Pengalaman belanja yang sangat eksklusif!",
+    },
+    {
+      id: 9,
+      name: "Hendra B.",
+      text: "Transaksinya aman, pelayanannya responsif, dan kualitas bajunya konsisten. Ini sudah menjadi butik andalan keluarga kami untuk kebutuhan fashion harian.",
+    },
+    {
+      id: 10,
+      name: "Siti A.",
+      text: "Suka sekali dengan detail jahitan produk Boutiquera, sangat rapi dan kokoh. Poin belanja yang dikumpulkan juga bisa ditukar dengan hadiah menarik, menguntungkan sekali.",
     },
   ];
 
@@ -34,7 +69,7 @@ export default function Testimonials() {
           .animate-marquee-review {
             display: flex;
             width: max-content;
-            animation: marquee-review 40s linear infinite;
+            animation: marquee-review 50s linear infinite;
           }
           .review-container:hover .animate-marquee-review {
             animation-play-state: paused;
@@ -44,7 +79,7 @@ export default function Testimonials() {
 
       <div className="max-w-7xl mx-auto px-8 flex justify-between items-end mb-16 relative z-20">
         <h3 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-gray-900">
-          Our Happy Customers
+          Testimoni Pelanggan
         </h3>
         <div className="hidden md:flex gap-2 opacity-50">
           <FaStar className="text-gray-300 text-3xl" />
@@ -89,17 +124,6 @@ export default function Testimonials() {
             </React.Fragment>
           ))}
         </div>
-      </div>
-
-      {/* BUTTON VIEW ALL REVIEWS */}
-      <div className="flex justify-center mt-12 relative z-20 px-8">
-        <button className="group relative px-10 py-4 bg-transparent text-gray-900 font-bold text-lg rounded-full overflow-hidden border-2 border-gray-900 transition-all duration-300 cursor-pointer">
-          <div className="absolute inset-0 bg-gray-900 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
-          <span className="relative z-10 flex items-center gap-3 group-hover:text-white transition-colors duration-300">
-            View All Customer Reviews
-            <FiArrowRight className="text-xl group-hover:translate-x-2 transition-transform duration-300" />
-          </span>
-        </button>
       </div>
     </section>
   );

@@ -13,42 +13,60 @@ import DressStyle from "@/components/crm/DressStyle";
 import Testimonials from "@/components/crm/Testimonials";
 import Footer from "@/components/crm/Footer";
 import Chat from "@/components/crm/Chat";
+import WhyChooseUs from "@/components/crm/WhyChooseUs";
+
+// Mengimpor Auth Context yang sama dengan Header
+import { useAuth } from "../../context/AuthContext"; 
 
 export default function Home() {
   const location = useLocation();
+  
+  // Ambil data 'user' langsung dari AuthContext global
+  const { user } = useAuth(); 
 
-  // Membagi data produk untuk 2 section langsung dari data yang di-import
+  // Menentukan status member: jika 'user' ada/tidak null, berarti dia adalah Member yang sudah login
+  const isMember = !!user; 
+
   const newArrivals = productsData.slice(0, 4);
   const topSelling = productsData.slice(4, 8);
 
-  // Kalau Home dibuka dengan instruksi "scrollTo" (dikirim oleh Header saat
-  // user klik menu navigasi dari halaman lain, misal dari ProductDetail),
-  // scroll otomatis ke section yang dimaksud setelah halaman ini selesai render.
   useEffect(() => {
+    // Logika scroll berdasarkan state navigasi
     if (location.state?.scrollTo) {
       const sectionId = location.state.scrollTo;
 
       const timer = setTimeout(() => {
-        const target = document.getElementById(sectionId);
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 150);
 
       return () => clearTimeout(timer);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [location]);
 
   return (
     <div className="font-sans text-gray-900 bg-white">
       <Header />
       <HeroSection />
       <BrandsBanner />
-      <NewArrivals products={newArrivals} />
-      <TopSelling products={topSelling} />
-      <DressStyle />
-      <MembershipSection />
+      
+      {/* KONDISI 1: JIKA USER SUDAH REGISTER & LOGIN (MEMBER) */}
+      {isMember && (
+        <>
+          <NewArrivals products={newArrivals} />
+          <TopSelling products={topSelling} />
+          <DressStyle />
+        </>
+      )}
+
+      {/* KONDISI 2: JIKA USER BELUM LOGIN (GUEST) */}
+      {!isMember && (
+        <>
+          <WhyChooseUs />
+          <MembershipSection />
+        </>
+      )}
+
+      {/* Komponen yang selalu muncul */}
       <Testimonials />
       <Footer />
       <Chat />
