@@ -25,7 +25,7 @@ export default function MemberHero({ user }) {
   return (
     <section
       id="hero"
-      className="scroll-mt-24 bg-[#F2F0F1] pt-16 md:pt-24 flex flex-col md:flex-row items-stretch overflow-hidden mt-[-5  0px]"
+      className="scroll-mt-24 bg-[#F2F0F1] pt-16 md:pt-24 flex flex-col md:flex-row items-stretch overflow-hidden mt-[-50px]"
     >
       <div className="px-8 md:px-28 md:w-1/2 space-y-6 md:pr-10 pb-16 md:pb-24 flex flex-col justify-center">
         <h2 className="text-5xl md:text-7xl font-black leading-none uppercase tracking-tighter">
