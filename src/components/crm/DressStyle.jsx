@@ -2,12 +2,15 @@ import React from "react";
 
 export default function DressStyle() {
   return (
-    <section id="dress-style" className="scroll-mt-24 px-8 py-10 max-w-7xl mx-auto">
-      <div className="bg-[#F0F0F0] rounded-[40px] px-8 py-16 md:px-16">
-        <h3 className="text-4xl font-black text-center mb-12 uppercase tracking-tight">
+    <section id="dress-style" className="scroll-mt-15 px-8 py-6 max-w-7xl mx-auto">
+      {/* Mengubah py-16 menjadi md:py-12 agar menghemat ruang vertikal */}
+      <div className="bg-[#F0F0F0] rounded-[40px] px-8 py-10 md:py-12 md:px-16">
+        {/* Mengubah mb-12 menjadi mb-8 agar jarak judul ke card tidak terlalu jauh */}
+        <h3 className="text-4xl font-black text-center mb-8 uppercase tracking-tight">
           BROWSE BY DRESS STYLE
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[600px]">
+        {/* Mengubah md:h-[600px] menjadi md:h-[480px] agar pas di satu layar monitor */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[480px]">
           {/* 1. CASUAL CARD */}
           <div className="group relative rounded-3xl overflow-hidden h-64 md:h-auto hover:shadow-2xl transition-all duration-300 cursor-pointer">
             <img

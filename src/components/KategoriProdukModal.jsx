@@ -27,13 +27,15 @@ export default function KategoriProdukModal({
             <label className="text-sm font-medium text-gray-600 mb-1 block">
               Nama Kategori
             </label>
+            {/* NAME dan VALUE diubah menjadi nama_kategori */}
             <InputField
               type="text"
-              name="category"
-              value={formData.category}
+              name="nama_kategori" 
+              value={formData.nama_kategori}
               onChange={handleInputChange}
               className="w-full border border-gray-200 rounded-md py-1.5 px-3 text-sm outline-none focus:border-[#4EA674]/50"
               required
+              placeholder="masukkan nama kategori..."
             />
           </div>
 
@@ -41,12 +43,14 @@ export default function KategoriProdukModal({
             <label className="text-sm font-medium text-gray-600 mb-1 block">
               Deskripsi
             </label>
+            {/* NAME dan VALUE diubah menjadi deskripsi */}
             <InputField
               type="text"
-              name="description"
-              value={formData.description}
+              name="deskripsi"
+              value={formData.deskripsi}
               onChange={handleInputChange}
               className="w-full border border-gray-200 rounded-md py-1.5 px-3 text-sm outline-none focus:border-[#4EA674]/50"
+              placeholder="masukkan deskripsi kategori..."
             />
           </div>
 

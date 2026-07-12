@@ -27,16 +27,16 @@ export default function TransaksiModal({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Nama Customer</label>
               <select
-                name="id_customer"
+                name="idCustomer"
                 required
-                value={formData.id_customer}
+                value={formData.idCustomer}
                 onChange={handleInputChange}
                 className="w-full border border-gray-200 rounded-md px-4 py-2 text-sm outline-none focus:border-[#4EA674] text-gray-700"
               >
                 <option value="" disabled>Pilih Customer</option>
                 {customers.map((cust) => (
                   <option key={cust.id} value={cust.id}>
-                    {cust.name}
+                    {cust.nama_customer}
                   </option>
                 ))}
               </select>
@@ -46,9 +46,9 @@ export default function TransaksiModal({
               <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Transaksi</label>
               <input
                 type="date"
-                name="date"
+                name="tanggal_transaksi"
                 required
-                value={formData.date}
+                value={formData.tanggal_transaksi}
                 onChange={handleInputChange}
                 className="w-full border border-gray-200 rounded-md px-4 py-2 text-sm outline-none focus:border-[#4EA674]"
               />
@@ -60,8 +60,8 @@ export default function TransaksiModal({
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Metode Pembayaran</label>
               <select
-                name="payment"
-                value={formData.payment}
+                name="metode_pembayaran"
+                value={formData.metode_pembayaran}
                 onChange={handleInputChange}
                 className="w-full border border-gray-200 rounded-md px-4 py-2 text-sm outline-none focus:border-[#4EA674] text-gray-700"
               >
@@ -69,6 +69,7 @@ export default function TransaksiModal({
                 <option value="qris">QRIS</option>
                 <option value="credit card">Credit Card</option>
                 <option value="transfer">Transfer</option>
+                <option value="e-wallet">E-Wallet</option>
               </select>
             </div>
 

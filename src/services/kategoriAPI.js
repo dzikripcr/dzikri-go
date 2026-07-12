@@ -11,18 +11,24 @@ const headers = {
 
 export const kategoriProdukAPI = {
   async fetchKategori() {
-    const response = await axios.get(`${API_URL}?select=*&order=id.asc`, { 
-      headers 
-    });
+    const response = await axios.get(API_URL, { headers });
     return response.data;
   },
 
   async createKategori(data) {
-    const payload = { category: data.category, description: data.description };
-    const response = await axios.post(API_URL, payload, {
+    const response = await axios.post(API_URL, data, {
       headers: { ...headers, Prefer: "return=representation" },
     });
     return response.data[0];
+  },
+
+  async updateKategori(id, data) {
+    const { id: excludedId, created_at, updated_at, ...cleanPayload } = data;
+
+    const response = await axios.patch(`${API_URL}?id=eq.${id}`, cleanPayload, {
+      headers,
+    });
+    return response.data;
   },
 
   async deleteKategori(id) {
@@ -31,12 +37,4 @@ export const kategoriProdukAPI = {
     });
     return response.data;
   },
-
-  async updateKategori(id, data) {
-    const payload = { category: data.category, description: data.description };
-    const response = await axios.patch(`${API_URL}?id=eq.${id}`, payload, {
-      headers,
-    });
-    return response.data;
-  }
 };

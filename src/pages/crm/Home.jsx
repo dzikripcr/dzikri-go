@@ -6,8 +6,6 @@ import productsData from "@/data/products.json";
 import Header from "@/components/crm/Header";
 import HeroSection from "@/components/crm/HeroSection";
 import MembershipSection from "@/components/crm/membership/MembershipSection";
-import MemberOffer from "@/components/crm/conversion/MemberOffer";
-import MemberPointCard from "@/components/crm/conversion/MemberPointCard";
 import BrandsBanner from "@/components/crm/BrandsBanner";
 import NewArrivals from "@/components/crm/NewArrivals";
 import TopSelling from "@/components/crm/TopSelling";
@@ -51,10 +49,6 @@ export default function Home() {
       <TopSelling products={topSelling} />
       <DressStyle />
       <MembershipSection />
-      <section className="max-w-7xl mx-auto px-8 space-y-8">
-        <MemberOffer />
-        <MemberPointCard />
-      </section>
       <Testimonials />
       <Footer />
       <Chat />

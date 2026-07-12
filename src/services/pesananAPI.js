@@ -1,8 +1,8 @@
-// pesananAPI.js
 import axios from "axios";
 
-const API_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/pesanan";
-const TRANSAKSI_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/transaksi";
+const BASE_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1";
+const PESANAN_URL = `${BASE_URL}/pesanan`;
+const TRANSAKSI_URL = `${BASE_URL}/transaksi`;
 const API_KEY = "sb_publishable_kzt9cJe9q0rWdbJLdjgyBw_6YgjDHay";
 
 const headers = {
@@ -13,58 +13,43 @@ const headers = {
 
 export const pesananAPI = {
   async fetchPesanan() {
-    const response = await axios.get(`${API_URL}?select=*&order=id.desc`, {
-      headers,
-    });
+    const response = await axios.get(
+      // Disesuaikan dengan kolom tanggal_pesanan di database
+      `${PESANAN_URL}?order=tanggal_pesanan.desc`,
+      { headers }
+    );
+    return response.data;
+  },
+
+  async fetchTransaksiOptions() {
+    const response = await axios.get(
+      // Disesuaikan dengan skema tabel transaksi
+      `${TRANSAKSI_URL}?select=id,nama_customer,tanggal_transaksi`,
+      { headers }
+    );
     return response.data;
   },
 
   async createPesanan(data) {
-    const payload = {
-      id_transaksi: data.id_transaksi,
-      id_produk: data.id_produk,
-      product_name: data.product_name,
-      total_kuantitas: data.total_kuantitas,
-      total_belanja: data.total_belanja,
-      date: data.date,
-      payment: data.payment,
-      status: data.status,
-    };
-    const response = await axios.post(API_URL, payload, {
+    const response = await axios.post(PESANAN_URL, data, {
       headers: { ...headers, Prefer: "return=representation" },
     });
     return response.data[0];
   },
 
   async updatePesanan(id, data) {
-    const payload = {
-      id_transaksi: data.id_transaksi,
-      id_produk: data.id_produk,
-      product_name: data.product_name,
-      total_kuantitas: data.total_kuantitas,
-      total_belanja: data.total_belanja,
-      date: data.date,
-      payment: data.payment,
-      status: data.status,
-    };
-    const response = await axios.patch(`${API_URL}?id=eq.${id}`, payload, {
-      headers,
-    });
+    const response = await axios.patch(
+      `${PESANAN_URL}?id=eq.${id}`,
+      data,
+      { headers }
+    );
     return response.data;
   },
 
   async deletePesanan(id) {
-    const response = await axios.delete(`${API_URL}?id=eq.${id}`, {
+    const response = await axios.delete(`${PESANAN_URL}?id=eq.${id}`, {
       headers,
     });
-    return response.data;
-  },
-
-  async fetchTransaksiOptions() {
-    const response = await axios.get(
-      `${TRANSAKSI_URL}?select=id,name&order=id.desc`,
-      { headers }
-    );
     return response.data;
   },
 };

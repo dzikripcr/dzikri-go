@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaPlus, FaSearch, FaEdit, FaTrashAlt, FaExclamationTriangle } from "react-icons/fa";
+import { FaPlus, FaSearch, FaEdit, FaTrashAlt } from "react-icons/fa";
 
 import { userAPI } from "../services/userAPI";
 
@@ -10,6 +10,7 @@ import SelectField from "../components/SelectField";
 import UserModal from "../components/UserModal";
 import AlertBox from "../components/AlertBox";
 import DeleteModal from "../components/DeleteModal";
+import Badge from "../components/Badge"; // Import Badge Component
 
 export default function User() {
   const [users, setUsers] = useState([]);
@@ -24,30 +25,34 @@ export default function User() {
   // State untuk Delete Confirmation Modal
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, userId: null });
 
+  // State form disesuaikan dengan skema tabel public."user"
   const [formData, setFormData] = useState({
-    name: "",
+    nama_user: "", 
     email: "",
     password: "",
     role: "member",
-    profile_image: "",
+    poto_profil: "", 
   });
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
 
   const loadUsers = async () => {
-    const data = await userAPI.fetchUser();
-    setUsers(data);
+    try {
+      const data = await userAPI.fetchUser();
+      setUsers(data);
+    } catch (error) {
+      console.error("Gagal memuat data user:", error);
+      showAlert("Gagal memuat data pengguna dari server.", "error");
+    }
   };
 
   useEffect(() => {
     loadUsers();
   }, []);
 
-  // Fungsi pembantu untuk memunculkan alert sementara
   const showAlert = (message, type = "success") => {
     setAlert({ show: true, message, type });
-    // Otomatis hilangkan alert setelah 3 detik
     setTimeout(() => {
       setAlert({ show: false, message: "", type: "info" });
     }, 3000);
@@ -66,18 +71,18 @@ export default function User() {
       setImageFile(file);
       setFormData({
         ...formData,
-        profile_image: URL.createObjectURL(file),
+        poto_profil: URL.createObjectURL(file), 
       });
     }
   };
 
   const resetForm = () => {
     setFormData({
-      name: "",
+      nama_user: "",
       email: "",
       password: "",
       role: "member",
-      profile_image: "",
+      poto_profil: "",
     });
     setImageFile(null);
     setEditingUser(null);
@@ -88,8 +93,9 @@ export default function User() {
 
     try {
       setUploading(true);
-      let profileImageUrl = formData.profile_image;
+      let profileImageUrl = formData.poto_profil;
 
+      // Upload gambar ke bucket jika ada file baru yang dipilih
       if (imageFile) {
         profileImageUrl = await userAPI.uploadProfileImage(
           imageFile,
@@ -97,10 +103,13 @@ export default function User() {
         );
       }
 
-      const payload = { ...formData, profile_image: profileImageUrl };
+      // Payload untuk dikirim ke DB (kolom poto_profil)
+      const payload = { ...formData, poto_profil: profileImageUrl };
 
       if (editingUser) {
+        // Jangan update password jika field dikosongkan saat edit
         if (!payload.password) delete payload.password;
+        
         await userAPI.updateUser(editingUser.id, payload);
         showAlert("Data user berhasil diperbarui!", "success");
       } else {
@@ -122,21 +131,19 @@ export default function User() {
   const handleEdit = (user) => {
     setEditingUser(user);
     setFormData({
-      name: user.name,
-      email: user.email,
-      password: "",
-      role: user.role,
-      profile_image: user.profile_image || "",
+      nama_user: user.nama_user || "", 
+      email: user.email || "",
+      password: "", // Kosongkan password saat edit, diisi jika ingin diubah
+      role: user.role || "member",
+      poto_profil: user.poto_profil || "", 
     });
     setIsModalOpen(true);
   };
 
-  // Fungsi untuk memunculkan modal delete
   const handleDeleteClick = (id) => {
     setDeleteModal({ isOpen: true, userId: id });
   };
 
-  // Fungsi eksekusi delete dari modal
   const confirmDelete = async () => {
     try {
       await userAPI.deleteUser(deleteModal.userId);
@@ -150,22 +157,24 @@ export default function User() {
     }
   };
 
+  // Filter logika menggunakan nama_user dan email
   const filteredUsers = users.filter((user) => {
     const search = searchTerm.toLowerCase();
+    
     const matchSearch =
-      user.name.toLowerCase().includes(search) ||
-      user.email.toLowerCase().includes(search);
+      (user.nama_user?.toLowerCase().includes(search)) ||
+      (user.email?.toLowerCase().includes(search));
+      
     const matchRole =
       selectedRole && selectedRole !== "all"
         ? user.role === selectedRole
         : true;
+        
     return matchSearch && matchRole;
   });
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen relative">
-      
-      {/* Menampilkan AlertBox di atas halaman jika state alert.show bernilai true */}
       {alert.show && (
         <div className="mb-4 animate-fade-in-down w-full">
           <AlertBox type={alert.type}>{alert.message}</AlertBox>
@@ -219,25 +228,18 @@ export default function User() {
 
                 <td className="p-4">
                   <img
-                    src={user.profile_image || "/default-avatar.png"}
-                    alt={user.name}
+                    src={user.poto_profil || "/default-avatar.png"}
+                    alt={user.nama_user}
                     className="w-9 h-9 rounded-full object-cover border"
                   />
                 </td>
 
-                <td className="p-4 font-semibold">{user.name}</td>
+                <td className="p-4 font-semibold">{user.nama_user}</td>
                 <td className="p-4 text-gray-600">{user.email}</td>
 
                 <td className="p-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      user.role === "admin" || user.role === "superadmin"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {user.role}
-                  </span>
+                  {/* Pemanggilan Komponen Badge di sini */}
+                  <Badge type={user.role}>{user.role}</Badge>
                 </td>
 
                 <td className="p-4 flex gap-3">
@@ -254,7 +256,6 @@ export default function User() {
         </div>
       </div>
 
-      {/* User Edit/Add Modal */}
       {isModalOpen && (
         <UserModal
           onClose={() => {
@@ -270,7 +271,6 @@ export default function User() {
         />
       )}
 
-      {/* Pop Up Confirm Delete Modal */}
       <DeleteModal
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, userId: null })}

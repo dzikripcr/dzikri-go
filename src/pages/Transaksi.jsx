@@ -22,10 +22,10 @@ export default function Transaksi() {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
   const [formData, setFormData] = useState({
-    id_customer: "",
-    name: "",
-    date: today(),
-    payment: "qris",
+    idCustomer: "",
+    nama_customer: "",
+    tanggal_transaksi: today(),
+    metode_pembayaran: "qris",
     status: "berhasil",
   });
 
@@ -61,12 +61,12 @@ export default function Transaksi() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "id_customer") {
+    if (name === "idCustomer") {
       const selected = customers.find((c) => String(c.id) === String(value));
       setFormData((prev) => ({
         ...prev,
-        id_customer: value,
-        name: selected ? selected.name : "",
+        idCustomer: value,
+        nama_customer: selected ? selected.nama_customer : "",
       }));
       return;
     }
@@ -76,10 +76,10 @@ export default function Transaksi() {
 
   const openAddModal = () => {
     setFormData({
-      id_customer: "",
-      name: "",
-      date: today(),
-      payment: "qris",
+      idCustomer: "",
+      nama_customer: "",
+      tanggal_transaksi: today(),
+      metode_pembayaran: "qris",
       status: "berhasil",
     });
     setIsModalOpen(true);
@@ -88,10 +88,10 @@ export default function Transaksi() {
   const openEditModal = (item) => {
     setFormData({
       id: item.id,
-      id_customer: item.id_customer,
-      name: item.name,
-      date: item.date ? item.date.slice(0, 10) : today(),
-      payment: item.payment,
+      idCustomer: item.idCustomer,
+      nama_customer: item.nama_customer,
+      tanggal_transaksi: item.tanggal_transaksi ? item.tanggal_transaksi.slice(0, 10) : today(),
+      metode_pembayaran: item.metode_pembayaran,
       status: item.status,
     });
     setIsModalOpen(true);
@@ -101,10 +101,10 @@ export default function Transaksi() {
     e.preventDefault();
     try {
       const payload = {
-        id_customer: parseInt(formData.id_customer),
-        name: formData.name,
-        date: formData.date,
-        payment: formData.payment,
+        idCustomer: parseInt(formData.idCustomer),
+        nama_customer: formData.nama_customer,
+        tanggal_transaksi: formData.tanggal_transaksi,
+        metode_pembayaran: formData.metode_pembayaran,
         status: formData.status,
       };
 
@@ -143,11 +143,11 @@ export default function Transaksi() {
   const _searchTerm = searchTerm.toLowerCase();
 
   const filteredTransaksi = transaksiList.filter((item) => {
-    const matchesSearch = item.name.toLowerCase().includes(_searchTerm);
+    const matchesSearch = item.nama_customer?.toLowerCase().includes(_searchTerm);
     const matchesStatus =
       selectedStatus !== "all" ? item.status === selectedStatus : true;
     const matchesPayment =
-      selectedPayment !== "all" ? item.payment === selectedPayment : true;
+      selectedPayment !== "all" ? item.metode_pembayaran === selectedPayment : true;
     return matchesSearch && matchesStatus && matchesPayment;
   });
 
@@ -189,6 +189,7 @@ export default function Transaksi() {
                 { label: "QRIS", value: "qris" },
                 { label: "Credit Card", value: "credit card" },
                 { label: "Transfer", value: "transfer" },
+                { label: "E-Wallet", value: "e-wallet" },
               ]}
               className="w-[200px]"
             />
@@ -211,11 +212,11 @@ export default function Transaksi() {
             {filteredTransaksi.map((item, index) => (
               <tr key={item.id} className="border-b border-gray-100 hover:bg-gray-50 text-sm transition-colors">
                 <td className="p-4 text-gray-500">{index + 1}</td>
-                <td className="p-4 font-semibold text-gray-800">{item.name}</td>
+                <td className="p-4 font-semibold text-gray-800">{item.nama_customer}</td>
                 <td className="p-4 text-gray-600">
-                  {item.date ? new Date(item.date).toLocaleDateString("id-ID") : "-"}
+                  {item.tanggal_transaksi ? new Date(item.tanggal_transaksi).toLocaleDateString("id-ID") : "-"}
                 </td>
-                <td className="p-4 text-gray-600 capitalize">{item.payment}</td>
+                <td className="p-4 text-gray-600 capitalize">{item.metode_pembayaran}</td>
                 <td className="p-4 capitalize"><Badge type={item.status}>{item.status}</Badge></td>
                 <td className="p-4 flex space-x-3 text-gray-400">
                   <Button type="edit" onClick={() => openEditModal(item)}>

@@ -29,10 +29,8 @@ export default function CustomerDetail({ customer, onClose }) {
   };
 
   const profileImageSrc =
-    customer.profile_image ||
-    customer.profileImage ||
-    customer.user?.profile_image ||
-    customer.user?.profileImage;
+    customer.poto_profil ||
+    customer.user?.poto_profil;
 
   return (
     <div className="bg-white rounded-xl shadow-sm border p-5">
@@ -50,7 +48,7 @@ export default function CustomerDetail({ customer, onClose }) {
         {profileImageSrc ? (
           <img
             src={profileImageSrc}
-            alt={customer.name}
+            alt={customer.nama_customer}
             className="w-24 h-24 rounded-full object-cover border-4 border-gray-100 shadow-sm"
           />
         ) : (
@@ -58,7 +56,7 @@ export default function CustomerDetail({ customer, onClose }) {
         )}
 
         <h3 className="mt-4 text-lg font-bold text-gray-800">
-          {customer.name}
+          {customer.nama_customer}
         </h3>
         <p className="text-sm text-gray-500">{customer.email}</p>
 
@@ -84,12 +82,12 @@ export default function CustomerDetail({ customer, onClose }) {
 
           <div className="flex items-center gap-3 border rounded-lg p-3 text-sm font-medium text-gray-700 mb-2 bg-gray-50/50">
             <FaPhone className="text-[#4EA674]" />
-            <span>{customer.phone || "-"}</span>
+            <span>{customer.nohp || "-"}</span>
           </div>
 
           <div className="flex items-center gap-3 border rounded-lg p-3 text-sm font-medium text-gray-700 bg-gray-50/50">
             <FaMapMarkerAlt className="text-[#4EA674]" />
-            <span>{customer.address || "-"}</span>
+            <span>{customer.alamat || "-"}</span>
           </div>
         </div>
       </div>
@@ -103,19 +101,20 @@ export default function CustomerDetail({ customer, onClose }) {
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">Registration:</span>
             <span className="font-medium text-gray-800">
-              {formatDate(customer.join_date)}
+              {formatDate(customer.tanggal_join)}
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">Last Purchase:</span>
             <span className="font-medium text-gray-800">
+              {/* Asumsi: Anda punya kolom ini atau bisa diganti sesuai DB Anda */}
               {formatDate(customer.last_purchase)}
             </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">Source:</span>
             <span className="font-medium text-gray-800 capitalize">
-              {customer.user_source || "-"}
+              {customer.sumber_user || "-"}
             </span>
           </div>
         </div>
@@ -141,7 +140,7 @@ export default function CustomerDetail({ customer, onClose }) {
         <div className="grid grid-cols-3 gap-2">
           <div className="border rounded-lg py-3 px-1 flex flex-col items-center justify-center bg-gray-50/50">
             <p className="text-xl font-bold text-gray-800">
-              {customer.order_count ?? 0}
+              {customer.jumlah_pesanan ?? 0}
             </p>
             <p
               className="text-[9px] sm:text-[10px] tracking-tight uppercase font-semibold text-gray-500 mt-1 w-full text-center truncate"
@@ -153,7 +152,7 @@ export default function CustomerDetail({ customer, onClose }) {
 
           <div className="border rounded-lg py-3 px-1 flex flex-col items-center justify-center bg-green-50/30">
             <p className="text-xl font-bold text-green-600">
-              {customer.completed_orders ?? 0}
+              {customer.pesanan_selesai ?? 0}
             </p>
             <p
               className="text-[9px] sm:text-[10px] tracking-tight uppercase font-semibold text-gray-500 mt-1 w-full text-center truncate"
@@ -165,7 +164,7 @@ export default function CustomerDetail({ customer, onClose }) {
 
           <div className="border rounded-lg py-3 px-1 flex flex-col items-center justify-center bg-red-50/30">
             <p className="text-xl font-bold text-red-500">
-              {customer.cancelled_orders ?? 0}
+              {customer.pesanan_dibatalkan ?? 0}
             </p>
             <p
               className="text-[9px] sm:text-[10px] tracking-tight uppercase font-semibold text-gray-500 mt-1 w-full text-center truncate"

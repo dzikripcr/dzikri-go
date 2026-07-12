@@ -17,9 +17,10 @@ export default function KategoriProduk() {
   const [alert, setAlert] = useState({ show: false, message: "", type: "info" });
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
+  // Disesuaikan persis dengan skema kolom lokal: nama_kategori & deskripsi
   const [formData, setFormData] = useState({
-    category: "",
-    description: "",
+    nama_kategori: "",
+    deskripsi: "",
   });
   
   const [searchTerm, setSearchTerm] = useState("");
@@ -51,14 +52,19 @@ export default function KategoriProduk() {
 
   const openAddModal = () => {
     setFormData({
-      category: "",
-      description: "",
+      nama_kategori: "",
+      deskripsi: "",
     });
     setIsModalOpen(true);
   };
 
   const openEditModal = (item) => {
-    setFormData(item);
+    // Mengisi form dengan data dari row tabel
+    setFormData({
+      id: item.id,
+      nama_kategori: item.nama_kategori,
+      deskripsi: item.deskripsi,
+    });
     setIsModalOpen(true);
   };
 
@@ -73,7 +79,7 @@ export default function KategoriProduk() {
         showAlert("Kategori baru berhasil ditambahkan!", "success");
       }
       setIsModalOpen(false);
-      setFormData({ category: "", description: "" });
+      setFormData({ nama_kategori: "", deskripsi: "" });
       loadKategori();
     } catch (error) {
       showAlert("Error saving data: " + error.message, "error");
@@ -97,8 +103,9 @@ export default function KategoriProduk() {
     }
   };
 
+  // Logika pencarian menggunakan nama_kategori
   const filteredKategori = kategoriList.filter((item) =>
-    item.category.toLowerCase().includes(searchTerm.toLowerCase())
+    (item.nama_kategori && item.nama_kategori.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
@@ -137,8 +144,8 @@ export default function KategoriProduk() {
             {filteredKategori.map((item, index) => (
               <tr key={item.id} className="border-b hover:bg-gray-50 text-sm">
                 <td className="p-4">{index + 1}</td>
-                <td className="p-4 font-semibold">{item.category}</td>
-                <td className="p-4 text-gray-600">{item.description}</td>
+                <td className="p-4 font-semibold">{item.nama_kategori}</td>
+                <td className="p-4 text-gray-600">{item.deskripsi}</td>
                 <td className="p-4 flex gap-3">
                   <Button type="edit" onClick={() => openEditModal(item)}>
                     <FaEdit />

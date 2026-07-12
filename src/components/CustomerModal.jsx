@@ -26,8 +26,8 @@ export default function CustomerModal({
             <label className="block text-sm font-medium mb-1 text-gray-700">Phone</label>
             <input
               type="text"
-              name="phone"
-              value={formData.phone || ""}
+              name="nohp"
+              value={formData.nohp || ""}
               onChange={handleInputChange}
               className="w-full border rounded-md px-4 py-2 outline-none focus:border-[#4EA674] transition-colors"
               placeholder="08123456789"
@@ -38,8 +38,8 @@ export default function CustomerModal({
           <div>
             <label className="block text-sm font-medium mb-1 text-gray-700">Address</label>
             <textarea
-              name="address"
-              value={formData.address || ""}
+              name="alamat"
+              value={formData.alamat || ""}
               onChange={handleInputChange}
               className="w-full border rounded-md px-4 py-2 outline-none focus:border-[#4EA674] transition-colors"
               placeholder="Alamat lengkap"
@@ -52,12 +52,12 @@ export default function CustomerModal({
             <label className="block text-sm font-medium mb-1 text-gray-700">Status</label>
             <select
               name="status"
-              value={formData.status || "Aktif"}
+              value={formData.status || "aktif"}
               onChange={handleInputChange}
               className="w-full border rounded-md px-4 py-2 outline-none focus:border-[#4EA674] transition-colors"
             >
-              <option value="Aktif">Aktif</option>
-              <option value="Tidak Aktif">Tidak Aktif</option>
+              <option value="aktif">Aktif</option>
+              <option value="tidak aktif">Tidak Aktif</option>
             </select>
           </div>
 
@@ -81,8 +81,8 @@ export default function CustomerModal({
             <label className="block text-sm font-medium mb-1 text-gray-700">User Source</label>
             <input
               type="text"
-              name="user_source"
-              value={formData.user_source || ""}
+              name="sumber_user"
+              value={formData.sumber_user || ""}
               onChange={handleInputChange}
               className="w-full border rounded-md px-4 py-2 outline-none focus:border-[#4EA674] transition-colors"
               placeholder="Misal: Instagram, Referensi Teman"

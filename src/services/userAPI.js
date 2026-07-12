@@ -1,6 +1,7 @@
 import axios from "axios";
 import { supabase } from "@/lib/supabaseClient";
 
+// Endpoint Supabase yang mengarah langsung ke tabel public."user"
 const API_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/user";
 const API_KEY = "sb_publishable_kzt9cJe9q0rWdbJLdjgyBw_6YgjDHay";
 

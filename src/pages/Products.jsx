@@ -12,7 +12,7 @@ import AlertBox from "../components/AlertBox";
 import DeleteModal from "../components/DeleteModal";
 import { produkAPI } from "../services/produkAPI";
 import { kategoriProdukAPI } from "../services/kategoriAPI";
-import Badge from "@/components/Badge";
+import Badge from "../components/Badge"; // Pastikan path ini benar
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -27,12 +27,12 @@ export default function Products() {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
   const [formData, setFormData] = useState({
-    name: "",
-    category_id: "",
-    price: "",
-    stock: "",
-    status: "Low Stock",
-    image: "",
+    nama_produk: "",
+    idKategori: "",
+    harga: "",
+    stok: "",
+    status: "stok tersedia",
+    gambar_produk: "",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -55,7 +55,6 @@ export default function Products() {
     loadData();
   }, []);
 
-  // Fungsi pembantu untuk memunculkan alert sementara
   const showAlert = (message, type = "success") => {
     setAlert({ show: true, message, type });
     setTimeout(() => {
@@ -76,12 +75,12 @@ export default function Products() {
 
   const openAddModal = () => {
     setFormData({
-      name: "",
-      category_id: categories[0]?.id || "",
-      price: "",
-      stock: "",
-      status: "Low Stock",
-      image: "",
+      nama_produk: "",
+      idKategori: categories[0]?.id || "",
+      harga: "",
+      stok: "",
+      status: "stok tersedia",
+      gambar_produk: "",
     });
     setSelectedFile(null);
     setIsModalOpen(true);
@@ -90,12 +89,12 @@ export default function Products() {
   const openEditModal = (product) => {
     setFormData({
       id: product.id,
-      name: product.name,
-      category_id: product.category_id,
-      price: product.price,
-      stock: product.stock,
+      nama_produk: product.nama_produk,
+      idKategori: product.idKategori,
+      harga: product.harga,
+      stok: product.stok,
       status: product.status,
-      image: product.image,
+      gambar_produk: product.gambar_produk,
     });
     setSelectedFile(null);
     setIsModalOpen(true);
@@ -104,20 +103,19 @@ export default function Products() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let imageUrl = formData.image;
+      let imageUrl = formData.gambar_produk;
       
-      // Proses upload jika ada berkas foto baru pilihan user
       if (selectedFile) {
         imageUrl = await produkAPI.uploadImage(selectedFile);
       }
 
       const payload = {
-        name: formData.name,
-        category_id: parseInt(formData.category_id),
-        price: parseFloat(formData.price),
-        stock: parseInt(formData.stock),
+        nama_produk: formData.nama_produk,
+        idKategori: parseInt(formData.idKategori),
+        harga: parseFloat(formData.harga),
+        stok: parseInt(formData.stok),
         status: formData.status,
-        image: imageUrl,
+        gambar_produk: imageUrl,
       };
 
       if (formData.id) {
@@ -156,14 +154,14 @@ export default function Products() {
 
   const filteredProducts = products
     .filter((product) => {
-      const categoryName = product.kategori_produk?.category?.toLowerCase() || "";
+      const categoryName = product.kategori_produk?.nama_kategori?.toLowerCase() || "";
       const matchesSearch =
-        product.name.toLowerCase().includes(_searchTerm) ||
+        (product.nama_produk && product.nama_produk.toLowerCase().includes(_searchTerm)) ||
         categoryName.includes(_searchTerm);
 
       const matchesCategory =
         selectedCategory && selectedCategory !== "all"
-          ? product.category_id === parseInt(selectedCategory)
+          ? product.idKategori === parseInt(selectedCategory)
           : true;
 
       return matchesSearch && matchesCategory;
@@ -171,9 +169,9 @@ export default function Products() {
     .sort((a, b) => {
       switch (sortBy) {
         case "stock-asc":
-          return a.stock - b.stock;
+          return a.stok - b.stok;
         case "stock-desc":
-          return b.stock - a.stock;
+          return b.stok - a.stok;
         default:
           return String(a.id).localeCompare(String(b.id));
       }
@@ -182,7 +180,6 @@ export default function Products() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen relative">
       
-      {/* Alert Box */}
       {alert.show && (
         <div className="mb-4 animate-fade-in-down w-full">
           <AlertBox type={alert.type}>{alert.message}</AlertBox>
@@ -213,7 +210,7 @@ export default function Products() {
               value={sortBy}
               onChange={setSortBy}
               options={[
-                { label: "Default Stock", value: "id" },
+                { label: "Default Sort", value: "id" },
                 { label: "Stock: Lowest to Highest", value: "stock-asc" },
                 { label: "Stock: Highest to Lowest", value: "stock-desc" },
               ]}
@@ -225,9 +222,8 @@ export default function Products() {
               placeholder="All Category"
               options={[
                 { label: "All Category", value: "all" },
-                { label: "All Category", value: "all" },
                 ...categories.map((cat) => ({
-                  label: cat.category,
+                  label: cat.nama_kategori, 
                   value: String(cat.id),
                 })),
               ]}
@@ -244,23 +240,24 @@ export default function Products() {
                 <td className="p-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-gray-100 rounded-md overflow-hidden">
-                      {product.image ? (
-                        <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      {product.gambar_produk ? (
+                        <img src={product.gambar_produk} alt={product.nama_produk} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gray-200 text-xs text-gray-400">No Image</div>
                       )}
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-800">{product.name}</p>
+                      <p className="font-semibold text-gray-800">{product.nama_produk}</p>
                     </div>
                   </div>
                 </td>
-                <td className="p-4 text-gray-600">{product.kategori_produk?.category || "Uncategorized"}</td>
-                <td className="p-4 font-bold text-gray-800">${parseFloat(product.price).toFixed(2)}</td>
-                <td className="p-4 text-gray-800 font-medium">{product.stock}</td>
                 
-                {/* 2. Implementasi Badge dinamis pada kolom status */}
+                <td className="p-4 text-gray-600">{product.kategori_produk?.nama_kategori || "Uncategorized"}</td>
+                <td className="p-4 font-bold text-gray-800">Rp {parseFloat(product.harga).toLocaleString("id-ID")}</td>
+                <td className="p-4 text-gray-800 font-medium">{product.stok}</td>
+                
                 <td className="p-4">
+                  {/* PEMANGGILAN KOMPONEN BADGE */}
                   <Badge type={product.status}>{product.status}</Badge>
                 </td>
 
@@ -292,7 +289,6 @@ export default function Products() {
         />
       )}
 
-      {/* Delete Confirmation Modal */}
       <DeleteModal
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, id: null })}

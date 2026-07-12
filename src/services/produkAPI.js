@@ -11,11 +11,21 @@ const headers = {
 };
 
 export const produkAPI = {
+  // select=*,kategori_produk(nama_kategori) -> embed relasi kategori
   async fetchProduk() {
-    const response = await axios.get(`${API_URL}?select=*&order=id.asc`, {
-      headers,
-    });
+    const response = await axios.get(
+      `${API_URL}?select=*,kategori_produk(nama_kategori)`,
+      { headers }
+    );
     return response.data;
+  },
+
+  async fetchProdukById(id) {
+    const response = await axios.get(
+      `${API_URL}?id=eq.${id}&select=*,kategori_produk(nama_kategori)`,
+      { headers }
+    );
+    return response.data[0];
   },
 
   async createProduk(data) {
@@ -25,13 +35,6 @@ export const produkAPI = {
     return response.data[0];
   },
 
-  async deleteProduk(id) {
-    const response = await axios.delete(`${API_URL}?id=eq.${id}`, {
-      headers,
-    });
-    return response.data;
-  },
-
   async updateProduk(id, data) {
     const response = await axios.patch(`${API_URL}?id=eq.${id}`, data, {
       headers,
@@ -39,23 +42,24 @@ export const produkAPI = {
     return response.data;
   },
 
-  async uploadImage(file, identifier = "product") {
-    if (!file) return null;
+  async deleteProduk(id) {
+    const response = await axios.delete(`${API_URL}?id=eq.${id}`, {
+      headers,
+    });
+    return response.data;
+  },
 
+  async uploadImage(file) {
     const fileExt = file.name.split(".").pop();
-    const fileName = `${identifier}-${Math.random()}_${Date.now()}.${fileExt}`;
-    const filePath = `products/${fileName}`;
+    const fileName = `produk-${Date.now()}.${fileExt}`;
 
     const { error } = await supabase.storage
-      .from("product-images")
-      .upload(filePath, file, { upsert: true });
+      .from("products")
+      .upload(fileName, file, { upsert: true });
 
     if (error) throw error;
 
-    const { data } = supabase.storage
-      .from("product-images")
-      .getPublicUrl(filePath);
-
+    const { data } = supabase.storage.from("products").getPublicUrl(fileName);
     return data.publicUrl;
   },
 };

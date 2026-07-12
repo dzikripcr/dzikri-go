@@ -10,7 +10,7 @@ import DeleteModal from "../components/DeleteModal";
 import OrderModal from "../components/OrderModal";
 import { pesananAPI } from "../services/pesananAPI";
 import { produkAPI } from "../services/produkAPI";
-import Badge from "@/components/Badge";
+import Badge from "@/components/Badge"; // Pastikan path ini sesuai dengan struktur Anda
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -24,14 +24,14 @@ export default function Orders() {
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
   const [formData, setFormData] = useState({
-    id_transaksi: "",
-    id_produk: "",
-    product_name: "",
+    idTransaksi: "",
+    idProduk: "",
+    nama_produk: "",
     total_kuantitas: 1,
     total_belanja: 0,
-    date: today(),
-    payment: "unpaid",
-    status: "shipped",
+    tanggal_pesanan: today(),
+    status_bayar: "belum bayar",
+    status_pesanan: "menunggu konfirmasi",
   });
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -71,19 +71,17 @@ export default function Orders() {
     setFormData((prev) => {
       let updatedData = { ...prev, [name]: value };
 
-      // Jika produk berubah, cari harganya dan hitung ulang total belanja
-      if (name === "id_produk") {
+      if (name === "idProduk") {
         const selected = products.find((p) => String(p.id) === String(value));
-        const hargaProduk = selected ? (selected.harga || selected.price || 0) : 0;
+        const hargaProduk = selected ? (selected.harga || 0) : 0;
         
-        updatedData.product_name = selected ? selected.name : "";
+        updatedData.nama_produk = selected ? selected.nama_produk : "";
         updatedData.total_belanja = parseInt(updatedData.total_kuantitas || 0) * hargaProduk;
       }
 
-      // Jika kuantitas berubah, hitung ulang total belanja berdasarkan produk terpilih
       if (name === "total_kuantitas") {
-        const selected = products.find((p) => String(p.id) === String(updatedData.id_produk));
-        const hargaProduk = selected ? (selected.harga || selected.price || 0) : 0;
+        const selected = products.find((p) => String(p.id) === String(updatedData.idProduk));
+        const hargaProduk = selected ? (selected.harga || 0) : 0;
         
         updatedData.total_belanja = parseInt(value || 0) * hargaProduk;
       }
@@ -94,14 +92,14 @@ export default function Orders() {
 
   const openAddModal = () => {
     setFormData({
-      id_transaksi: "",
-      id_produk: "",
-      product_name: "",
+      idTransaksi: "",
+      idProduk: "",
+      nama_produk: "",
       total_kuantitas: 1,
       total_belanja: 0,
-      date: today(),
-      payment: "unpaid",
-      status: "shipped",
+      tanggal_pesanan: today(),
+      status_bayar: "belum bayar",
+      status_pesanan: "menunggu konfirmasi",
     });
     setIsModalOpen(true);
   };
@@ -109,14 +107,14 @@ export default function Orders() {
   const openEditModal = (item) => {
     setFormData({
       id: item.id,
-      id_transaksi: item.id_transaksi,
-      id_produk: item.id_produk,
-      product_name: item.product_name,
+      idTransaksi: item.idTransaksi,
+      idProduk: item.idProduk,
+      nama_produk: item.nama_produk,
       total_kuantitas: item.total_kuantitas || 1,
       total_belanja: item.total_belanja || 0,
-      date: item.date ? item.date.slice(0, 10) : today(),
-      payment: item.payment,
-      status: item.status,
+      tanggal_pesanan: item.tanggal_pesanan ? item.tanggal_pesanan.slice(0, 10) : today(),
+      status_bayar: item.status_bayar,
+      status_pesanan: item.status_pesanan,
     });
     setIsModalOpen(true);
   };
@@ -125,28 +123,28 @@ export default function Orders() {
     e.preventDefault();
     try {
       const payload = {
-        id_transaksi: parseInt(formData.id_transaksi),
-        id_produk: parseInt(formData.id_produk),
-        product_name: formData.product_name,
+        idTransaksi: parseInt(formData.idTransaksi),
+        idProduk: parseInt(formData.idProduk),
+        nama_produk: formData.nama_produk,
         total_kuantitas: parseInt(formData.total_kuantitas),
         total_belanja: parseInt(formData.total_belanja),
-        date: formData.date,
-        payment: formData.payment,
-        status: formData.status,
+        tanggal_pesanan: formData.tanggal_pesanan,
+        status_bayar: formData.status_bayar,
+        status_pesanan: formData.status_pesanan,
       };
 
       if (formData.id) {
         await pesananAPI.updatePesanan(formData.id, payload);
-        showAlert("Order berhasil diperbarui!", "success");
+        showAlert("Pesanan berhasil diperbarui!", "success");
       } else {
         await pesananAPI.createPesanan(payload);
-        showAlert("Order baru berhasil ditambahkan!", "success");
+        showAlert("Pesanan baru berhasil ditambahkan!", "success");
       }
 
       setIsModalOpen(false);
       loadData();
     } catch (error) {
-      showAlert("Gagal memproses data order: " + error.message, "error");
+      showAlert("Gagal memproses data pesanan: " + error.message, "error");
     }
   };
 
@@ -157,11 +155,11 @@ export default function Orders() {
   const confirmDelete = async () => {
     try {
       await pesananAPI.deletePesanan(deleteModal.id);
-      showAlert("Order berhasil dihapus!", "success");
+      showAlert("Pesanan berhasil dihapus!", "success");
       loadData();
     } catch (error) {
       console.error(error);
-      showAlert("Gagal menghapus order!", "error");
+      showAlert("Gagal menghapus pesanan!", "error");
     } finally {
       setDeleteModal({ isOpen: false, id: null });
     }
@@ -170,21 +168,21 @@ export default function Orders() {
   const _searchTerm = searchTerm.toLowerCase();
 
   const filteredOrders = orders.filter((item) => {
-    const matchesSearch = item.product_name?.toLowerCase().includes(_searchTerm);
-    const matchesStatus = selectedStatus !== "all" ? item.status === selectedStatus : true;
-    const matchesPayment = selectedPayment !== "all" ? item.payment === selectedPayment : true;
+    const matchesSearch = item.nama_produk?.toLowerCase().includes(_searchTerm);
+    const matchesStatus = selectedStatus !== "all" ? item.status_pesanan === selectedStatus : true;
+    const matchesPayment = selectedPayment !== "all" ? item.status_bayar === selectedPayment : true;
     return matchesSearch && matchesStatus && matchesPayment;
   });
 
   const statusTabs = [
-    { label: "All order", value: "all", showCount: true },
-    { label: "Shipped", value: "Shipped", showCount: false },
-    { label: "Pending", value: "Pending", showCount: false },        
-    { label: "Delivered", value: "Delivered", showCount: false },
-    { label: "Canceled", value: "Canceled", showCount: false },
+    { label: "Semua Pesanan", value: "all", showCount: true },
+    { label: "Menunggu Konfirmasi", value: "menunggu konfirmasi", showCount: false },
+    { label: "Dikonfirmasi", value: "dikonfirmasi", showCount: false },        
+    { label: "Dikirim", value: "dikirim", showCount: false },
+    { label: "Diterima", value: "diterima", showCount: false },
+    { label: "Dibatalkan", value: "dibatalkan", showCount: false },
   ];
 
-  // Helper format rupiah
   const formatRupiah = (angka) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -203,7 +201,7 @@ export default function Orders() {
 
       <div className="flex justify-between items-center mb-6">
         <Button onClick={openAddModal} type="add">
-          <FaPlus className="mr-2" /> Tambah Order
+          <FaPlus className="mr-2" /> Tambah Pesanan
         </Button>
         
         <SelectField
@@ -212,8 +210,8 @@ export default function Orders() {
           placeholder="Semua Pembayaran"
           options={[
             { label: "Semua Pembayaran", value: "all" },
-            { label: "Paid", value: "paid" },
-            { label: "Unpaid", value: "unpaid" },
+            { label: "Sudah Bayar", value: "sudah bayar" },
+            { label: "Belum Bayar", value: "belum bayar" },
           ]}
           className="w-[180px]"
         />
@@ -222,7 +220,7 @@ export default function Orders() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
           
-          <div className="flex bg-[#EAF5EE] p-1 rounded-xl w-full md:w-auto">
+          <div className="flex bg-[#EAF5EE] p-1 rounded-xl w-full md:w-auto overflow-x-auto">
             {statusTabs.map((tab) => {
               const isActive = selectedStatus === tab.value;
               return (
@@ -248,7 +246,7 @@ export default function Orders() {
             <div className="relative w-full md:w-64">
               <InputField
                 type="text"
-                placeholder="Cari pesanan pelanggan..."
+                placeholder="Cari pesanan produk..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full border border-gray-200 bg-[#F9FAFB] rounded-lg py-1.5 pl-3 pr-10 text-sm outline-none focus:border-[#4EA674]/50 transition-colors"
@@ -263,22 +261,27 @@ export default function Orders() {
             {filteredOrders.map((item, index) => (
               <tr key={item.id} className="border-b border-gray-100 hover:bg-gray-50 text-sm transition-colors">
                 <td className="p-4 text-gray-500">{index + 1}</td>
-                <td className="p-4 font-semibold text-gray-800">{item.product_name}</td>
+                <td className="p-4 font-semibold text-gray-800">{item.nama_produk}</td>
                 <td className="p-4 text-gray-600 text-center">{item.total_kuantitas || 0} pcs</td>
                 <td className="p-4 font-medium text-gray-800">{formatRupiah(item.total_belanja || 0)}</td>
                 <td className="p-4 text-gray-600">
-                  {item.date ? new Date(item.date).toLocaleDateString("id-ID") : "-"}
+                  {item.tanggal_pesanan ? new Date(item.tanggal_pesanan).toLocaleDateString("id-ID") : "-"}
                 </td>
+                
+                {/* Badge Status Pembayaran */}
                 <td className="p-4">
-                  <Badge type={item.payment === "paid" ? "berhasil" : "gagal"}>
-                    <span className="capitalize">{item.payment}</span>
+                  <Badge type={item.status_bayar === "sudah bayar" ? "berhasil" : "gagal"}>
+                    {item.status_bayar}
                   </Badge>
                 </td>
+                
+                {/* Badge Status Pesanan memanggil prop type sesuai database */}
                 <td className="p-4">
-                  <Badge type={item.status ? item.status.toLowerCase() : "pending"}>
-                    {item.status}
+                  <Badge type={item.status_pesanan}>
+                    {item.status_pesanan}
                   </Badge>
                 </td>
+                
                 <td className="p-4 flex space-x-3 text-gray-400">
                   <Button type="edit" onClick={() => openEditModal(item)}>
                     <FaEdit />
@@ -308,7 +311,7 @@ export default function Orders() {
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, id: null })}
         onConfirm={confirmDelete}
-        message="Apakah Anda yakin ingin menghapus order ini secara permanen?"
+        message="Apakah Anda yakin ingin menghapus pesanan ini secara permanen?"
       />
     </div>
   );

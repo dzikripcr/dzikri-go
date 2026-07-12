@@ -32,10 +32,10 @@ export default function Feedback() {
   const filteredFeedback = feedbackList.filter((item) => {
     const searchLower = searchTerm.toLowerCase();
     
-    // Fallback string kosong agar tidak error jika data bernilai null
+    // Disesuaikan dengan kolom nama_customer dan nama_produk dari tabel ulasan
     const matchSearch = 
-      (item.customerName || "").toLowerCase().includes(searchLower) ||
-      (item.namaProduk || "").toLowerCase().includes(searchLower);
+      (item.nama_customer || "").toLowerCase().includes(searchLower) ||
+      (item.nama_produk || "").toLowerCase().includes(searchLower);
       
     const matchRating = 
       selectedRating === "all" ? true : item.rating === parseInt(selectedRating);
@@ -78,7 +78,6 @@ export default function Feedback() {
         </div>
 
         <div className="overflow-x-auto">
-          {/* Menambahkan header "Product" */}
           <Table headers={["No", "Customer", "Product", "Rating", "Feedback"]}>
             {isLoading ? (
               <tr>
@@ -96,12 +95,17 @@ export default function Feedback() {
               filteredFeedback.map((item, index) => (
                 <tr key={item.id} className="border-b hover:bg-gray-50 text-sm">
                   <td className="p-4">{index + 1}</td>
+                  
+                  {/* Render nama_customer */}
                   <td className="p-4 font-semibold">
-                    {item.customerName || "Anonymous"}
+                    {item.nama_customer || "Anonymous"}
                   </td>
+                  
+                  {/* Render nama_produk */}
                   <td className="p-4 text-gray-700">
-                    {item.namaProduk || "-"}
+                    {item.nama_produk || "-"}
                   </td>
+                  
                   <td className="p-4">
                     <div className="flex items-center gap-1 text-yellow-500">
                       {Array.from({ length: 5 }).map((_, i) => (
@@ -112,8 +116,10 @@ export default function Feedback() {
                       ))}
                     </div>
                   </td>
+                  
+                  {/* Render teks ulasan yang sesuai dengan kolom DB */}
                   <td className="p-4 text-gray-600 max-w-md truncate whitespace-normal">
-                    {item.feedback}
+                    {item.ulasan}
                   </td>
                 </tr>
               ))

@@ -15,6 +15,29 @@ export const customerAPI = {
     return response.data;
   },
 
+  async fetchCustomerById(id) {
+    const response = await axios.get(`${API_URL}?id=eq.${id}`, { headers });
+    return response.data.length ? response.data[0] : null;
+  },
+  
+  async createCustomerFromUser(newUser) {
+    const payload = {
+      idUser: newUser.id,
+      nama_customer: newUser.nama_user,
+      email: newUser.email,
+      poto_profil: newUser.poto_profil || null,
+      jumlah_pesanan: 0,
+      total_belanja: 0,
+      status: "aktif", 
+      level_membership: "silver",
+    };
+
+    const response = await axios.post(API_URL, payload, {
+      headers: { ...headers, Prefer: "return=representation" },
+    });
+    return response.data[0];
+  },
+
   async createCustomer(data) {
     const response = await axios.post(API_URL, data, {
       headers: { ...headers, Prefer: "return=representation" },
@@ -24,9 +47,9 @@ export const customerAPI = {
 
   async updateCustomer(id, data) {
     const response = await axios.patch(`${API_URL}?id=eq.${id}`, data, {
-      headers,
+      headers: { ...headers, Prefer: "return=representation" },
     });
-    return response.data;
+    return response.data.length ? response.data[0] : null;
   },
 
   async deleteCustomer(id) {
@@ -36,24 +59,13 @@ export const customerAPI = {
     return response.data;
   },
 
-  async createCustomerFromUser(user) {
-    const payload = {
-      id_user: user.id,
-      name: user.name,
-      email: user.email,
-      profile_image: user.profile_image || null,
-      phone: "",
-      address: "",
-      order_count: 0,
-      total_spend: 0,
-      status: "Aktif",
-      join_date: new Date().toISOString(),
-      last_purchase: null,
-      completed_orders: 0,
-      cancelled_orders: 0,
-      level_membership: "silver",
-      user_source: "Website Register",
-    };
-    return this.createCustomer(payload);
+  // Sinkronisasi foto jika diubah dari menu User
+  async syncProfileImageByUserId(userId, profileImage) {
+    const response = await axios.patch(
+      `${API_URL}?idUser=eq.${userId}`,
+      { poto_profil: profileImage },
+      { headers: { ...headers, Prefer: "return=representation" } }
+    );
+    return response.data.length ? response.data[0] : null;
   },
 };

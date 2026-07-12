@@ -55,7 +55,7 @@ export default function MembershipSection() {
   const ctaLink = user ? "/profile" : "/register";
 
   return (
-    <section id="membership" className="scroll-mt-24 px-8 py-20 max-w-7xl mx-auto">
+    <section id="membership" className="scroll-mt-8 px-8 py-20 max-w-7xl mx-auto">
       <div className="text-center mb-16">
         <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">
           Exclusive

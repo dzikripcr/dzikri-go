@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const API_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/transaksi";
-const CUSTOMER_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1/customer";
+const BASE_URL = "https://eazbbeabwiggkdtujveb.supabase.co/rest/v1";
+const TRANSAKSI_URL = `${BASE_URL}/transaksi`;
+const CUSTOMER_URL = `${BASE_URL}/customer`;
 const API_KEY = "sb_publishable_kzt9cJe9q0rWdbJLdjgyBw_6YgjDHay";
 
 const headers = {
@@ -12,51 +13,42 @@ const headers = {
 
 export const transaksiAPI = {
   async fetchTransaksi() {
-    const response = await axios.get(`${API_URL}?select=*&order=id.desc`, {
-      headers,
-    });
+    const response = await axios.get(
+      `${TRANSAKSI_URL}?order=tanggal_transaksi.desc`,
+      { headers }
+    );
+    return response.data;
+  },
+
+  // Dipakai untuk isi dropdown pilihan customer di TransaksiModal
+  async fetchCustomers() {
+    const response = await axios.get(
+      `${CUSTOMER_URL}?select=id,nama_customer`,
+      { headers }
+    );
     return response.data;
   },
 
   async createTransaksi(data) {
-    const payload = {
-      id_customer: data.id_customer,
-      name: data.name,
-      date: data.date,
-      payment: data.payment,
-      status: data.status,
-    };
-    const response = await axios.post(API_URL, payload, {
+    const response = await axios.post(TRANSAKSI_URL, data, {
       headers: { ...headers, Prefer: "return=representation" },
     });
     return response.data[0];
   },
 
   async updateTransaksi(id, data) {
-    const payload = {
-      id_customer: data.id_customer,
-      name: data.name,
-      date: data.date,
-      payment: data.payment,
-      status: data.status,
-    };
-    const response = await axios.patch(`${API_URL}?id=eq.${id}`, payload, {
-      headers,
-    });
+    const response = await axios.patch(
+      `${TRANSAKSI_URL}?id=eq.${id}`,
+      data,
+      { headers }
+    );
     return response.data;
   },
 
   async deleteTransaksi(id) {
-    const response = await axios.delete(`${API_URL}?id=eq.${id}`, {
+    const response = await axios.delete(`${TRANSAKSI_URL}?id=eq.${id}`, {
       headers,
     });
-    return response.data;
-  },
-  async fetchCustomers() {
-    const response = await axios.get(
-      `${CUSTOMER_URL}?select=id,name&order=name.asc`,
-      { headers }
-    );
     return response.data;
   },
 };

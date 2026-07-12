@@ -28,9 +28,10 @@ export default function UserModal({
           {/* Profile image */}
           <div className="flex flex-col items-center gap-3">
             <div className="relative group">
-              {formData.profile_image ? (
+              {/* Sesuaikan dengan key poto_profil */}
+              {formData.poto_profil ? (
                 <img
-                  src={formData.profile_image}
+                  src={formData.poto_profil}
                   alt="preview"
                   className="w-24 h-24 rounded-full object-cover border-2 border-gray-200 group-hover:border-[#4EA674] transition-colors duration-200"
                 />
@@ -41,7 +42,7 @@ export default function UserModal({
 
             {/* Tombol Kustom Menggantikan Choose File */}
             <label className="cursor-pointer inline-flex items-center justify-center px-4 py-1.5 bg-[#4EA674]/10 hover:bg-[#4EA674]/20 text-[#4EA674] text-xs font-semibold rounded-full border border-[#4EA674]/20 transition-all duration-200 active:scale-95 shadow-sm">
-              <span>{formData.profile_image ? "Ubah Foto" : "Pilih Foto"}</span>
+              <span>{formData.poto_profil ? "Ubah Foto" : "Pilih Foto"}</span>
               <input
                 type="file"
                 accept="image/*"
@@ -53,9 +54,10 @@ export default function UserModal({
 
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
+            {/* Sesuaikan name menjadi nama_user */}
             <input
-              name="name"
-              value={formData.name}
+              name="nama_user"
+              value={formData.nama_user}
               onChange={handleInputChange}
               className="w-full border rounded-md px-4 py-2 outline-none focus:border-[#4EA674]"
               placeholder="User name"

@@ -5,7 +5,7 @@ export default function ProductSection({ id, title, products, showBorder = false
   return (
     <section
       id={id}
-      className={`scroll-mt-24 py-16 px-8 max-w-7xl mx-auto ${
+      className={`scroll-mt-6 py-16 px-8 max-w-7xl mx-auto ${
         showBorder ? "border-b border-gray-200" : ""
       }`}
     >

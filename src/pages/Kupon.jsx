@@ -8,37 +8,42 @@ import SelectField from "../components/SelectField";
 import KuponModal from "../components/KuponModal";
 import AlertBox from "../components/AlertBox";
 import DeleteModal from "../components/DeleteModal";
+import Badge from "../components/Badge"; // Import Badge Component
 import { kuponAPI } from "../services/kuponAPI";
 
 export default function Kupon() {
   const [kuponList, setKuponList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // State untuk Alert Box & Delete Modal
-  const [alert, setAlert] = useState({ show: false, message: "", type: "info" });
+  const [alert, setAlert] = useState({
+    show: false,
+    message: "",
+    type: "info",
+  });
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
 
-  const [formData, setFormData] = useState({
-    code: "",
-    name: "",
-    discountType: "percentage",
-    discountValue: "",
-    minPurchase: "",
-    maxUsage: "",
-    validFrom: "",
-    validUntil: "",
-    status: "Active",
-  });
+  // State 1:1 dengan Database Supabase
+  const initialFormState = {
+    kode: "",
+    nama_kupon: "",
+    tipe_diskon: "Persentase",
+    diskon: "",
+    minimal_belanja: "",
+    maksimal_pemakaian: "",
+    berlaku_dari: "",
+    berlaku_sampai: "",
+    status: "aktif",
+  };
 
+  const [formData, setFormData] = useState(initialFormState);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const loadKupon = async () => {
     try {
       const data = await kuponAPI.fetchKupon();
-      setKuponList(data);
+      setKuponList(data || []);
     } catch (error) {
-      console.error(error);
       showAlert("Gagal memuat data kupon", "error");
     }
   };
@@ -63,52 +68,53 @@ export default function Kupon() {
   };
 
   const openAddModal = () => {
-    setFormData({
-      code: "",
-      name: "",
-      discountType: "percentage",
-      discountValue: "",
-      minPurchase: "",
-      maxUsage: "",
-      validFrom: "",
-      validUntil: "",
-      status: "Active",
-    });
+    setFormData(initialFormState);
     setIsModalOpen(true);
   };
 
   const openEditModal = (item) => {
-    setFormData(item);
+    // Pastikan data null diubah menjadi string kosong agar input HTML tidak error
+    setFormData({
+      ...item,
+      minimal_belanja: item.minimal_belanja || "",
+      maksimal_pemakaian: item.maksimal_pemakaian || "",
+      berlaku_dari: item.berlaku_dari || "",
+      berlaku_sampai: item.berlaku_sampai || "",
+    });
     setIsModalOpen(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Sanitasi payload agar sesuai dengan PostgreSQL Data Types
+    const payload = {
+      kode: formData.kode,
+      nama_kupon: formData.nama_kupon,
+      tipe_diskon: formData.tipe_diskon,
+      status: formData.status,
+      diskon: Number(formData.diskon) || 0,
+      minimal_belanja: formData.minimal_belanja ? Number(formData.minimal_belanja) : 0,
+      maksimal_pemakaian: formData.maksimal_pemakaian ? Number(formData.maksimal_pemakaian) : null,
+      berlaku_dari: formData.berlaku_dari ? formData.berlaku_dari : null,
+      berlaku_sampai: formData.berlaku_sampai ? formData.berlaku_sampai : null,
+    };
+
     try {
       if (formData.id) {
-        await kuponAPI.updateKupon(formData.id, formData);
+        // Update: Hapus kolom yang tidak boleh diubah dan perbarui updated_at
+        payload.updated_at = new Date().toISOString();
+        await kuponAPI.updateKupon(formData.id, payload);
         showAlert("Kupon berhasil diperbarui!", "success");
       } else {
-        await kuponAPI.createKupon(formData);
+        // Create
+        await kuponAPI.createKupon(payload);
         showAlert("Kupon baru berhasil ditambahkan!", "success");
       }
 
       setIsModalOpen(false);
-      setFormData({
-        code: "",
-        name: "",
-        discountType: "percentage",
-        discountValue: "",
-        minPurchase: "",
-        maxUsage: "",
-        validFrom: "",
-        validUntil: "",
-        status: "Active",
-      });
       loadKupon();
     } catch (error) {
-      console.error(error);
       showAlert("Gagal menyimpan data kupon", "error");
     }
   };
@@ -123,7 +129,6 @@ export default function Kupon() {
       showAlert("Kupon berhasil dihapus!", "success");
       loadKupon();
     } catch (error) {
-      console.error(error);
       showAlert("Gagal menghapus kupon!", "error");
     } finally {
       setDeleteModal({ isOpen: false, id: null });
@@ -134,8 +139,8 @@ export default function Kupon() {
     const search = searchTerm.toLowerCase();
 
     const matchSearch =
-      item.code.toLowerCase().includes(search) ||
-      item.name.toLowerCase().includes(search);
+      item.kode?.toLowerCase().includes(search) ||
+      item.nama_kupon?.toLowerCase().includes(search);
 
     const matchStatus =
       selectedStatus && selectedStatus !== "all"
@@ -147,8 +152,6 @@ export default function Kupon() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen relative">
-      
-      {/* Alert Box */}
       {alert.show && (
         <div className="mb-4 animate-fade-in-down w-full">
           <AlertBox type={alert.type}>{alert.message}</AlertBox>
@@ -178,12 +181,11 @@ export default function Kupon() {
           <SelectField
             value={selectedStatus}
             onChange={setSelectedStatus}
-            placeholder="All Status"
+            placeholder="Semua Status"
             options={[
-              { label: "All Status", value: "all" },
-              { label: "Active", value: "Active" },
-              { label: "Inactive", value: "Inactive" },
-              { label: "Expired", value: "Expired" },
+              { label: "Semua Status", value: "all" },
+              { label: "Aktif", value: "aktif" },
+              { label: "Tidak Aktif", value: "tidak aktif" },
             ]}
           />
         </div>
@@ -204,35 +206,33 @@ export default function Kupon() {
             {filteredKupon.map((item, index) => (
               <tr key={item.id} className="border-b hover:bg-gray-50 text-sm">
                 <td className="p-4">{index + 1}</td>
-                <td className="p-4 font-semibold">{item.code}</td>
-                <td className="p-4">{item.name}</td>
+                <td className="p-4 font-semibold">{item.kode}</td>
+                <td className="p-4">{item.nama_kupon}</td>
                 <td className="p-4">
-                  {item.discountType === "percentage"
-                    ? `${item.discountValue}%`
-                    : `Rp${Number(item.discountValue).toLocaleString("id-ID")}`}
+                  {item.tipe_diskon?.toLowerCase() === "persentase"
+                    ? `${item.diskon}%`
+                    : `Rp${Number(item.diskon).toLocaleString("id-ID")}`}
                 </td>
                 <td className="p-4 text-gray-600">
-                  Rp{Number(item.minPurchase || 0).toLocaleString("id-ID")}
+                  Rp{Number(item.minimal_belanja || 0).toLocaleString("id-ID")}
                 </td>
-                <td className="p-4 text-gray-500">{item.validUntil}</td>
+                <td className="p-4 text-gray-500">
+                  {item.berlaku_sampai || "-"}
+                </td>
+                
+                {/* Bagian ini telah diubah untuk menggunakan komponen Badge */}
                 <td className="p-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      item.status === "Active"
-                        ? "bg-green-100 text-green-700"
-                        : item.status === "Expired"
-                        ? "bg-red-100 text-red-700"
-                        : "bg-gray-100 text-gray-700"
-                    }`}
-                  >
-                    {item.status}
-                  </span>
+                  <Badge type={item.status}>{item.status}</Badge>
                 </td>
+
                 <td className="p-4 flex gap-3">
                   <Button type="edit" onClick={() => openEditModal(item)}>
                     <FaEdit />
                   </Button>
-                  <Button type="hapus" onClick={() => handleDeleteClick(item.id)}>
+                  <Button
+                    type="hapus"
+                    onClick={() => handleDeleteClick(item.id)}
+                  >
                     <FaTrashAlt />
                   </Button>
                 </td>
@@ -252,7 +252,6 @@ export default function Kupon() {
         />
       )}
 
-      {/* Delete Confirmation Modal */}
       <DeleteModal
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, id: null })}
