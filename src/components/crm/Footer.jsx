@@ -21,16 +21,18 @@ export default function Footer() {
               className="pl-12 pr-6 py-4 rounded-full w-full outline-none text-black bg-white focus:ring-4 focus:ring-gray-300/50 transition-all duration-300"
             />
           </div>
-          <button className="bg-white text-black font-extrabold px-6 py-4 rounded-full w-full transition-all duration-300 ease-out relative outline-none hover:bg-white hover:scale-105 hover:shadow-[0_0_15px_#fff,0_0_30px_#fff,0_0_45px_rgba(255,255,255,0.6)] active:scale-95 active:shadow-[0_0_10px_#fff]">
-            Berlangganan Buletin
+          <button className="bg-white text-black font-extrabold px-6 py-4 rounded-full w-full cursor-pointer transition-all duration-300 ease-out relative outline-none hover:bg-white hover:scale-105 hover:shadow-[0_0_15px_#fff,0_0_30px_#fff,0_0_45px_rgba(255,255,255,0.6)] active:scale-95 active:shadow-[0_0_10px_#fff]">
+            Berlangganan
           </button>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-10 border-b border-gray-300 pt-8 pb-12">
+        {/* Tambahkan md:col-span-1 atau sesuaikan jika masih kurang luas */}
         <div className="md:col-span-1 space-y-6">
-          <h3 className="text-3xl font-black uppercase tracking-tighter">
-            Boutiquera
+          {/* Di sini ditambahkan class whitespace-nowrap */}
+          <h3 className="text-2xl font-black uppercase tracking-tighter whitespace-nowrap">
+            DM Boutiquera
           </h3>
           <p className="text-sm text-gray-500 leading-relaxed">
             Kami menyediakan pakaian yang sesuai dengan gaya Anda dan bangga untuk Anda
@@ -158,7 +160,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-        <p>Boutiquera © 2025/2026, Hak Cipta Dilindungi Undang-Undang</p>
+        <p>DM Boutiquera © 2025/2026, Hak Cipta Dilindungi Undang-Undang</p>
         <div className="flex space-x-3 mt-4 md:mt-0">
           <div className="bg-white border rounded px-3 py-1 shadow-sm font-bold text-xs text-blue-900">
             VISA

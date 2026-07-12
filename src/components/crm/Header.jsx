@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; // Tambahkan useRef di sini
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import {
@@ -28,6 +28,11 @@ export default function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // Buat referensi (Ref) untuk masing-masing container menu dropdown
+  const notifRef = useRef(null);
+  const shopRef = useRef(null);
+  const profileRef = useRef(null);
+
   const points = user?.points ?? 0;
   const orderCount = user?.orderCount ?? 0;
   const totalSpend = user?.totalSpend ?? 0;
@@ -54,6 +59,31 @@ export default function Header() {
     setIsNotifOpen(false);
     setIsProfileOpen(false);
   };
+
+  // Effect untuk menghandle klik di luar elemen
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Tutup Shop jika klik di luar element shopRef
+      if (shopRef.current && !shopRef.current.contains(event.target)) {
+        setIsShopOpen(false);
+      }
+      // Tutup Notifikasi jika klik di luar element notifRef
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setIsNotifOpen(false);
+      }
+      // Tutup Profil jika klik di luar element profileRef
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    // Daftarkan event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Bersihkan event listener saat komponen unmount
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -145,9 +175,10 @@ export default function Header() {
           Home
         </button>
 
-        {/* CONDITIONAL RENDERING: Menu Shop (Hanya Member / Sudah Login) */}
+        {/* CONDITIONAL RENDERING: Menu Shop */}
         {user && (
-          <div className="relative">
+          // Pasang shopRef membungkus button pemicu dan jendela dropdown-nya
+          <div className="relative" ref={shopRef}>
             <button
               onClick={() => setIsShopOpen(!isShopOpen)}
               className="flex items-center gap-1 cursor-pointer hover:text-gray-600 transition"
@@ -181,7 +212,7 @@ export default function Header() {
           </div>
         )}
 
-        {/* CONDITIONAL RENDERING: Menu Why Us & Membership (Hanya Guest / Belum Login) */}
+        {/* CONDITIONAL RENDERING: Menu Why Us & Membership */}
         {!user && (
           <>
             <button
@@ -257,7 +288,8 @@ export default function Header() {
         ) : (
           <>
             {/* NOTIFICATION */}
-            <div className="relative">
+            {/* Pasang notifRef membungkus button dan dropdown-nya */}
+            <div className="relative" ref={notifRef}>
               <button
                 onClick={() => {
                   setIsNotifOpen(!isNotifOpen);
@@ -312,7 +344,8 @@ export default function Header() {
             </button>
 
             {/* PROFILE DROPDOWN */}
-            <div className="relative">
+            {/* Pasang profileRef membungkus button profil dan dropdown-nya */}
+            <div className="relative" ref={profileRef}>
               <button
                 onClick={() => {
                   setIsProfileOpen(!isProfileOpen);
