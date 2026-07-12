@@ -1,7 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
-export default function ProductSection({ id, title, products, showBorder = false }) {
+export default function ProductSection({
+  id,
+  title,
+  products,
+  showBorder = false,
+}) {
+  const navigate = useNavigate();
+
   return (
     <section
       id={id}
@@ -13,9 +21,7 @@ export default function ProductSection({ id, title, products, showBorder = false
         {title}
       </h3>
       {!products || products.length === 0 ? (
-        <p className="text-center text-gray-500">
-          Tidak ada produk tersedia.
-        </p>
+        <p className="text-center text-gray-500">Tidak ada produk tersedia.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {products.map((item) => (
@@ -24,7 +30,10 @@ export default function ProductSection({ id, title, products, showBorder = false
         </div>
       )}
       <div className="text-center mt-10">
-        <button className="border border-gray-200 bg-white cursor-pointer text-black px-16 py-3 rounded-full font-medium transition-all duration-300 ease-in-out hover:bg-black hover:text-white hover:border-black hover:shadow-lg w-full md:w-auto">
+        <button
+          onClick={() => navigate("/produk")}
+          className="border border-gray-200 bg-white cursor-pointer text-black px-16 py-3 rounded-full font-medium transition-all duration-300 ease-in-out hover:bg-black hover:text-white hover:border-black hover:shadow-lg w-full md:w-auto"
+        >
           Lihat Semua
         </button>
       </div>

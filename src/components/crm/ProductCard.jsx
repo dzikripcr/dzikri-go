@@ -18,8 +18,8 @@ export default function ProductCard({ item }) {
     <Link to={`/product/${item.id}`} className="cursor-pointer group flex flex-col">
       <div className="bg-[#F0EEED] aspect-[4/5] rounded-[20px] mb-4 overflow-hidden relative">
         <img
-          src={item.image}
-          alt={item.name}
+          src={item.gambar}
+          alt={item.nama}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
         />
         {!isAvailable && (
@@ -32,7 +32,7 @@ export default function ProductCard({ item }) {
           </div>
         )}
       </div>
-      <h4 className="font-bold text-lg leading-tight mb-1">{item.name}</h4>
+      <h4 className="font-bold text-lg leading-tight mb-1">{item.nama}</h4>
       <div className="flex items-center space-x-1 mb-2">
         <FaStar className="text-[#FFC633] text-sm" />
         <FaStar className="text-[#FFC633] text-sm" />
@@ -42,7 +42,7 @@ export default function ProductCard({ item }) {
         <span className="text-sm text-gray-500 ml-1">4.0/5</span>
       </div>
       <div className="flex items-center space-x-3">
-        <span className="text-2xl font-bold">{formatRupiah(item.price)}</span>
+        <span className="text-2xl font-bold">{formatRupiah(item.harga)}</span>
       </div>
     </Link>
   );

@@ -16,14 +16,14 @@ import Footer from "../crm/Footer";
 import CustomerService from "../crm/Chat";
 import ProductCard from "../crm/ProductCard";
 
-const getSizeOptions = (category) => {
-  switch (category) {
-    case "Dresses":
-    case "Outerwear":
-    case "Tops":
-    case "Bottoms":
+const getSizeOptions = (kategori) => {
+  switch (kategori) {
+    case "Gaun":
+    case "Pakaian Luar":
+    case "Atasan":
+    case "Bawahan":
       return ["S", "M", "L", "XL"];
-    case "Shoes":
+    case "Sepatu":
       return ["36", "37", "38", "39", "40"];
     default:
       return [];
@@ -31,24 +31,34 @@ const getSizeOptions = (category) => {
 };
 
 const categoryDescriptions = {
-  Dresses:
-    "Dress elegan ini dirancang untuk membuat momen spesial Anda makin berkesan, dengan potongan yang pas di badan dan bahan premium yang nyaman dipakai sepanjang hari.",
-  Accessories:
+  Gaun:
+    "Gaun elegan ini dirancang untuk membuat momen spesial Anda makin berkesan, dengan potongan yang pas di badan dan bahan premium yang nyaman dipakai sepanjang hari.",
+  Aksesoris:
     "Aksesori eksklusif yang menjadi sentuhan akhir sempurna untuk melengkapi gaya Anda, dibuat dari material berkualitas tinggi dan tahan lama.",
-  Jewelry:
+  Perhiasan:
     "Perhiasan cantik dengan detail halus yang menambah kesan elegan pada setiap penampilan, cocok untuk acara formal maupun kasual.",
-  Outerwear:
+  "Pakaian Luar":
     "Outer hangat dan stylish yang siap menemani Anda menghadapi cuaca dingin tanpa mengorbankan gaya berpenampilan.",
-  Shoes:
+  Sepatu:
     "Sepatu nyaman dengan desain modern, dibuat dari bahan pilihan agar tetap stylish sekaligus mendukung aktivitas harian Anda.",
-  Tops:
+  Atasan:
     "Atasan ringan dan nyaman dengan potongan yang flattering, cocok dipadukan dengan berbagai gaya busana favoritmu.",
-  Bottoms:
+  Bawahan:
     "Bawahan dengan potongan tailored yang memberikan siluet rapi dan elegan, nyaman dipakai sepanjang hari.",
+  Tas:
+    "Tas stylish dengan desain modern dan fungsional, cocok untuk melengkapi penampilan sehari-hari maupun acara formal.",
+  "Pakaian Tidur":
+    "Pakaian tidur nyaman dan elegan, dibuat dari bahan lembut yang membuat istirahat Anda lebih berkualitas.",
+  "Pakaian Renang":
+    "Pakaian renang dengan bahan berkualitas yang nyaman dan tahan lama, siap menemani aktivitas pantai atau kolam renang Anda.",
+  "Busana Muslim":
+    "Busana muslimah elegan dan nyaman, dirancang dengan perhatian pada detail untuk menunjang penampilan syar'i Anda.",
+  Wewangian:
+    "Wewangian dengan aroma eksklusif dan tahan lama, memberikan kesan istimewa pada setiap momen spesial Anda.",
 };
 
-const getDescription = (category) =>
-  categoryDescriptions[category] ||
+const getDescription = (kategori) =>
+  categoryDescriptions[kategori] ||
   "Produk eksklusif dari koleksi Boutique kami, dibuat dengan perhatian penuh pada detail dan kualitas.";
 
 const reviewPool = [
@@ -83,7 +93,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const [visibleReviews, setVisibleReviews] = useState(4);
 
-  const sizeOptions = product ? getSizeOptions(product.category) : [];
+  const sizeOptions = product ? getSizeOptions(product.kategori) : [];
   const [selectedSize, setSelectedSize] = useState(sizeOptions[0] || null);
 
   if (!product) {
@@ -120,7 +130,7 @@ export default function ProductDetail() {
       : "bg-green-500";
 
   const handleDecrease = () => setQuantity((q) => Math.max(1, q - 1));
-  const handleIncrease = () => setQuantity((q) => Math.min(product.stock || 1, q + 1));
+  const handleIncrease = () => setQuantity((q) => Math.min(product.stok || 1, q + 1));
   const handleLoadMoreReviews = () => setVisibleReviews((v) => Math.min(reviewPool.length, v + 4));
 
   const suggestions = productsData.filter((p) => p.id !== product.id).slice(0, 4);
@@ -148,9 +158,9 @@ export default function ProductDetail() {
             Toko
           </Link>
           <FiChevronRight className="text-gray-400" />
-          <span>{product.category}</span>
+          <span>{product.kategori}</span>
           <FiChevronRight className="text-gray-400" />
-          <span className="text-gray-900 font-medium">{product.name}</span>
+          <span className="text-gray-900 font-medium">{product.nama}</span>
         </nav>
 
         {/* MAIN PRODUCT SECTION */}
@@ -158,8 +168,8 @@ export default function ProductDetail() {
           {/* GAMBAR PRODUK */}
           <div className="bg-[#F0EEED] rounded-[32px] overflow-hidden aspect-[4/5] md:aspect-auto md:h-[560px]">
             <img
-              src={product.image}
-              alt={product.name}
+              src={product.gambar}
+              alt={product.nama}
               className="w-full h-full object-cover"
             />
           </div>
@@ -167,7 +177,7 @@ export default function ProductDetail() {
           {/* INFO PRODUK */}
           <div className="flex flex-col">
             <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tight leading-tight mb-3">
-              {product.name}
+              {product.nama}
             </h1>
 
             <div className="flex items-center gap-2 mb-4">
@@ -177,7 +187,7 @@ export default function ProductDetail() {
 
             <div className="flex items-center gap-3 mb-4">
               <span className="text-3xl font-bold">
-                {formatRupiah(product.price)}
+                {formatRupiah(product.harga)}
               </span>
               <span
                 className={`text-white text-xs font-bold px-3 py-1 rounded-full ${statusColor}`}
@@ -187,11 +197,11 @@ export default function ProductDetail() {
             </div>
 
             <p className="text-gray-600 leading-relaxed text-sm md:text-base mb-2">
-              {getDescription(product.category)}
+              {getDescription(product.kategori)}
             </p>
             <p className="text-xs text-gray-400 mb-6">
-              Kategori: {product.category}
-              {!isOutOfStock && ` • ${product.stock} pcs tersedia`}
+              Kategori: {product.kategori}
+              {!isOutOfStock && ` • ${product.stok} pcs tersedia`}
             </p>
 
             <hr className="border-gray-200 mb-6" />

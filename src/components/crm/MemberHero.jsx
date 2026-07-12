@@ -37,12 +37,14 @@ export default function MemberHero({ user }) {
         </h2>
         <p className="text-gray-600 max-w-md leading-relaxed text-sm md:text-base">
           Jelajahi beragam koleksi pakaian kami yang dirancang dengan teliti,
-          dibuat khusus untuk menonjolkan keunikan diri dan memenuhi selera fashion Anda.
+          dibuat khusus untuk menonjolkan keunikan diri dan memenuhi selera
+          fashion Anda.
         </p>
         <button
+          onClick={() => navigate("/produk")}
           className="bg-black text-white font-medium py-4 rounded-full w-full transition-all duration-300 ease-out relative outline-none
-                    hover:bg-black hover:scale-105 hover:shadow-[0_0_15px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3),0_0_45px_rgba(0,0,0,0.2)]
-                    active:scale-95 active:shadow-[0_0_10px_rgba(0,0,0,0.4)] cursor-pointer"
+            hover:bg-black hover:scale-105 hover:shadow-[0_0_15px_rgba(0,0,0,0.5),0_0_30px_rgba(0,0,0,0.3),0_0_45px_rgba(0,0,0,0.2)]
+            active:scale-95 active:shadow-[0_0_10px_rgba(0,0,0,0.4)] cursor-pointer"
         >
           Belanja Sekarang
         </button>

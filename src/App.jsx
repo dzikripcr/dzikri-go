@@ -16,6 +16,7 @@ const Orders = React.lazy(() => import("./pages/Orders"));
 
 const Customers = React.lazy(() => import("./pages/Customers"));
 
+// Halaman Manajemen Produk Internal untuk Admin (/products)
 const Products = React.lazy(() => import("./pages/Products"));
 
 const User = React.lazy(() => import("./pages/User"));
@@ -30,11 +31,15 @@ const Feedback = React.lazy(() => import("./pages/Feedback"));
 
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
 
+// Halaman Detail Produk Katalog Pelanggan (/product/:id)
 const ProductDetailCRM = React.lazy(
   () => import("./components/crm/Productdetail"),
 );
 
 const Home = React.lazy(() => import("./pages/crm/Home"));
+
+// Halaman Katalog Seluruh Produk Baru Pelanggan (/produk)
+const ProductsCRM = React.lazy(() => import("./components/crm/Products"));
 
 // Error Page
 
@@ -63,7 +68,7 @@ import Forgot from "./pages/auth/Forgot";
 import Loading from "./components/Loading";
 import RoleGuard from "./components/RoleGuard";
 
-// Tidak diapakai untuk sementara, karena cross chesk project PFL
+// Tidak dipakai untuk sementara, karena cross check project PFL
 const ProtectedAdmin = React.lazy(() => import("./components/ProtectedAdmin"));
 
 const RequireMember = React.lazy(() => import("./components/RequireMember"));
@@ -78,9 +83,19 @@ export default function App() {
       <ScrollToTop />
 
       <Routes>
-        {/* CRM LAYOUT */}
+        {/* CRM LAYOUT (Rute Sisi Pelanggan) */}
 
         <Route path="/" element={<Home />} />
+
+        {/* Rute Baru: Katalog Produk Pelanggan agar tidak tabrakan dengan Rute Admin */}
+        <Route
+          path="/produk"
+          element={
+            <RequireMember>
+              <ProductsCRM />
+            </RequireMember>
+          }
+        />
 
         <Route
           path="/product/:id"
@@ -100,7 +115,7 @@ export default function App() {
           }
         />
 
-        {/* MAIN LAYOUT */}
+        {/* MAIN LAYOUT (Rute Sisi Dashboard Admin) */}
 
         <Route element={<MainLayout />}>
           {/* MAIN ROUTES */}
@@ -132,6 +147,7 @@ export default function App() {
             }
           />
 
+          {/* Rute Manajemen Produk Admin tetap menggunakan /products */}
           <Route
             path="/products"
             element={
@@ -206,7 +222,7 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/*AUTH LAYOUT*/}
+        {/* AUTH LAYOUT */}
 
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
