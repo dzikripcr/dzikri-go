@@ -1,8 +1,6 @@
-import { BiUserCircle } from "react-icons/bi"; 
+import { BiUserCircle } from "react-icons/bi";
 import { FiLogOut, FiUsers, FiX } from "react-icons/fi"; // Tambah FiX untuk tombol close
-import {
-  AiOutlineShoppingCart,
-} from "react-icons/ai";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link, NavLink } from "react-router-dom";
 import { TbHanger } from "react-icons/tb";
 import { FaHome } from "react-icons/fa";
@@ -26,7 +24,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
     <>
       {/* OVERLAY: Muncul hanya di mobile/tablet saat sidebar terbuka */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-black/40 lg:hidden transition-opacity"
           onClick={() => setIsOpen(false)}
         />
@@ -42,21 +40,27 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         `}
       >
         {/* Logo & Tombol Close untuk Mobile */}
-        <div id="sidebar-logo" className="flex items-center justify-between mb-6 px-2 py-1">
-          <div className="flex items-center space-x-2">
-            <div className="text-[#4EA674] text-2xl">
-              <TbHanger />
-            </div>
+        <div
+          id="sidebar-logo"
+          className="flex items-center justify-between mb-6 px-2 py-1"
+        >
+          <div className="flex items-center space-x-3">
+            <img
+              src="/img/logo.png"
+              alt="DM Boutiquera Logo"
+              className="w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-105"
+            />
             <span
               id="logo-title"
-              className="font-extrabold text-2xl text-gray-900 tracking-wide uppercase"
+              // Tambahkan whitespace-nowrap dan turunkan ukuran font ke text-xl atau text-lg
+              className="font-extrabold text-md text-gray-900 tracking-wide uppercase whitespace-nowrap"
             >
-              Boutiquera
+              DM Boutiquera
             </span>
           </div>
 
           {/* Tombol close - hanya muncul di mobile/tablet */}
-          <button 
+          <button
             onClick={() => setIsOpen(false)}
             className="lg:hidden p-1 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700"
           >
@@ -73,7 +77,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 1. Dashboard */}
             <li>
-              <NavLink to="/dashboard" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/dashboard"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <FaHome className="text-[18px]" />
                 <span>Dashboard</span>
               </NavLink>
@@ -81,7 +89,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 2. Order Management */}
             <li>
-              <NavLink to="/orders" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/orders"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <AiOutlineShoppingCart className="text-[18px]" />
                 <span>Pesanan</span>
               </NavLink>
@@ -89,7 +101,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 3. Customers */}
             <li>
-              <NavLink to="/customers" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/customers"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <FiUsers className="text-[18px]" />
                 <span>Data Pelanggan</span>
               </NavLink>
@@ -97,7 +113,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 4. Coupon Code */}
             <li>
-              <NavLink to="/kupon" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/kupon"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <BsTicketPerforated className="text-[18px]" />
                 <span>Kupon & Voucher</span>
               </NavLink>
@@ -105,7 +125,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 5. Categories */}
             <li>
-              <NavLink to="/kategori-produk" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/kategori-produk"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <BsTags className="text-[18px]" />
                 <span>Kategori Produk</span>
               </NavLink>
@@ -113,7 +137,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 6. Transaction */}
             <li>
-              <NavLink to="/transaksi" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/transaksi"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <BsCashStack className="text-[18px]" />
                 <span>Transaksi</span>
               </NavLink>
@@ -121,7 +149,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 7. Product List */}
             <li>
-              <NavLink to="/products" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/products"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <BsBoxSeam className="text-[18px]" />
                 <span>Data Produk</span>
               </NavLink>
@@ -129,7 +161,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 8. Feedback / Ulasan */}
             <li>
-              <NavLink to="/feedback" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/feedback"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <BsChatSquareText className="text-[18px]" />
                 <span>Ulasan</span>
               </NavLink>
@@ -137,7 +173,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
             {/* 9. User */}
             <li>
-              <NavLink to="/users" className={menuClass} onClick={() => setIsOpen(false)}>
+              <NavLink
+                to="/users"
+                className={menuClass}
+                onClick={() => setIsOpen(false)}
+              >
                 <BiUserCircle className="text-[18px]" />
                 <span>User</span>
               </NavLink>
@@ -146,7 +186,10 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         </div>
 
         {/* Footer Profile Mini */}
-        <div id="sidebar-footer" className="mt-auto pt-4 border-t border-gray-100">
+        <div
+          id="sidebar-footer"
+          className="mt-auto pt-4 border-t border-gray-100"
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">
               <img
@@ -158,7 +201,9 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 <p className="text-sm font-semibold text-gray-900 truncate">
                   Dzikri Maulana
                 </p>
-                <p className="text-xs text-gray-500 truncate">dzikri@gmail.com</p>
+                <p className="text-xs text-gray-500 truncate">
+                  dzikri@gmail.com
+                </p>
               </div>
             </div>
 

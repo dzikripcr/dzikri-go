@@ -200,12 +200,19 @@ export default function Header() {
     `}
     >
       {/* LOGO */}
-      <h1
+      <div 
         onClick={() => scrollToSection("hero")}
-        className="font-black uppercase tracking-tighter cursor-pointer text-3xl"
+        className="flex items-center gap-4 cursor-pointer group"
       >
-        DM Boutiquera
-      </h1>
+        <img 
+          src="/img/logo.png" 
+          alt="DM Boutiquera Logo" 
+          className="w-14 h-14 object-contain transition-transform duration-300 group-hover:scale-105" 
+        />
+        <h1 className="font-black uppercase tracking-tighter text-3xl ml-[-10px]">
+          DM Boutiquera
+        </h1>
+      </div>
 
       {/* MENU */}
       <nav className="hidden md:flex space-x-6 font-medium">
