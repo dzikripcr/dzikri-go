@@ -13,11 +13,13 @@ import {
 } from "react-icons/fi";
 import Header from "./Header";
 import Footer from "./Footer";
+import { useNavigate } from "react-router-dom";
 
 export default function OrderHistory() {
   const { orders } = useCart();
   const [activeTab, setActiveTab] = useState("sekarang"); // 'sekarang' | 'selesai'
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const navigate = useNavigate();
 
   // Helper Format Rupiah
   const formatRupiah = (value) => {
