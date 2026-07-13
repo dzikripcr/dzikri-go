@@ -9,17 +9,26 @@ import {
   FiBell,
   FiLogOut,
   FiAward,
-  FiPackage, // <-- Tambahan ikon untuk Riwayat Pesanan
+  FiPackage,
+  FiGift, // <-- Ikon baru untuk menu Poin Reward
 } from "react-icons/fi";
 
 import { useAuth } from "../../context/AuthContext";
 // Import Cart Context untuk mengambil data jumlah item di keranjang
 import { useCart } from "../../context/CartContext"; 
-import { getLevelFromPoints, getMemberStatus } from "../../services/membership";
+// Import Rewards Context untuk sistem poin & voucher (Marketing Automation)
+import { useRewards } from "../../context/RewardsContext";
+import { getLevelFromPoints, getMemberStatus, LEVEL_BADGE_CLASSES } from "../../services/membership";
 
 export default function Header() {
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
+  const {
+    points,
+    availableVouchers,
+    rewardCatalog,
+    redeemReward,
+  } = useRewards();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,18 +36,26 @@ export default function Header() {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isRewardsOpen, setIsRewardsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // State kecil khusus untuk interaksi di dalam dropdown Poin Reward
+  const [redeemFeedback, setRedeemFeedback] = useState(null);
+  const [copiedCode, setCopiedCode] = useState(null);
 
   // Buat referensi (Ref) untuk masing-masing container menu dropdown
   const notifRef = useRef(null);
   const shopRef = useRef(null);
   const profileRef = useRef(null);
+  const rewardsRef = useRef(null);
 
-  const points = user?.points ?? 0;
   const orderCount = user?.orderCount ?? 0;
   const totalSpend = user?.totalSpend ?? 0;
   const isActive = user?.isActive ?? true;
 
+  // Level & status membership sekarang dihitung dari "points" milik RewardsContext,
+  // supaya setiap kali dapat/tukar poin, level membership ikut ter-update otomatis
+  // di seluruh bagian aplikasi (Header, MemberCard, ProfileMember, dst).
   const level = getLevelFromPoints(points);
   const status = getMemberStatus({ isActive, orderCount, totalSpend, level });
 
@@ -62,6 +79,28 @@ export default function Header() {
     setIsShopOpen(false);
     setIsNotifOpen(false);
     setIsProfileOpen(false);
+    setIsRewardsOpen(false);
+  };
+
+  // Handler tukar poin menjadi voucher
+  const handleRedeem = (rewardId) => {
+    const result = redeemReward(rewardId);
+    if (result.success) {
+      setRedeemFeedback({
+        type: "success",
+        message: `Berhasil ditukar! Kode voucher: ${result.voucher.code}`,
+      });
+    } else {
+      setRedeemFeedback({ type: "error", message: result.message });
+    }
+    setTimeout(() => setRedeemFeedback(null), 3500);
+  };
+
+  // Handler salin kode voucher ke clipboard
+  const handleCopyCode = (code) => {
+    navigator.clipboard?.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 1500);
   };
 
   // Effect untuk menghandle klik di luar elemen
@@ -75,6 +114,9 @@ export default function Header() {
       }
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setIsProfileOpen(false);
+      }
+      if (rewardsRef.current && !rewardsRef.current.contains(event.target)) {
+        setIsRewardsOpen(false);
       }
     };
 
@@ -296,6 +338,132 @@ export default function Header() {
           </Link>
         ) : (
           <>
+            {/* ==================================================== */}
+            {/* POIN REWARD — MARKETING AUTOMATION (BARU) */}
+            {/* ==================================================== */}
+            <div className="relative" ref={rewardsRef}>
+              <button
+                onClick={() => {
+                  setIsRewardsOpen(!isRewardsOpen);
+                  setIsNotifOpen(false);
+                  setIsShopOpen(false);
+                  setIsProfileOpen(false);
+                }}
+                className="text-2xl hover:text-gray-600 transition cursor-pointer relative flex items-center justify-center p-1 mt-1 outline-none"
+              >
+                <FiGift />
+                {availableVouchers.length > 0 && (
+                  <span className="absolute top-0 right-0 bg-emerald-500 text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold border-2 border-white">
+                    {availableVouchers.length}
+                  </span>
+                )}
+              </button>
+
+              {isRewardsOpen && (
+                <div className="absolute right-[-40px] md:right-0 mt-3 w-[340px] md:w-[380px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden">
+                  {/* Header: Saldo Poin & Level */}
+                  <div className="p-4 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black text-white">
+                    <p className="text-[10px] uppercase tracking-[.2em] text-zinc-400">
+                      Poin Reward Anda
+                    </p>
+                    <div className="flex items-end justify-between mt-1">
+                      <span className="text-2xl font-black">
+                        {points} <span className="text-xs font-medium text-zinc-400">PTS</span>
+                      </span>
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
+                          LEVEL_BADGE_CLASSES?.[level] || "bg-white text-black"
+                        }`}
+                      >
+                        {level}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Feedback tukar poin (sukses/gagal) */}
+                  {redeemFeedback && (
+                    <div
+                      className={`px-4 py-2 text-xs font-bold ${
+                        redeemFeedback.type === "success"
+                          ? "bg-emerald-50 text-emerald-700"
+                          : "bg-red-50 text-red-600"
+                      }`}
+                    >
+                      {redeemFeedback.message}
+                    </div>
+                  )}
+
+                  <div className="max-h-[360px] overflow-y-auto">
+                    {/* Katalog Tukar Poin */}
+                    <div className="p-4">
+                      <h4 className="text-xs font-black uppercase tracking-wider text-gray-400 mb-3">
+                        Tukar Poin
+                      </h4>
+                      <div className="space-y-2">
+                        {rewardCatalog.map((reward) => (
+                          <div
+                            key={reward.id}
+                            className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100"
+                          >
+                            <div>
+                              <p className="text-xs font-bold text-gray-900">{reward.label}</p>
+                              <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
+                                {reward.description}
+                              </p>
+                              <p className="text-[10px] font-bold text-amber-600 mt-1">
+                                {reward.cost} Poin
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => handleRedeem(reward.id)}
+                              disabled={points < reward.cost}
+                              className="text-[10px] font-black uppercase tracking-wider px-3 py-2 rounded-full bg-black text-white disabled:bg-gray-200 disabled:text-gray-400 hover:bg-gray-800 transition cursor-pointer disabled:cursor-not-allowed whitespace-nowrap"
+                            >
+                              Tukar
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Voucher Saya (hasil tukar poin, siap dipakai saat checkout) */}
+                    {availableVouchers.length > 0 && (
+                      <div className="p-4 border-t border-gray-100">
+                        <h4 className="text-xs font-black uppercase tracking-wider text-gray-400 mb-3">
+                          Voucher Saya ({availableVouchers.length})
+                        </h4>
+                        <div className="space-y-2">
+                          {availableVouchers.map((v) => (
+                            <div
+                              key={v.code}
+                              className="flex items-center justify-between gap-3 p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl"
+                            >
+                              <div>
+                                <p className="text-xs font-bold text-gray-900">{v.label}</p>
+                                <p className="text-[10px] font-mono text-gray-500 mt-0.5">{v.code}</p>
+                              </div>
+                              <button
+                                onClick={() => handleCopyCode(v.code)}
+                                className="text-[10px] font-black uppercase tracking-wider px-3 py-2 rounded-full bg-white border border-gray-200 hover:bg-gray-100 transition cursor-pointer whitespace-nowrap"
+                              >
+                                {copiedCode === v.code ? "Tersalin!" : "Salin Kode"}
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-3 text-center border-t border-gray-100 bg-gray-50">
+                    <span className="text-[10px] text-gray-400 font-medium">
+                      Pakai kode voucher saat checkout di halaman keranjang
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* NOTIFICATION */}
             <div className="relative" ref={notifRef}>
               <button
@@ -303,6 +471,7 @@ export default function Header() {
                   setIsNotifOpen(!isNotifOpen);
                   setIsShopOpen(false);
                   setIsProfileOpen(false);
+                  setIsRewardsOpen(false);
                 }}
                 className="text-2xl hover:text-gray-600 transition cursor-pointer relative flex items-center justify-center p-1 mt-1 outline-none"
               >
@@ -378,6 +547,7 @@ export default function Header() {
                   setIsProfileOpen(!isProfileOpen);
                   setIsNotifOpen(false);
                   setIsShopOpen(false);
+                  setIsRewardsOpen(false);
                 }}
                 className="text-2xl cursor-pointer hover:text-gray-600 transition"
               >
@@ -387,16 +557,13 @@ export default function Header() {
               {isProfileOpen && (
                 <div className="absolute right-0 mt-4 w-64 bg-white border shadow-xl rounded-2xl p-4 z-[999]">
                   {/* Data profil dinamis menggunakan data dari AuthContext */}
-                  <p className="font-bold">{user?.name || "Aulia Rahman"}</p>
+                  <p className="font-bold">{user?.name || "Dzikri Maulana"}</p>
                   <p className="text-sm text-gray-500 capitalize">{status || "Member"}</p>
 
                   <div className="flex flex-wrap gap-2 mt-3">
-                    <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-100 text-purple-700 uppercase">
-                      {level || "Regular"}
-                    </span>
-                    <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700">
+                    <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-400">
                       <FiAward className="text-xs" />
-                      Loyal Member
+                      Gold Member
                     </span>
                   </div>
 
@@ -412,7 +579,7 @@ export default function Header() {
                     Profile Member
                   </button>
 
-                  {/* TOMBOL RIWAYAT PESANAN (BARU) */}
+                  {/* TOMBOL RIWAYAT PESANAN */}
                   <button
                     onClick={() => {
                       setIsProfileOpen(false);

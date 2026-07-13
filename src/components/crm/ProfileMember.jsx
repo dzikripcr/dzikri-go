@@ -31,9 +31,9 @@ import {
 } from "../../services/membership";
 
 const DEFAULT_MEMBER = {
-  fullName: "Aulia Rahman",
+  fullName: "Dzikri Maulana",
   phone: "0812-3456-7890",
-  email: "aulia.rahman@example.com",
+  email: "dzikri@gmail.com",
   address: "Jl. Melati No.12",
   cityProvince: "Pekanbaru, Riau",
   registeredAt: "2023-08-14",

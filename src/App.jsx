@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 // 1. IMPORT CONTEXT PROVIDERS
 // =====================
 import { AuthProvider } from "./context/AuthContext";
+import { RewardsProvider } from "./context/RewardsContext";
 import { CartProvider } from "./context/CartContext";
 
 // Komponen global - auto scroll ke atas tiap pindah route
@@ -57,159 +58,164 @@ const RequireMember = React.lazy(() => import("./components/RequireMember"));
 export default function App() {
   return (
     <AuthProvider>
-      <CartProvider>
-        <Suspense fallback={<Loading />}>
-          <ScrollToTop />
+      {/* RewardsProvider WAJIB membungkus CartProvider, karena CartContext
+          otomatis memanggil addPoints()/markVoucherUsed() dari RewardsContext
+          setiap kali placeOrder() dipanggil */}
+      <RewardsProvider>
+        <CartProvider>
+          <Suspense fallback={<Loading />}>
+            <ScrollToTop />
 
-          <Routes>
-            {/* CRM LAYOUT (Rute Sisi Pelanggan) */}
-            <Route path="/" element={<Home />} />
+            <Routes>
+              {/* CRM LAYOUT (Rute Sisi Pelanggan) */}
+              <Route path="/" element={<Home />} />
 
-            <Route
-              path="/produk"
-              element={
-                <RequireMember>
-                  <ProductsCRM />
-                </RequireMember>
-              }
-            />
-
-            <Route
-              path="/product/:id"
-              element={
-                <RequireMember>
-                  <ProductDetailCRM />
-                </RequireMember>
-              }
-            />
-
-            <Route
-              path="/profile"
-              element={
-                <RequireMember>
-                  <ProfileMember />
-                </RequireMember>
-              }
-            />
-
-            <Route
-              path="/cart"
-              element={
-                <RequireMember>
-                  <CartCRM />
-                </RequireMember>
-              }
-            />
-
-            {/* RUTE BARU: Halaman Riwayat Pesanan Pelanggan */}
-            <Route
-              path="/pesanan"
-              element={
-                <RequireMember>
-                  <OrderHistory />
-                </RequireMember>
-              }
-            />
-
-            {/* MAIN LAYOUT (Rute Sisi Dashboard Admin) */}
-            <Route element={<MainLayout />}>
               <Route
-                path="/dashboard"
+                path="/produk"
                 element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <Dashboard />
-                  </RoleGuard>
+                  <RequireMember>
+                    <ProductsCRM />
+                  </RequireMember>
                 }
               />
+
               <Route
-                path="/orders"
+                path="/product/:id"
                 element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <Orders />
-                  </RoleGuard>
+                  <RequireMember>
+                    <ProductDetailCRM />
+                  </RequireMember>
                 }
-              />
-              <Route
-                path="/customers"
-                element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <Customers />
-                  </RoleGuard>
-                }
-              />
-              <Route
-                path="/products"
-                element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <Products />
-                  </RoleGuard>
-                }
-              />
-              <Route
-                path="/products/:id"
-                element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <ProductDetail />
-                  </RoleGuard>
-                }
-              />
-              <Route
-                path="/transaksi"
-                element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <Transaksi />
-                  </RoleGuard>
-                }
-              />
-              <Route
-                path="/kategori-produk"
-                element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <KategoriProduk />
-                  </RoleGuard>
-                }
-              />
-              <Route
-                path="/kupon"
-                element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <Kupon />
-                  </RoleGuard>
-                }
-              />
-              <Route
-                path="/feedback"
-                element={
-                  <RoleGuard allowedRoles={["admin", "superadmin"]}>
-                    <Feedback />
-                  </RoleGuard>
-                }
-              />
-              <Route 
-                path="/users" 
-                element={
-                  <RoleGuard allowedRoles={["superadmin"]}>
-                    <User />
-                  </RoleGuard>
-                } 
               />
 
-              {/* ERROR PAGE */}
-              <Route path="/error400" element={<Error400 />} />
-              <Route path="/error401" element={<Error401 />} />
-              <Route path="/error403" element={<Error403 />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
+              <Route
+                path="/profile"
+                element={
+                  <RequireMember>
+                    <ProfileMember />
+                  </RequireMember>
+                }
+              />
 
-            {/* AUTH LAYOUT */}
-            <Route element={<AuthLayout />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot" element={<Forgot />} />
-            </Route>
-          </Routes>
-        </Suspense>
-      </CartProvider>
+              <Route
+                path="/cart"
+                element={
+                  <RequireMember>
+                    <CartCRM />
+                  </RequireMember>
+                }
+              />
+
+              {/* RUTE BARU: Halaman Riwayat Pesanan Pelanggan */}
+              <Route
+                path="/pesanan"
+                element={
+                  <RequireMember>
+                    <OrderHistory />
+                  </RequireMember>
+                }
+              />
+
+              {/* MAIN LAYOUT (Rute Sisi Dashboard Admin) */}
+              <Route element={<MainLayout />}>
+                <Route
+                  path="/dashboard"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <Dashboard />
+                    </RoleGuard>
+                  }
+                />
+                <Route
+                  path="/orders"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <Orders />
+                    </RoleGuard>
+                  }
+                />
+                <Route
+                  path="/customers"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <Customers />
+                    </RoleGuard>
+                  }
+                />
+                <Route
+                  path="/products"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <Products />
+                    </RoleGuard>
+                  }
+                />
+                <Route
+                  path="/products/:id"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <ProductDetail />
+                    </RoleGuard>
+                  }
+                />
+                <Route
+                  path="/transaksi"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <Transaksi />
+                    </RoleGuard>
+                  }
+                />
+                <Route
+                  path="/kategori-produk"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <KategoriProduk />
+                    </RoleGuard>
+                  }
+                />
+                <Route
+                  path="/kupon"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <Kupon />
+                    </RoleGuard>
+                  }
+                />
+                <Route
+                  path="/feedback"
+                  element={
+                    <RoleGuard allowedRoles={["admin", "superadmin"]}>
+                      <Feedback />
+                    </RoleGuard>
+                  }
+                />
+                <Route 
+                  path="/users" 
+                  element={
+                    <RoleGuard allowedRoles={["superadmin"]}>
+                      <User />
+                    </RoleGuard>
+                  } 
+                />
+
+                {/* ERROR PAGE */}
+                <Route path="/error400" element={<Error400 />} />
+                <Route path="/error401" element={<Error401 />} />
+                <Route path="/error403" element={<Error403 />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+
+              {/* AUTH LAYOUT */}
+              <Route element={<AuthLayout />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot" element={<Forgot />} />
+              </Route>
+            </Routes>
+          </Suspense>
+        </CartProvider>
+      </RewardsProvider>
     </AuthProvider>
   );
 }

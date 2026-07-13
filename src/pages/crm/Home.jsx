@@ -50,9 +50,6 @@ export default function Home() {
       <HeroSection />
       <BrandsBanner />
       
-      {/* ======================================================================== */}
-      {/* CRM FEATURE: SMART TRACKING BANNER FOR LOGGED IN MEMBERS */}
-      {/* ======================================================================== */}
       {isMember && activeOrder && (
         <div className="max-w-7xl mx-auto px-4 md:px-8 pt-6 animate-fadeIn">
           <div className="bg-black text-white p-4 rounded-[20px] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
@@ -68,7 +65,7 @@ export default function Home() {
               </div>
             </div>
             <button
-              onClick={() => navigate("/riwayat-pesanan")}
+              onClick={() => navigate("/pesanan")}
               className="bg-white text-black text-[11px] font-black uppercase tracking-widest px-5 py-2.5 rounded-full hover:bg-gray-100 transition flex items-center gap-1.5 cursor-pointer w-full sm:w-auto justify-center"
             >
               Lacak Paket <FiArrowRight size={12} />

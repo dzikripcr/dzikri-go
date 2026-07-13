@@ -1,12 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useRewards, POINTS_PER_RUPIAH } from "./RewardsContext";
 
 const CartContext = createContext();
 
-// Key yang dipakai untuk menyimpan data di localStorage
 const CART_STORAGE_KEY = "dm_boutiquera_cart";
 const ORDERS_STORAGE_KEY = "dm_boutiquera_orders";
 
-// Helper: baca data dari localStorage dengan aman (fallback ke default kalau gagal/tidak ada)
 function loadFromStorage(key, defaultValue) {
   try {
     const stored = localStorage.getItem(key);
@@ -18,12 +17,12 @@ function loadFromStorage(key, defaultValue) {
 }
 
 export function CartProvider({ children }) {
-  // Inisialisasi state langsung dari localStorage (lazy initializer)
-  // supaya saat pertama kali render, data lama otomatis terisi
+  // PENTING: CartProvider harus dirender di DALAM RewardsProvider (lihat App.jsx)
+  const { addPoints, markVoucherUsed } = useRewards();
+
   const [cartItems, setCartItems] = useState(() => loadFromStorage(CART_STORAGE_KEY, []));
   const [orders, setOrders] = useState(() => loadFromStorage(ORDERS_STORAGE_KEY, []));
 
-  // Setiap kali cartItems berubah, otomatis simpan ke localStorage
   useEffect(() => {
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
@@ -32,7 +31,6 @@ export function CartProvider({ children }) {
     }
   }, [cartItems]);
 
-  // Setiap kali orders berubah, otomatis simpan ke localStorage
   useEffect(() => {
     try {
       localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
@@ -74,9 +72,22 @@ export function CartProvider({ children }) {
 
   const clearCart = () => setCartItems([]);
 
-  // Menyimpan pesanan ke dalam list history dan mengosongkan keranjang
+  // Menyimpan pesanan ke riwayat, mengosongkan keranjang, DAN mengintegrasikan
+  // sistem reward: otomatis kasih poin dari belanja, dan "matikan" voucher yang dipakai
   const placeOrder = (newOrder) => {
     setOrders((prevOrders) => [newOrder, ...prevOrders]);
+
+    // 1 poin didapat setiap kelipatan Rp10.000 dari subtotal produk
+    const pointsEarned = Math.floor((newOrder.subtotal || 0) / POINTS_PER_RUPIAH);
+    if (pointsEarned > 0) {
+      addPoints(pointsEarned, `Belanja pesanan ${newOrder.id}`);
+    }
+
+    // Kalau pesanan ini pakai voucher hasil tukar poin, tandai voucher itu sudah terpakai
+    if (newOrder.voucherCode) {
+      markVoucherUsed(newOrder.voucherCode);
+    }
+
     clearCart();
   };
 

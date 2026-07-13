@@ -30,7 +30,6 @@ export default function OrderHistory() {
     }).format(value);
   };
 
-  // Mock Data jika context kosong (untuk kebutuhan demo visual awal agar halaman tidak kosong)
   const sampleOrders = [
     {
       id: "DM-874291",
@@ -63,7 +62,7 @@ export default function OrderHistory() {
       shippingName: "Reguler Standar",
       address:
         "Jl. Budi Utomo No. 12, Kel. Sukamaju, Kec. Lima Puluh, Pekanbaru, Riau",
-      status: "dikirim", // Status: konfirmasi | diproses | dikirim | diterima
+      status: "dikirim",
       cashbackEarned: 63900,
     },
   ];
@@ -95,17 +94,77 @@ export default function OrderHistory() {
       status: "diterima",
       cashbackEarned: 0,
     },
+    {
+      id: "DM-192837",
+      date: "15 Mei 2026",
+      items: [
+        {
+          id: 104,
+          nama: "Vintage Silk Blouse Cream",
+          size: "M",
+          harga: 550000,
+          quantity: 1,
+          gambar:
+            "https://images.unsplash.com/photo-1604043960100-3fb2e389df34?w=400",
+        },
+        {
+          id: 105,
+          nama: "Pleated Midi Skirt Brown",
+          size: "M",
+          harga: 480000,
+          quantity: 1,
+          gambar:
+            "https://images.unsplash.com/photo-1582142407894-ec85a1260a46?w=400",
+        },
+      ],
+      subtotal: 1030000,
+      shippingFee: 25000,
+      discount: 50000,
+      total: 1005000,
+      payment: "credit_card",
+      shippingName: "Reguler Standar",
+      address: "Jl. Sudirman No. 45, Kec. Bukit Raya, Pekanbaru, Riau",
+      status: "diterima",
+      cashbackEarned: 50250,
+    },
+    {
+      id: "DM-094726",
+      date: "02 April 2026",
+      items: [
+        {
+          id: 106,
+          nama: "Classic Trench Coat Beige",
+          size: "L",
+          harga: 1299000,
+          quantity: 1,
+          gambar:
+            "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400",
+        },
+      ],
+      subtotal: 1299000,
+      shippingFee: 0, 
+      discount: 0,
+      total: 1299000,
+      payment: "qris",
+      shippingName: "Next Day Delivery",
+      address: "Perumahan Elite Blok C2, Marpoyan Damai, Pekanbaru, Riau",
+      status: "diterima",
+      cashbackEarned: 64950,
+    },
   ];
 
-  const currentOrdersList =
-    orders.length > 0
-      ? orders.filter((o) => o.status !== "diterima")
-      : sampleOrders;
-  const completedOrdersList =
-    orders.length > 0
-      ? orders.filter((o) => o.status === "diterima")
-      : completedSampleOrders;
+  // 1. Filter data asli dari state terlebih dahulu
+  const realCurrentOrders = orders.filter((o) => o.status !== "diterima");
+  const realCompletedOrders = orders.filter((o) => o.status === "diterima");
 
+  // 2. Cek masing-masing kategori. Jika kosong, baru gunakan mock data
+  const currentOrdersList =
+    realCurrentOrders.length > 0 ? realCurrentOrders : sampleOrders;
+    
+  const completedOrdersList =
+    realCompletedOrders.length > 0 ? realCompletedOrders : completedSampleOrders;
+
+  // 3. Tentukan list mana yang aktif berdasarkan Tab
   const currentList =
     activeTab === "sekarang" ? currentOrdersList : completedOrdersList;
 

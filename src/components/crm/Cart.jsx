@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useCart } from "../../context/CartContext"; 
+import { useRewards } from "../../context/RewardsContext";
 import { FiMinus, FiPlus, FiTrash2, FiMapPin, FiTruck, FiCreditCard, FiTag, FiCheck, FiArrowRight, FiHome } from "react-icons/fi";
 import { BsCheckCircleFill } from "react-icons/bs";
 import Header from "./Header";
@@ -7,6 +8,7 @@ import Footer from "./Footer";
 
 export default function Cart() {
   const { cartItems, updateQuantity, removeFromCart, placeOrder } = useCart();
+  const { availableVouchers, findVoucherByCode } = useRewards();
 
   // State Form Checkout Belanja
   const [address, setAddress] = useState("Jl. Budi Utomo No. 12, Kel. Sukamaju, Kec. Lima Puluh, Pekanbaru, Riau");
@@ -16,6 +18,7 @@ export default function Cart() {
   const [selectedCoupon, setSelectedCoupon] = useState("none");
   const [paymentMethod, setPaymentMethod] = useState("qris");
   const [voucherCode, setVoucherCode] = useState("");
+  const [klaimError, setKlaimError] = useState("");
   
   // State Baru untuk Pop-Up Sukses
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -36,12 +39,29 @@ export default function Cart() {
     express: { name: "Express Kilat", price: 45000 },
   };
 
+  // Kupon demo statis (tidak berkaitan dengan poin) + kupon dinamis
+  // hasil tukar poin dari RewardsContext (Marketing Automation)
+  const staticCoupons = [
+    { id: "none", name: "Tidak Menggunakan Kupon" },
+    { id: "gratis_ongkir", name: "Gratis Ongkir (Maks Rp20.000)" },
+    { id: "diskon_butik", name: "Diskon Eksklusif DM 10%" },
+    { id: "cashback", name: "Cashback Spesial Belanja 5%" },
+  ];
+
+  const voucherCoupons = availableVouchers.map((v) => ({
+    id: `voucher-${v.code}`,
+    name: `🎁 ${v.label} • ${v.code}`,
+  }));
+
+  const couponOptions = [...staticCoupons, ...voucherCoupons];
+
   const subtotalProduk = cartItems.reduce((acc, item) => acc + item.harga * item.quantity, 0);
   const biayaPengiriman = cartItems.length > 0 ? shippingRates[shippingOption].price : 0;
 
   let potonganHarga = 0;
   let potonganOngkir = 0;
   let cashbackPoin = 0;
+  let appliedVoucherCode = null;
 
   if (selectedCoupon === "gratis_ongkir") {
     potonganOngkir = Math.min(biayaPengiriman, 20000);
@@ -49,10 +69,40 @@ export default function Cart() {
     potonganHarga = subtotalProduk * 0.1;
   } else if (selectedCoupon === "cashback") {
     cashbackPoin = subtotalProduk * 0.05;
+  } else if (selectedCoupon.startsWith("voucher-")) {
+    // Kupon berasal dari voucher hasil tukar poin
+    const code = selectedCoupon.replace("voucher-", "");
+    const voucher = availableVouchers.find((v) => v.code === code);
+    if (voucher) {
+      appliedVoucherCode = voucher.code;
+      if (voucher.type === "gratis_ongkir") {
+        potonganOngkir = Math.min(biayaPengiriman, voucher.value);
+      } else if (voucher.type === "diskon_persen") {
+        potonganHarga = subtotalProduk * (voucher.value / 100);
+      } else if (voucher.type === "cashback_persen") {
+        cashbackPoin = subtotalProduk * (voucher.value / 100);
+      } else if (voucher.type === "potongan_nominal") {
+        potonganHarga = Math.min(voucher.value, subtotalProduk);
+      }
+    }
   }
 
   const totalHemat = potonganHarga + potonganOngkir;
   const totalPembayaran = subtotalProduk + biayaPengiriman - totalHemat;
+
+  // Klaim kode voucher manual: cocokkan dengan voucher hasil tukar poin milik pelanggan
+  const handleKlaimVoucher = () => {
+    if (!voucherCode.trim()) return;
+    const found = findVoucherByCode(voucherCode);
+    if (found) {
+      setSelectedCoupon(`voucher-${found.code}`);
+      setKlaimError("");
+      setVoucherCode("");
+    } else {
+      setKlaimError("Kode voucher tidak ditemukan atau sudah terpakai.");
+      setTimeout(() => setKlaimError(""), 3000);
+    }
+  };
 
   // Handler Buat Pesanan yang memicu Pop-up & integrasi Context
   const handlePlaceOrder = () => {
@@ -73,10 +123,12 @@ export default function Cart() {
       shippingName: shippingRates[shippingOption].name,
       address: address,
       status: "dikirim", // Set default 'dikirim' untuk simulasi progres bar pelacakan kurir
-      cashbackEarned: cashbackPoin
+      cashbackEarned: cashbackPoin,
+      voucherCode: appliedVoucherCode, // dipakai CartContext untuk menandai voucher sudah terpakai
     };
 
     placeOrder(newOrder); 
+    setSelectedCoupon("none");
     setIsSuccessOpen(true); 
   };
 
@@ -220,12 +272,7 @@ export default function Cart() {
                 </h3>
                 
                 <div className="space-y-2 mb-4">
-                  {[
-                    { id: "none", name: "Tidak Menggunakan Kupon" },
-                    { id: "gratis_ongkir", name: "Gratis Ongkir (Maks Rp20.000)" },
-                    { id: "diskon_butik", name: "Diskon Eksklusif DM 10%" },
-                    { id: "cashback", name: "Cashback Spesial Belanja 5%" }
-                  ].map((coupon) => (
+                  {couponOptions.map((coupon) => (
                     <label 
                       key={coupon.id}
                       className={`flex items-center justify-between p-3 rounded-xl text-xs font-medium border cursor-pointer ${
@@ -253,10 +300,19 @@ export default function Cart() {
                     onChange={(e) => setVoucherCode(e.target.value)}
                     className="flex-1 bg-[#F2F0F1] px-3 py-2 rounded-xl text-xs outline-none border border-transparent focus:border-black"
                   />
-                  <button className="bg-black text-white text-xs font-bold px-4 rounded-xl hover:bg-gray-800 transition">
+                  <button
+                    onClick={handleKlaimVoucher}
+                    className="bg-black text-white text-xs font-bold px-4 rounded-xl hover:bg-gray-800 transition cursor-pointer"
+                  >
                     Klaim
                   </button>
                 </div>
+                {klaimError && (
+                  <p className="text-[11px] text-red-500 font-medium mt-2">{klaimError}</p>
+                )}
+                <p className="text-[10px] text-gray-400 mt-2">
+                  Dapatkan lebih banyak voucher dengan menukar Poin Reward Anda lewat ikon 🎁 di header.
+                </p>
               </div>
 
               {/* Metode Pembayaran */}
