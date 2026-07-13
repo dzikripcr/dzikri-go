@@ -143,7 +143,7 @@ export default function Register() {
       <div className="mt-10 text-center">
         <p className="text-sm text-gray-600">
           Already have an account?
-          <Link to="/" className="ml-2 font-bold">
+          <Link to="/login" className="ml-2 font-bold">
             Sign In
           </Link>
         </p>
