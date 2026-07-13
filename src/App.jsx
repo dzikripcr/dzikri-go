@@ -31,6 +31,8 @@ const ProductsCRM = React.lazy(() => import("./components/crm/Products"));
 const ProductDetailCRM = React.lazy(() => import("./components/crm/Productdetail"));
 const ProfileMember = React.lazy(() => import("./components/crm/ProfileMember"));
 const CartCRM = React.lazy(() => import("./components/crm/Cart"));
+// Tambahkan komponen riwayat pesanan yang telah dibuat sebelumnya
+const OrderHistory = React.lazy(() => import("./components/crm/OrderHistory")); 
 
 // Error Page
 const NotFound = React.lazy(() => import("./pages/NotFound"));
@@ -54,7 +56,6 @@ const RequireMember = React.lazy(() => import("./components/RequireMember"));
 
 export default function App() {
   return (
-    // 2. BUNGKUS DENGAN AUTH & CART PROVIDER DI LEVEL TERATAS
     <AuthProvider>
       <CartProvider>
         <Suspense fallback={<Loading />}>
@@ -91,12 +92,21 @@ export default function App() {
               }
             />
 
-            {/* Rute Baru untuk Halaman Keranjang Belanja Pelanggan */}
             <Route
               path="/cart"
               element={
                 <RequireMember>
                   <CartCRM />
+                </RequireMember>
+              }
+            />
+
+            {/* RUTE BARU: Halaman Riwayat Pesanan Pelanggan */}
+            <Route
+              path="/pesanan"
+              element={
+                <RequireMember>
+                  <OrderHistory />
                 </RequireMember>
               }
             />

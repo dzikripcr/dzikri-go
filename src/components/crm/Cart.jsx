@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useCart } from "../../context/CartContext"; // Sesuaikan path lokasi file Context Anda
-import { FiMinus, FiPlus, FiTrash2, FiMapPin, FiTruck, FiCreditCard, FiTag } from "react-icons/fi";
+import { useCart } from "../../context/CartContext"; 
+import { FiMinus, FiPlus, FiTrash2, FiMapPin, FiTruck, FiCreditCard, FiTag, FiCheck, FiArrowRight, FiHome } from "react-icons/fi";
 import { BsCheckCircleFill } from "react-icons/bs";
 import Header from "./Header";
 import Footer from "./Footer";
 
 export default function Cart() {
-  const { cartItems, updateQuantity, removeFromCart } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, placeOrder } = useCart();
 
   // State Form Checkout Belanja
   const [address, setAddress] = useState("Jl. Budi Utomo No. 12, Kel. Sukamaju, Kec. Lima Puluh, Pekanbaru, Riau");
@@ -16,6 +16,10 @@ export default function Cart() {
   const [selectedCoupon, setSelectedCoupon] = useState("none");
   const [paymentMethod, setPaymentMethod] = useState("qris");
   const [voucherCode, setVoucherCode] = useState("");
+  
+  // State Baru untuk Pop-Up Sukses
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [generatedOrderId, setGeneratedOrderId] = useState("");
 
   // Helper Format Rupiah
   const formatRupiah = (value) => {
@@ -26,49 +30,66 @@ export default function Cart() {
     }).format(value);
   };
 
-  // Data Mock Biaya Pengiriman
   const shippingRates = {
     hemat: { name: "Hemat / Kargo", price: 15000 },
     reguler: { name: "Reguler Standar", price: 25000 },
     express: { name: "Express Kilat", price: 45000 },
   };
 
-  // Hitung Kalkulasi Dasar Kebutuhan Rincian Pembayaran
   const subtotalProduk = cartItems.reduce((acc, item) => acc + item.harga * item.quantity, 0);
   const biayaPengiriman = cartItems.length > 0 ? shippingRates[shippingOption].price : 0;
 
-  // Logika Fitur Kupon Diskon & Potongan Harga
   let potonganHarga = 0;
   let potonganOngkir = 0;
   let cashbackPoin = 0;
 
   if (selectedCoupon === "gratis_ongkir") {
-    potonganOngkir = Math.min(biayaPengiriman, 20000); // maksimal potongan ongkir 20rb
+    potonganOngkir = Math.min(biayaPengiriman, 20000);
   } else if (selectedCoupon === "diskon_butik") {
-    potonganHarga = subtotalProduk * 0.1; // Diskon produk 10%
+    potonganHarga = subtotalProduk * 0.1;
   } else if (selectedCoupon === "cashback") {
-    cashbackPoin = subtotalProduk * 0.05; // Cashback koin 5%
+    cashbackPoin = subtotalProduk * 0.05;
   }
 
   const totalHemat = potonganHarga + potonganOngkir;
   const totalPembayaran = subtotalProduk + biayaPengiriman - totalHemat;
 
+  // Handler Buat Pesanan yang memicu Pop-up & integrasi Context
   const handlePlaceOrder = () => {
     if (cartItems.length === 0) return alert("Keranjang belanja Anda kosong.");
-    alert(`Pesanan berhasil dibuat!\nTotal Bayar: ${formatRupiah(totalPembayaran)}\nMetode: ${paymentMethod.toUpperCase()}`);
+    
+    const orderId = `DM-${Math.floor(100000 + Math.random() * 900000)}`;
+    setGeneratedOrderId(orderId);
+
+    const newOrder = {
+      id: orderId,
+      date: new Date().toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" }),
+      items: [...cartItems],
+      subtotal: subtotalProduk,
+      shippingFee: biayaPengiriman,
+      discount: totalHemat,
+      total: totalPembayaran,
+      payment: paymentMethod,
+      shippingName: shippingRates[shippingOption].name,
+      address: address,
+      status: "dikirim", // Set default 'dikirim' untuk simulasi progres bar pelacakan kurir
+      cashbackEarned: cashbackPoin
+    };
+
+    placeOrder(newOrder); 
+    setIsSuccessOpen(true); 
   };
 
   return (
-    <div className="font-sans text-gray-900 bg-white min-h-screen flex flex-col">
+    <div className="font-sans text-gray-900 bg-white min-h-screen flex flex-col relative">
       <Header />
 
-      {/* Main Container dengan padding bottom ekstra (pb-32) agar kontent akhir tidak terpotong oleh Bar Sticky */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 md:px-8 py-10 pb-36">
         <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight mb-8 text-center md:text-left">
           Keranjang Belanja
         </h2>
 
-        {cartItems.length === 0 ? (
+        {cartItems.length === 0 && !isSuccessOpen ? (
           <div className="text-center py-24 bg-gray-50 rounded-[32px] border border-dashed border-gray-200">
             <p className="text-gray-500 font-medium text-lg">Keranjang belanja Anda kosong.</p>
             <p className="text-gray-400 text-sm mt-1">Silakan pilih produk DM Boutiquera terlebih dahulu.</p>
@@ -76,10 +97,9 @@ export default function Cart() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
-            {/* KOLOM KIRI: Daftar Item & Data Pengiriman */}
+            {/* KOLOM KIRI */}
             <div className="lg:col-span-2 space-y-6">
-              
-              {/* Seksi 1: Alamat Penerima */}
+              {/* Alamat Penerima */}
               <div className="bg-[#F2F0F1] p-6 rounded-[24px]">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-bold text-base uppercase tracking-wider flex items-center gap-2">
@@ -104,7 +124,7 @@ export default function Cart() {
                 )}
               </div>
 
-              {/* Seksi 2: Item Produk */}
+              {/* Item Produk */}
               <div className="border border-gray-100 rounded-[24px] p-6 space-y-4 shadow-sm">
                 <h3 className="font-bold text-base uppercase tracking-wider mb-2">Produk Dipilih</h3>
                 {cartItems.map((item) => (
@@ -147,7 +167,7 @@ export default function Cart() {
                 ))}
               </div>
 
-              {/* Seksi 3: Opsi Pengiriman & Catatan Penjual */}
+              {/* Opsi Pengiriman */}
               <div className="bg-[#F2F0F1] p-6 rounded-[24px] space-y-4">
                 <div>
                   <h3 className="font-bold text-base uppercase tracking-wider flex items-center gap-2 mb-3">
@@ -191,10 +211,9 @@ export default function Cart() {
               </div>
             </div>
 
-            {/* KOLOM KANAN: Kupon, Pembayaran & Rincian Ringkas Desktop */}
+            {/* KOLOM KANAN */}
             <div className="space-y-6">
-              
-              {/* Pilihan Kupon & Voucher */}
+              {/* Kupon */}
               <div className="border border-gray-100 rounded-[24px] p-6 shadow-sm">
                 <h3 className="font-bold text-base uppercase tracking-wider flex items-center gap-2 mb-4">
                   <FiTag className="text-black" /> Kupon & Promo Butik
@@ -240,7 +259,7 @@ export default function Cart() {
                 </div>
               </div>
 
-              {/* Pilihan Metode Pembayaran */}
+              {/* Metode Pembayaran */}
               <div className="bg-[#F2F0F1] p-6 rounded-[24px]">
                 <h3 className="font-bold text-base uppercase tracking-wider flex items-center gap-2 mb-4">
                   <FiCreditCard className="text-black" /> Metode Pembayaran
@@ -268,7 +287,7 @@ export default function Cart() {
                 </div>
               </div>
 
-              {/* Rincian Tagihan Pembayaran */}
+              {/* Rincian Tagihan */}
               <div className="border border-gray-100 rounded-[24px] p-6 shadow-sm space-y-3 text-sm">
                 <h3 className="font-bold text-base uppercase tracking-wider mb-2">Rincian Pembayaran</h3>
                 <div className="flex justify-between text-gray-500">
@@ -311,12 +330,10 @@ export default function Cart() {
         )}
       </main>
 
-      {/* STICKY BOTTOM BAR: Selalu berada di posisi paling bawah walaupun halaman di-scroll */}
+      {/* STICKY BOTTOM BAR */}
       {cartItems.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 md:px-8 py-4 flex items-center justify-between shadow-[0_-8px_30px_rgba(0,0,0,0.05)] z-50">
           <div className="max-w-7xl w-full mx-auto flex items-center justify-between gap-4">
-            
-            {/* Sisi Kiri Bar: Total Harga + Informasi Jumlah Hemat */}
             <div className="flex flex-col">
               <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Total Tagihan</span>
               <div className="flex items-baseline gap-2 flex-wrap">
@@ -331,13 +348,58 @@ export default function Cart() {
               </div>
             </div>
 
-            {/* Sisi Kanan Bar: Tombol Buat Pesanan */}
             <button
               onClick={handlePlaceOrder}
               className="bg-black text-white px-8 md:px-12 py-3.5 rounded-full font-bold uppercase text-xs md:text-sm tracking-widest hover:bg-gray-800 transition duration-300 shadow-sm active:scale-95 cursor-pointer"
             >
               Buat Pesanan
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================================== */}
+      {/* POP UP MODAL SUKSES (BOUTIQUE THEMING & EXCLUSIVE CRM FEEL) */}
+      {/* ======================================================================== */}
+      {isSuccessOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100] flex items-center justify-center p-4 transition-all duration-300 animate-fadeIn">
+          <div className="bg-white max-w-md w-full rounded-[32px] p-8 border border-gray-100 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] text-center space-y-6 transform scale-100 transition-transform">
+            
+            {/* Elegant Check Indicator */}
+            <div className="w-20 h-20 bg-black rounded-full flex items-center justify-center mx-auto shadow-lg shadow-black/20 animate-scaleUp">
+              <FiCheck className="text-white text-3xl stroke-[3]" />
+            </div>
+
+            {/* Typography & Order ID */}
+            <div className="space-y-2">
+              <h3 className="font-black uppercase tracking-tight text-2xl md:text-3xl text-gray-950">
+                Pesanan Berhasil
+              </h3>
+              <p className="text-xs font-mono tracking-widest text-gray-400 uppercase">
+                ID Transaksi: {generatedOrderId}
+              </p>
+            </div>
+
+            {/* Personalized CRM Note */}
+            <div className="bg-[#F2F0F1] p-4 rounded-[20px] text-xs text-gray-600 font-medium leading-relaxed">
+              ✨ Terima kasih, <span className="text-black font-bold">DM Luxury Member</span>. Pesanan Anda telah masuk antrean eksklusif kami. Tim kurir butik akan segera memvalidasi dan mempacking produk pesanan Anda dengan perhatian penuh ekstra.
+            </div>
+
+            {/* Call To Actions */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <button
+                onClick={() => window.location.href = "/pesanan"} // Sesuaikan dengan route halaman riwayat Anda
+                className="flex-1 bg-black text-white text-xs font-black uppercase tracking-wider py-4 px-6 rounded-full hover:bg-gray-800 transition flex items-center justify-center gap-2 cursor-pointer shadow-md"
+              >
+                Riwayat Pesanan <FiArrowRight size={14} />
+              </button>
+              <button
+                onClick={() => window.location.href = "/"} 
+                className="bg-[#F2F0F1] text-gray-900 text-xs font-bold uppercase tracking-wider py-4 px-6 rounded-full hover:bg-gray-200 transition flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <FiHome size={14} /> Beranda
+              </button>
+            </div>
           </div>
         </div>
       )}

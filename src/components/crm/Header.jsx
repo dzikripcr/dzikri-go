@@ -9,6 +9,7 @@ import {
   FiBell,
   FiLogOut,
   FiAward,
+  FiPackage, // <-- Tambahan ikon untuk Riwayat Pesanan
 } from "react-icons/fi";
 
 import { useAuth } from "../../context/AuthContext";
@@ -399,6 +400,7 @@ export default function Header() {
                     </span>
                   </div>
 
+                  {/* TOMBOL PROFILE MEMBER */}
                   <button
                     onClick={() => {
                       setIsProfileOpen(false);
@@ -410,9 +412,22 @@ export default function Header() {
                     Profile Member
                   </button>
 
+                  {/* TOMBOL RIWAYAT PESANAN (BARU) */}
+                  <button
+                    onClick={() => {
+                      setIsProfileOpen(false);
+                      navigate("/pesanan");
+                    }}
+                    className="mt-2 w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-800 text-sm font-medium py-2.5 rounded-full transition-all duration-300 hover:bg-gray-200 cursor-pointer"
+                  >
+                    <FiPackage />
+                    Riwayat Pesanan
+                  </button>
+
+                  {/* TOMBOL LOGOUT */}
                   <button
                     onClick={logout}
-                    className="mt-2 w-full flex items-center justify-center gap-2 text-red-500 text-sm font-medium py-2 
+                    className="mt-3 w-full flex items-center justify-center gap-2 text-red-500 text-sm font-medium py-2 
                       rounded-full cursor-pointer transition-all duration-300 ease-in-out hover:bg-red-500 
                       hover:text-white hover:shadow-md hover:scale-[1.02] active:scale-95"
                   >
