@@ -15,6 +15,8 @@ import Header from "../crm/Header";
 import Footer from "../crm/Footer";
 import CustomerService from "../crm/Chat";
 import ProductCard from "../crm/ProductCard";
+// Import hook Cart Context
+import { useCart } from "../../context/CartContext";
 
 const getSizeOptions = (kategori) => {
   switch (kategori) {
@@ -88,13 +90,14 @@ const StarRating = ({ rating, size = "text-sm" }) => {
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const { addToCart } = useCart(); // Menggunakan fungsi global tambah keranjang belanja
   const product = productsData.find((p) => p.id === id);
 
   const [quantity, setQuantity] = useState(1);
   const [visibleReviews, setVisibleReviews] = useState(4);
 
   const sizeOptions = product ? getSizeOptions(product.kategori) : [];
-  const [selectedSize, setSelectedSize] = useState(sizeOptions[0] || null);
+  const [selectedSize, setSelectedSize] = useState(sizeOptions[0] || "All Size");
 
   if (!product) {
     return (
@@ -132,6 +135,10 @@ export default function ProductDetail() {
   const handleDecrease = () => setQuantity((q) => Math.max(1, q - 1));
   const handleIncrease = () => setQuantity((q) => Math.min(product.stok || 1, q + 1));
   const handleLoadMoreReviews = () => setVisibleReviews((v) => Math.min(reviewPool.length, v + 4));
+
+  const handleAddToCartClick = () => {
+    addToCart(product, quantity, selectedSize);
+  };
 
   const suggestions = productsData.filter((p) => p.id !== product.id).slice(0, 4);
 
@@ -257,7 +264,10 @@ export default function ProductDetail() {
                     <FiPlus />
                   </button>
                 </div>
-                <button className="flex-1 bg-black text-white px-8 py-4 rounded-full font-medium hover:bg-gray-800 transition-all duration-300 cursor-pointer">
+                <button 
+                  onClick={handleAddToCartClick}
+                  className="flex-1 bg-black text-white px-8 py-4 rounded-full font-medium hover:bg-gray-800 transition-all duration-300 cursor-pointer"
+                >
                   Masukkan ke Keranjang
                 </button>
               </div>

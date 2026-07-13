@@ -15,23 +15,20 @@ import Footer from "@/components/crm/Footer";
 import Chat from "@/components/crm/Chat";
 import WhyChooseUs from "@/components/crm/WhyChooseUs";
 
-// Mengimpor Auth Context yang sama dengan Header
 import { useAuth } from "../../context/AuthContext"; 
 
 export default function Home() {
   const location = useLocation();
-  
-  // Ambil data 'user' langsung dari AuthContext global
   const { user } = useAuth(); 
 
-  // Menentukan status member: jika 'user' ada/tidak null, berarti dia adalah Member yang sudah login
   const isMember = !!user; 
 
+  // Membagi data dummy produk untuk section katalog
   const newArrivals = productsData.slice(0, 4);
   const topSelling = productsData.slice(4, 8);
 
+  // Efek handling scroll ke ID target jika diarahkan navigasi dari halaman lain
   useEffect(() => {
-    // Logika scroll berdasarkan state navigasi
     if (location.state?.scrollTo) {
       const sectionId = location.state.scrollTo;
 
@@ -44,30 +41,44 @@ export default function Home() {
   }, [location]);
 
   return (
-    <div className="font-sans text-gray-900 bg-white">
+    <div className="font-sans text-gray-900 bg-white antialiased selection:bg-black selection:text-white">
+      {/* Header otomatis aman karena sudah berada di bawah lingkup CartProvider di App.jsx */}
       <Header />
+      
       <HeroSection />
       <BrandsBanner />
       
-      {/* KONDISI 1: JIKA USER SUDAH REGISTER & LOGIN (MEMBER) */}
+      {/* TAMPILAN KHUSUS MEMBER */}
       {isMember && (
         <>
-          <NewArrivals products={newArrivals} />
-          <TopSelling products={topSelling} />
-          <DressStyle />
+          <div id="new-arrivals">
+            <NewArrivals products={newArrivals} />
+          </div>
+          <div id="top-selling">
+            <TopSelling products={topSelling} />
+          </div>
+          <div id="dress-style">
+            <DressStyle />
+          </div>
         </>
       )}
 
-      {/* KONDISI 2: JIKA USER BELUM LOGIN (GUEST) */}
+      {/* TAMPILAN KHUSUS GUEST (BELUM LOGIN) */}
       {!isMember && (
         <>
-          <WhyChooseUs />
-          <MembershipSection />
+          <div id="alasan">
+            <WhyChooseUs />
+          </div>
+          <div id="membership">
+            <MembershipSection />
+          </div>
         </>
       )}
 
-      {/* Komponen yang selalu muncul */}
-      <Testimonials />
+      <div id="testimonials">
+        <Testimonials />
+      </div>
+      
       <Footer />
       <Chat />
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"; // Tambahkan useRef di sini
+import React, { useState, useEffect, useRef } from "react"; 
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import {
@@ -12,10 +12,13 @@ import {
 } from "react-icons/fi";
 
 import { useAuth } from "../../context/AuthContext";
+// Import Cart Context untuk mengambil data jumlah item di keranjang
+import { useCart } from "../../context/CartContext"; 
 import { getLevelFromPoints, getMemberStatus } from "../../services/membership";
 
 export default function Header() {
   const { user, logout } = useAuth();
+  const { cartItems } = useCart();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,6 +40,9 @@ export default function Header() {
 
   const level = getLevelFromPoints(points);
   const status = getMemberStatus({ isActive, orderCount, totalSpend, level });
+
+  // Hitung total kuantitas item yang ada di keranjang untuk badge ikon cart
+  const cartCount = cartItems?.reduce((total, item) => total + item.quantity, 0) || 0;
 
   const scrollToSection = (sectionId) => {
     if (location.pathname !== "/") {
@@ -60,24 +66,19 @@ export default function Header() {
   // Effect untuk menghandle klik di luar elemen
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Tutup Shop jika klik di luar element shopRef
       if (shopRef.current && !shopRef.current.contains(event.target)) {
         setIsShopOpen(false);
       }
-      // Tutup Notifikasi jika klik di luar element notifRef
       if (notifRef.current && !notifRef.current.contains(event.target)) {
         setIsNotifOpen(false);
       }
-      // Tutup Profil jika klik di luar element profileRef
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setIsProfileOpen(false);
       }
     };
 
-    // Daftarkan event listener
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      // Bersihkan event listener saat komponen unmount
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
@@ -172,11 +173,8 @@ export default function Header() {
           Home
         </button>
 
-        {/* MENU PRODUK - BARU DITAMBAHKAN */}
-
         {/* CONDITIONAL RENDERING: Menu Shop */}
         {user && (
-          // Pasang shopRef membungkus button pemicu dan jendela dropdown-nya
           <div className="relative" ref={shopRef}>
             <button
               onClick={() => setIsShopOpen(!isShopOpen)}
@@ -213,11 +211,11 @@ export default function Header() {
 
         {user && (
           <button
-              onClick={() => navigate("/produk")}
-              className="cursor-pointer hover:text-gray-600 transition"
-            >
-              Produk
-            </button>
+            onClick={() => navigate("/produk")}
+            className="cursor-pointer hover:text-gray-600 transition"
+          >
+            Produk
+          </button>
         )}
 
         {/* CONDITIONAL RENDERING: Menu Why Us & Membership */}
@@ -298,7 +296,6 @@ export default function Header() {
         ) : (
           <>
             {/* NOTIFICATION */}
-            {/* Pasang notifRef membungkus button dan dropdown-nya */}
             <div className="relative" ref={notifRef}>
               <button
                 onClick={() => {
@@ -317,7 +314,7 @@ export default function Header() {
               </button>
 
               {isNotifOpen && (
-                <div className="absolute right-[-40px] md:right-0 mt-4 w-[320px] md:w-[360px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden">
+                <div className="absolute right-[-40px] md:right-0 mt-3 w-[320px] md:w-[360px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[999] overflow-hidden">
                   <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                     <h3 className="font-extrabold text-base tracking-tight">
                       Notifikasi Baru
@@ -360,13 +357,20 @@ export default function Header() {
               )}
             </div>
 
-            {/* CART */}
-            <button className="text-2xl cursor-pointer hover:text-gray-600 transition">
+            {/* CART (Sudah Diperbaiki Agar Bisa Diklik & Memiliki Badge Kuantitas) */}
+            <button 
+              onClick={() => navigate("/cart")}
+              className="text-2xl cursor-pointer hover:text-gray-600 transition relative flex items-center justify-center p-1 mt-1 outline-none"
+            >
               <FiShoppingCart />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 bg-black text-white text-[10px] w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold border-2 border-white">
+                  {cartCount}
+                </span>
+              )}
             </button>
 
             {/* PROFILE DROPDOWN */}
-            {/* Pasang profileRef membungkus button profil dan dropdown-nya */}
             <div className="relative" ref={profileRef}>
               <button
                 onClick={() => {
@@ -381,16 +385,17 @@ export default function Header() {
 
               {isProfileOpen && (
                 <div className="absolute right-0 mt-4 w-64 bg-white border shadow-xl rounded-2xl p-4 z-[999]">
-                  <p className="font-bold">Aulia Rahman</p>
-                  <p className="text-sm text-gray-500">Member</p>
+                  {/* Data profil dinamis menggunakan data dari AuthContext */}
+                  <p className="font-bold">{user?.name || "Aulia Rahman"}</p>
+                  <p className="text-sm text-gray-500 capitalize">{status || "Member"}</p>
 
                   <div className="flex flex-wrap gap-2 mt-3">
-                    <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-100 text-purple-700">
-                      VIP
+                    <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-100 text-purple-700 uppercase">
+                      {level || "Regular"}
                     </span>
                     <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 text-blue-700">
                       <FiAward className="text-xs" />
-                      Platinum
+                      Loyal Member
                     </span>
                   </div>
 

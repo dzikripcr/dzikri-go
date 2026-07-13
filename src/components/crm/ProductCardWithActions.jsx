@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { FiMinus, FiPlus } from "react-icons/fi";
+// Import hook Cart Context
+import { useCart } from "../../context/CartContext"; 
 
 // Fungsi pembantu untuk mendapatkan opsi ukuran berdasarkan kategori produk
 const getSizeOptions = (kategori) => {
@@ -19,6 +21,7 @@ const getSizeOptions = (kategori) => {
 };
 
 export default function ProductCardWithActions({ item, formatRupiah }) {
+  const { addToCart } = useCart(); // Mengambil fungsi global tambah keranjang
   const isOutOfStock = item.status === "Stok Habis";
   const sizeOptions = getSizeOptions(item.kategori);
   
@@ -35,14 +38,9 @@ export default function ProductCardWithActions({ item, formatRupiah }) {
     setQuantity((q) => Math.min(item.stok || 1, q + 1));
   };
 
-  const handleAddToCart = (e) => {
+  const handleAddToCartClick = (e) => {
     e.preventDefault(); // Mencegah Link terpicu saat tombol diklik
-    alert(
-      `Berhasil menambahkan ke keranjang:\n` +
-      `Produk: ${item.nama}\n` +
-      `Ukuran: ${selectedSize}\n` +
-      `Jumlah: ${quantity} pcs`
-    );
+    addToCart(item, quantity, selectedSize);
   };
 
   const statusColor =
@@ -107,14 +105,14 @@ export default function ProductCardWithActions({ item, formatRupiah }) {
                 <div className="flex items-center justify-between bg-[#F0F0F0] rounded-lg px-1 py-0.5 border border-transparent">
                   <button
                     onClick={handleDecrease}
-                    className="p-1 hover:bg-white rounded-md transition text-gray-600"
+                    className="p-1 hover:bg-white rounded-md transition text-gray-600 cursor-pointer"
                   >
                     <FiMinus size={12} />
                   </button>
                   <span className="font-bold text-gray-800 text-xs px-1 w-6 text-center">{quantity}</span>
                   <button
                     onClick={handleIncrease}
-                    className="p-1 hover:bg-white rounded-md transition text-gray-600"
+                    className="p-1 hover:bg-white rounded-md transition text-gray-600 cursor-pointer"
                   >
                     <FiPlus size={12} />
                   </button>
@@ -123,7 +121,7 @@ export default function ProductCardWithActions({ item, formatRupiah }) {
             </div>
 
             <button
-              onClick={handleAddToCart}
+              onClick={handleAddToCartClick}
               className="w-full bg-black text-white text-xs font-semibold py-2.5 rounded-full hover:bg-gray-800 transition duration-300 shadow-sm active:scale-95 cursor-pointer"
             >
               Tambah ke Keranjang
