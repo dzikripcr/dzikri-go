@@ -18,6 +18,8 @@ import ProductCard from "../crm/ProductCard";
 // Import hook Cart Context
 import { useCart } from "../../context/CartContext";
 
+import CustomSizeRequestModal from "./CustomSizeRequestModal";
+
 const getSizeOptions = (kategori) => {
   switch (kategori) {
     case "Gaun":
@@ -33,8 +35,7 @@ const getSizeOptions = (kategori) => {
 };
 
 const categoryDescriptions = {
-  Gaun:
-    "Gaun elegan ini dirancang untuk membuat momen spesial Anda makin berkesan, dengan potongan yang pas di badan dan bahan premium yang nyaman dipakai sepanjang hari.",
+  Gaun: "Gaun elegan ini dirancang untuk membuat momen spesial Anda makin berkesan, dengan potongan yang pas di badan dan bahan premium yang nyaman dipakai sepanjang hari.",
   Aksesoris:
     "Aksesori eksklusif yang menjadi sentuhan akhir sempurna untuk melengkapi gaya Anda, dibuat dari material berkualitas tinggi dan tahan lama.",
   Perhiasan:
@@ -47,8 +48,7 @@ const categoryDescriptions = {
     "Atasan ringan dan nyaman dengan potongan yang flattering, cocok dipadukan dengan berbagai gaya busana favoritmu.",
   Bawahan:
     "Bawahan dengan potongan tailored yang memberikan siluet rapi dan elegan, nyaman dipakai sepanjang hari.",
-  Tas:
-    "Tas stylish dengan desain modern dan fungsional, cocok untuk melengkapi penampilan sehari-hari maupun acara formal.",
+  Tas: "Tas stylish dengan desain modern dan fungsional, cocok untuk melengkapi penampilan sehari-hari maupun acara formal.",
   "Pakaian Tidur":
     "Pakaian tidur nyaman dan elegan, dibuat dari bahan lembut yang membuat istirahat Anda lebih berkualitas.",
   "Pakaian Renang":
@@ -64,14 +64,62 @@ const getDescription = (kategori) =>
   "Produk eksklusif dari koleksi Boutique kami, dibuat dengan perhatian penuh pada detail dan kualitas.";
 
 const reviewPool = [
-  { id: 1, name: "Samantha D.", rating: 4.5, text: "Produknya bagus banget, kualitasnya sesuai sama harga. Aku suka banget sama detailnya!", date: "14 Agustus 2024" },
-  { id: 2, name: "Alex M.", rating: 5, text: "Melebihi ekspektasi! Bahannya nyaman dan tampilannya persis seperti di foto.", date: "15 Agustus 2024" },
-  { id: 3, name: "Ethan R.", rating: 4, text: "Worth it banget buat dipakai harian, desainnya juga timeless dan gampang dipadu-padankan.", date: "16 Agustus 2024" },
-  { id: 4, name: "Olivia P.", rating: 5, text: "Pengiriman cepat dan packing rapi. Produknya juga sesuai banget sama deskripsi.", date: "17 Agustus 2024" },
-  { id: 5, name: "Liam K.", rating: 5, text: "Kualitas premium, terasa banget pas dipegang dan dipakai. Recommended seller!", date: "18 Agustus 2024" },
-  { id: 6, name: "Ava H.", rating: 4.5, text: "Bakal repeat order lagi, suka sama finishing produknya yang rapi.", date: "19 Agustus 2024" },
-  { id: 7, name: "Noah S.", rating: 4, text: "Sesuai ekspektasi, harga juga cukup worth it untuk kualitas segini.", date: "20 Agustus 2024" },
-  { id: 8, name: "Mia T.", rating: 5, text: "Recommended! CS-nya juga responsif waktu aku tanya-tanya sebelum order.", date: "21 Agustus 2024" },
+  {
+    id: 1,
+    name: "Samantha D.",
+    rating: 4.5,
+    text: "Produknya bagus banget, kualitasnya sesuai sama harga. Aku suka banget sama detailnya!",
+    date: "14 Agustus 2024",
+  },
+  {
+    id: 2,
+    name: "Alex M.",
+    rating: 5,
+    text: "Melebihi ekspektasi! Bahannya nyaman dan tampilannya persis seperti di foto.",
+    date: "15 Agustus 2024",
+  },
+  {
+    id: 3,
+    name: "Ethan R.",
+    rating: 4,
+    text: "Worth it banget buat dipakai harian, desainnya juga timeless dan gampang dipadu-padankan.",
+    date: "16 Agustus 2024",
+  },
+  {
+    id: 4,
+    name: "Olivia P.",
+    rating: 5,
+    text: "Pengiriman cepat dan packing rapi. Produknya juga sesuai banget sama deskripsi.",
+    date: "17 Agustus 2024",
+  },
+  {
+    id: 5,
+    name: "Liam K.",
+    rating: 5,
+    text: "Kualitas premium, terasa banget pas dipegang dan dipakai. Recommended seller!",
+    date: "18 Agustus 2024",
+  },
+  {
+    id: 6,
+    name: "Ava H.",
+    rating: 4.5,
+    text: "Bakal repeat order lagi, suka sama finishing produknya yang rapi.",
+    date: "19 Agustus 2024",
+  },
+  {
+    id: 7,
+    name: "Noah S.",
+    rating: 4,
+    text: "Sesuai ekspektasi, harga juga cukup worth it untuk kualitas segini.",
+    date: "20 Agustus 2024",
+  },
+  {
+    id: 8,
+    name: "Mia T.",
+    rating: 5,
+    text: "Recommended! CS-nya juga responsif waktu aku tanya-tanya sebelum order.",
+    date: "21 Agustus 2024",
+  },
 ];
 
 const StarRating = ({ rating, size = "text-sm" }) => {
@@ -97,7 +145,11 @@ export default function ProductDetail() {
   const [visibleReviews, setVisibleReviews] = useState(4);
 
   const sizeOptions = product ? getSizeOptions(product.kategori) : [];
-  const [selectedSize, setSelectedSize] = useState(sizeOptions[0] || "All Size");
+  const [selectedSize, setSelectedSize] = useState(
+    sizeOptions[0] || "All Size",
+  );
+
+  const [isCustomSizeOpen, setIsCustomSizeOpen] = useState(false);
 
   if (!product) {
     return (
@@ -108,7 +160,8 @@ export default function ProductDetail() {
             Produk Tidak Ditemukan
           </h2>
           <p className="text-gray-500 mb-6 max-w-md">
-            Produk yang Anda cari mungkin sudah tidak tersedia atau link-nya salah.
+            Produk yang Anda cari mungkin sudah tidak tersedia atau link-nya
+            salah.
           </p>
           <Link
             to="/"
@@ -129,18 +182,22 @@ export default function ProductDetail() {
     product.status === "Stok Habis"
       ? "bg-red-500"
       : product.status === "Stok Menipis"
-      ? "bg-orange-500"
-      : "bg-green-500";
+        ? "bg-orange-500"
+        : "bg-green-500";
 
   const handleDecrease = () => setQuantity((q) => Math.max(1, q - 1));
-  const handleIncrease = () => setQuantity((q) => Math.min(product.stok || 1, q + 1));
-  const handleLoadMoreReviews = () => setVisibleReviews((v) => Math.min(reviewPool.length, v + 4));
+  const handleIncrease = () =>
+    setQuantity((q) => Math.min(product.stok || 1, q + 1));
+  const handleLoadMoreReviews = () =>
+    setVisibleReviews((v) => Math.min(reviewPool.length, v + 4));
 
   const handleAddToCartClick = () => {
     addToCart(product, quantity, selectedSize);
   };
 
-  const suggestions = productsData.filter((p) => p.id !== product.id).slice(0, 4);
+  const suggestions = productsData
+    .filter((p) => p.id !== product.id)
+    .slice(0, 4);
 
   const formatRupiah = (value) => {
     return new Intl.NumberFormat("id-ID", {
@@ -237,6 +294,15 @@ export default function ProductDetail() {
               </div>
             )}
 
+            {sizeOptions.length > 0 && !isOutOfStock && (
+              <button
+                onClick={() => setIsCustomSizeOpen(true)}
+                className="text-xs font-bold underline uppercase tracking-tight text-gray-600 hover:text-black mb-6 self-start cursor-pointer"
+              >
+                Butuh ukuran custom? Ajukan di sini
+              </button>
+            )}
+
             {/* QUANTITY + ADD TO CART */}
             {isOutOfStock ? (
               <button
@@ -264,7 +330,7 @@ export default function ProductDetail() {
                     <FiPlus />
                   </button>
                 </div>
-                <button 
+                <button
                   onClick={handleAddToCartClick}
                   className="flex-1 bg-black text-white px-8 py-4 rounded-full font-medium hover:bg-gray-800 transition-all duration-300 cursor-pointer"
                 >
@@ -351,6 +417,13 @@ export default function ProductDetail() {
           </div>
         </section>
       </div>
+
+      {isCustomSizeOpen && (
+        <CustomSizeRequestModal
+          product={product}
+          onClose={() => setIsCustomSizeOpen(false)}
+        />
+      )}
 
       <Footer />
       <CustomerService />
