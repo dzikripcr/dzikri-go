@@ -15,7 +15,7 @@ export const produkAPI = {
   async fetchProduk() {
     const response = await axios.get(
       `${API_URL}?select=*,kategori_produk(nama_kategori)`,
-      { headers }
+      { headers },
     );
     return response.data;
   },
@@ -23,7 +23,7 @@ export const produkAPI = {
   async fetchProdukById(id) {
     const response = await axios.get(
       `${API_URL}?id=eq.${id}&select=*,kategori_produk(nama_kategori)`,
-      { headers }
+      { headers },
     );
     return response.data[0];
   },
@@ -53,13 +53,18 @@ export const produkAPI = {
     const fileExt = file.name.split(".").pop();
     const fileName = `produk-${Date.now()}.${fileExt}`;
 
+    // 🌟 UBAH DARI "products" MENJADI "product-images"
     const { error } = await supabase.storage
-      .from("products")
+      .from("product-images")
       .upload(fileName, file, { upsert: true });
 
     if (error) throw error;
 
-    const { data } = supabase.storage.from("products").getPublicUrl(fileName);
+    // 🌟 UBAH JUGA DI SINI SAAT MENGAMBIL URL
+    const { data } = supabase.storage
+      .from("product-images")
+      .getPublicUrl(fileName);
+
     return data.publicUrl;
   },
 };

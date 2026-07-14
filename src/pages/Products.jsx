@@ -286,6 +286,7 @@ export default function Products() {
           handleInputChange={handleInputChange}
           handleFileChange={handleFileChange}
           handleSubmit={handleSubmit}
+          selectedFile={selectedFile}
         />
       )}
 

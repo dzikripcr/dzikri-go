@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SalesChart from "../components/SalesChart";
 import Button from "../components/Button";
-import { FaSearch as FaSearchIcon } from "react-icons/fa";
+import { FaSearch as FaSearchIcon, FaRegFolderOpen } from "react-icons/fa";
 import InputField from "../components/InputField";
 import Card from "../components/Card";
 
@@ -16,8 +16,11 @@ export default function Dashboard() {
   const [customers, setCustomers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  
+  // State Interaktif
+  const [activeSidebarFilter, setActiveSidebarFilter] = useState("all"); // "all", "instock", "outofstock"
+  const [timeFilter, setTimeFilter] = useState("all"); // "all", "month", "year"
 
-  // 1. Memuat semua data secara bersamaan menggunakan Promise.allSettled (Aman dari error 400)
   useEffect(() => {
     const loadDashboardData = async () => {
       setIsLoading(true);
@@ -41,7 +44,7 @@ export default function Dashboard() {
     loadDashboardData();
   }, []);
 
-  // 2. Helper untuk format mata uang Rupiah (Menyesuaikan database Anda)
+  // Helper format Rupiah & Angka
   const formatRupiah = (angka) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
@@ -50,7 +53,6 @@ export default function Dashboard() {
     }).format(angka || 0);
   };
 
-  // Helper format angka ringkas (Contoh: 10700 menjadi 10.7K)
   const formatK = (angka) => {
     return new Intl.NumberFormat("id-ID", {
       notation: "compact",
@@ -58,49 +60,116 @@ export default function Dashboard() {
     }).format(angka || 0);
   };
 
-  // 3. Kalkulasi Statistik Berdasarkan Data Riil Supabase
-  const totalSales = orders.reduce((acc, curr) => acc + (curr.total_belanja || 0), 0);
-  const totalOrdersCount = orders.length;
+  // --------------------------------------------------------
+  // 1. FILTER PESANAN BERDASARKAN WAKTU (INTERAKTIF)
+  // --------------------------------------------------------
+  const currentDate = new Date();
+  const filteredOrdersByTime = orders.filter((o) => {
+    if (timeFilter === "all") return true;
+    
+    const orderDate = new Date(o.tanggal_pesanan);
+    if (timeFilter === "month") {
+      return orderDate.getMonth() === currentDate.getMonth() && 
+             orderDate.getFullYear() === currentDate.getFullYear();
+    }
+    if (timeFilter === "year") {
+      return orderDate.getFullYear() === currentDate.getFullYear();
+    }
+    return true;
+  });
+
+  // --------------------------------------------------------
+  // Kalkulasi Statistik Real dari Data Pesanan yang Difilter
+  // --------------------------------------------------------
+  const totalSales = filteredOrdersByTime.reduce((acc, curr) => acc + (Number(curr.total_belanja) || 0), 0);
+  const totalOrdersCount = filteredOrdersByTime.length;
   
-  const pendingCount = orders.filter((o) => o.status?.toLowerCase() === "pending").length;
-  const canceledCount = orders.filter((o) => o.status?.toLowerCase() === "canceled").length;
+  const pendingCount = filteredOrdersByTime.filter((o) => o.status_pesanan === "menunggu konfirmasi").length;
+  const canceledCount = filteredOrdersByTime.filter((o) => o.status_pesanan === "dibatalkan").length;
   
   const totalCustomersCount = customers.length;
   const totalProductsCount = products.length;
+  const stockProductsCount = products.filter((p) => (p.stok || 0) > 0).length;
+  const outOfStockCount = products.filter((p) => (p.stok || 0) <= 0).length;
 
-  // Asumsi jika di tabel produk Anda ada kolom 'stok' atau 'stock'
-  const stockProductsCount = products.filter((p) => (p.stok || p.stock || 0) > 0).length;
-  const outOfStockCount = products.filter((p) => (p.stok || p.stock || 0) <= 0).length;
+  // --------------------------------------------------------
+  // 2. KALKULASI TOP PRODUCTS BERDASARKAN PENJUALAN
+  // --------------------------------------------------------
+  // Hitung jumlah terjual per produk dari data pesanan
+  const productSalesMap = filteredOrdersByTime.reduce((acc, order) => {
+    // Hanya hitung pesanan yang tidak dibatalkan
+    if (order.status_pesanan !== "dibatalkan") {
+      acc[order.idProduk] = (acc[order.idProduk] || 0) + (Number(order.total_kuantitas) || 0);
+    }
+    return acc;
+  }, {});
 
-  // 4. Filter Produk untuk bagian "Top Products" berdasarkan kolom pencarian
-  const filteredProducts = products
-    .filter((product) =>
-      product.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .slice(0, 4); // Ambil 4 produk teratas untuk ditampilkan di sidebar
+  // Gabungkan data penjualan ke array produk & urutkan dari yang terlaris
+  const productsWithSales = products.map(p => ({
+    ...p,
+    terjual: productSalesMap[p.id] || 0
+  })).sort((a, b) => b.terjual - a.terjual);
+
+  // Filter Produk untuk Sidebar (Pencarian + Interaktif Statistik)
+  const filteredProducts = productsWithSales
+    .filter((product) => {
+      const matchesSearch = product.nama_produk?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      if (activeSidebarFilter === "instock") {
+        return matchesSearch && (product.stok || 0) > 0;
+      }
+      if (activeSidebarFilter === "outofstock") {
+        return matchesSearch && (product.stok || 0) <= 0;
+      }
+      return matchesSearch;
+    })
+    .slice(0, 5); // Tampilkan 5 produk teratas
+
+  const getStatusBadgeClass = (status) => {
+    const cleanStatus = status?.toLowerCase() || "";
+    if (cleanStatus === "stok tersedia") return "bg-emerald-50 text-emerald-700 border-emerald-100";
+    if (cleanStatus === "stok menipis") return "bg-amber-50 text-amber-700 border-amber-100";
+    return "bg-rose-50 text-rose-700 border-rose-100"; 
+  };
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <p className="text-gray-500 font-medium">Memuat data dashboard...</p>
+      <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-600 mb-4"></div>
+        <p className="text-gray-500 font-medium text-sm">Menyelaraskan data dengan Supabase...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-8 bg-gray-50 min-h-screen flex flex-col">
+    <div className="p-4 md:p-8 bg-gray-50 min-h-screen flex flex-col animate-in fade-in duration-300">
+      
+      {/* Top Header & Time Filter */}
+      <div className="flex justify-between items-center mb-6">
+        <select 
+          value={timeFilter}
+          onChange={(e) => setTimeFilter(e.target.value)}
+          className="border border-gray-200 bg-white rounded-lg px-4 py-2 text-sm font-medium text-gray-700 outline-none focus:border-emerald-500 shadow-sm transition-all"
+        >
+          <option value="all">Semua Waktu</option>
+          <option value="month">Bulan Ini</option>
+          <option value="year">Tahun Ini</option>
+        </select>
+      </div>
+
       {/* Top Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         {/* Total Sales */}
         <Card>
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-gray-900 font-bold text-lg">Total Sales</h3>
-              <p className="text-xs text-gray-400 mt-1">Akumulasi seluruh penjualan</p>
+              <h3 className="text-gray-900 font-bold text-lg">Total Penjualan</h3>
+              <p className="text-xs text-gray-400 mt-1">
+                {timeFilter === 'all' ? 'Akumulasi seluruh penjualan' : `Pendapatan ${timeFilter === 'month' ? 'bulan' : 'tahun'} ini`}
+              </p>
             </div>
             <Button type="option">⋮</Button>
           </div>
-
           <div className="mt-6 flex items-end justify-between">
             <div className="flex items-baseline">
               <span className="text-2xl font-extrabold text-gray-900 tracking-tight">
@@ -117,12 +186,11 @@ export default function Dashboard() {
         <Card>
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-gray-900 font-bold text-lg">Total Orders</h3>
+              <h3 className="text-gray-900 font-bold text-lg">Total Pesanan</h3>
               <p className="text-xs text-gray-400 mt-1">Semua status pesanan</p>
             </div>
             <Button type="option">⋮</Button>
           </div>
-
           <div className="mt-6 flex items-end justify-between">
             <div className="flex items-baseline">
               <span className="text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -140,20 +208,19 @@ export default function Dashboard() {
         <Card>
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-gray-900 font-bold text-lg">Pending & Canceled</h3>
+              <h3 className="text-gray-900 font-bold text-lg">Tertunda & Batal</h3>
               <p className="text-xs text-gray-400 mt-1">Butuh perhatian</p>
             </div>
             <Button type="option">⋮</Button>
           </div>
-
           <div className="mt-6 flex justify-between items-end">
             <div className="flex space-x-6">
               <div>
-                <p className="text-sm text-gray-500 mb-1">Pending</p>
+                <p className="text-sm text-gray-500 mb-1">Menunggu</p>
                 <span className="text-2xl font-bold text-amber-500">{pendingCount}</span>
               </div>
               <div>
-                <p className="text-sm text-gray-500 mb-1">Canceled</p>
+                <p className="text-sm text-gray-500 mb-1">Dibatalkan</p>
                 <span className="text-2xl font-bold text-rose-500">{canceledCount}</span>
               </div>
             </div>
@@ -169,38 +236,61 @@ export default function Dashboard() {
         {/* Chart Section */}
         <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-gray-900 text-lg">Report Overview</h3>
+            <h3 className="font-bold text-gray-900 text-lg">Laporan Penjualan</h3>
             <div className="flex items-center space-x-2 bg-[#EAF8E7] p-1 rounded-[12px] border border-gray-100">
-              <Button type="this_week">Live Data</Button>
+              <span className="text-xs font-semibold text-emerald-700 px-3 py-1">Data Real-Time</span>
             </div>
           </div>
 
-          {/* Sub Header Stats for Chart */}
-          <div className="flex justify-between items-start mb-6 border-b border-gray-100 pb-4 overflow-x-auto gap-4">
-            <div className="border-b-2 border-emerald-500 pb-2 -mb-[18px] whitespace-nowrap">
+          {/* Sub Header Stats (Interaktif Filter Produk) */}
+          <div className="flex justify-between items-start mb-6 border-b border-gray-100 pb-4 overflow-x-auto gap-4 select-none">
+            <div className="whitespace-nowrap">
               <h4 className="text-xl font-bold text-gray-900">{formatK(totalCustomersCount)}</h4>
-              <p className="text-xs text-gray-400 mt-1">Customers</p>
+              <p className="text-xs text-gray-400 mt-1">Pelanggan</p>
             </div>
-            <div className="whitespace-nowrap">
+
+            {/* Filter: Semua Produk */}
+            <div 
+              onClick={() => setActiveSidebarFilter("all")}
+              className={`whitespace-nowrap cursor-pointer transition-all pb-2 -mb-[18px] px-2 rounded-t-md ${
+                activeSidebarFilter === "all" ? "border-b-2 border-emerald-500 font-semibold" : "opacity-70 hover:opacity-100"
+              }`}
+            >
               <h4 className="text-xl font-bold text-gray-900">{totalProductsCount}</h4>
-              <p className="text-xs text-gray-400 mt-1">Total Products</p>
+              <p className="text-xs text-gray-400 mt-1">Semua Produk</p>
             </div>
-            <div className="whitespace-nowrap">
-              <h4 className="text-xl font-bold text-gray-900">{stockProductsCount}</h4>
-              <p className="text-xs text-gray-400 mt-1">In Stock</p>
+
+            {/* Filter: Produk In Stock */}
+            <div 
+              onClick={() => setActiveSidebarFilter("instock")}
+              className={`whitespace-nowrap cursor-pointer transition-all pb-2 -mb-[18px] px-2 rounded-t-md ${
+                activeSidebarFilter === "instock" ? "border-b-2 border-emerald-500 font-semibold" : "opacity-70 hover:opacity-100"
+              }`}
+            >
+              <h4 className="text-xl font-bold text-gray-950">{stockProductsCount}</h4>
+              <p className="text-xs text-emerald-600 font-medium mt-1">● Stok Tersedia</p>
             </div>
-            <div className="whitespace-nowrap">
-              <h4 className="text-xl font-bold text-gray-900">{outOfStockCount}</h4>
-              <p className="text-xs text-gray-400 mt-1">Out of Stock</p>
+
+            {/* Filter: Produk Out of Stock */}
+            <div 
+              onClick={() => setActiveSidebarFilter("outofstock")}
+              className={`whitespace-nowrap cursor-pointer transition-all pb-2 -mb-[18px] px-2 rounded-t-md ${
+                activeSidebarFilter === "outofstock" ? "border-b-2 border-rose-500 font-semibold" : "opacity-70 hover:opacity-100"
+              }`}
+            >
+              <h4 className="text-xl font-bold text-gray-950">{outOfStockCount}</h4>
+              <p className="text-xs text-rose-500 font-medium mt-1">● Stok Habis</p>
             </div>
+
             <div className="whitespace-nowrap">
               <h4 className="text-xl font-bold text-emerald-600">{formatK(totalSales)}</h4>
-              <p className="text-xs text-gray-400 mt-1">Revenue</p>
+              <p className="text-xs text-gray-400 mt-1">Pendapatan</p>
             </div>
           </div>
 
           <div className="flex-grow w-full h-[250px]">
-            <SalesChart data={orders} /> {/* Berikan data pesanan jika SalesChart Anda dinamis */}
+            {/* Kirimkan data pesanan yang sudah difilter waktu ke Chart */}
+            <SalesChart data={filteredOrdersByTime} />
           </div>
         </div>
 
@@ -208,12 +298,12 @@ export default function Dashboard() {
         <div className="space-y-6">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold text-gray-900 text-lg">Top Products</h3>
-              <Link
-                to="/Products"
-                className="text-[#6467F2] font-semibold text-sm hover:underline transition-colors"
-              >
-                All product
+              <div className="flex flex-col">
+                <h3 className="font-bold text-gray-900 text-lg">Produk Terlaris</h3>
+                <span className="text-xs text-gray-400 mt-0.5">Berdasarkan {timeFilter === 'all' ? 'semua pesanan' : 'periode yang dipilih'}</span>
+              </div>
+              <Link to="/Products" className="text-[#6467F2] font-semibold text-sm hover:underline transition-colors">
+                Lihat Semua
               </Link>
             </div>
 
@@ -224,48 +314,60 @@ export default function Dashboard() {
               </div>
               <InputField
                 type="text"
-                placeholder="Search product..."
+                placeholder="Cari produk..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-lg text-sm focus:outline-none focus:border-gray-200"
+                className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-lg text-sm focus:outline-none focus:border-gray-200 transition-colors"
               />
             </div>
 
-            {/* List Produk Real */}
+            {/* List Produk Real (Diurutkan dari yang terbanyak terjual) */}
             <div className="space-y-0">
               {filteredProducts.length === 0 ? (
-                <p className="text-sm text-gray-400 text-center py-4">Tidak ada produk ditemukan</p>
+                <div className="text-center py-8">
+                  <FaRegFolderOpen className="mx-auto text-gray-300 text-3xl mb-2" />
+                  <p className="text-xs text-gray-400">Tidak ada produk ditemukan</p>
+                  {activeSidebarFilter !== "all" && (
+                    <button 
+                      onClick={() => setActiveSidebarFilter("all")}
+                      className="text-xs text-[#6467F2] font-semibold mt-1 hover:underline outline-none"
+                    >
+                      Reset Filter Status
+                    </button>
+                  )}
+                </div>
               ) : (
                 filteredProducts.map((product, index) => (
                   <div
                     key={product.id}
                     className={`flex items-center justify-between py-4 ${
                       index !== filteredProducts.length - 1 ? "border-b border-gray-100" : ""
-                    }`}
+                    } hover:bg-gray-50/50 transition-colors rounded-lg px-2 -mx-2`}
                   >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center text-xs text-gray-400">
-                        {product.image || product.gambar ? (
-                          <img
-                            src={product.image || product.gambar}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                          />
+                    <div className="flex items-center space-x-3 min-w-0">
+                      <div className="w-12 h-12 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center text-[10px] text-gray-400 border border-gray-100 shadow-sm">
+                        {product.gambar_produk ? (
+                          <img src={product.gambar_produk} alt={product.nama_produk} className="w-full h-full object-cover" />
                         ) : (
                           "No Img"
                         )}
                       </div>
-                      <div>
-                        <p className="text-sm font-bold text-gray-800 line-clamp-1">
-                          {product.name}
+                      <div className="min-w-0">
+                        <p className="text-sm font-bold text-gray-800 truncate pr-1">
+                          {product.nama_produk}
                         </p>
-                        <p className="text-xs text-gray-400 mt-0.5">
-                          ID: {product.id}
-                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-full border capitalize ${getStatusBadgeClass(product.status)}`}>
+                            {product.status || "Stok Habis"}
+                          </span>
+                          <span className="text-[11px] text-gray-500 font-medium">
+                            Terjual: <span className="text-gray-900 font-bold">{product.terjual}</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <span className="font-bold text-gray-800 text-sm ml-2 whitespace-nowrap">
-                      {formatRupiah(product.harga || product.price)}
+                    <span className="font-extrabold text-gray-900 text-sm ml-2 whitespace-nowrap">
+                      {formatRupiah(product.harga)}
                     </span>
                   </div>
                 ))

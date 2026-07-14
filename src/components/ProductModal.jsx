@@ -7,6 +7,7 @@ export default function ProductModal({
   handleInputChange,
   handleFileChange,
   handleSubmit,
+  selectedFile,
 }) {
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex justify-center items-center p-4">
