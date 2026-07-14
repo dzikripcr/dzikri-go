@@ -10,6 +10,7 @@ import {
   FiAward,
   FiTag,
   FiArrowLeft,
+  FiStar, // Menambahkan ikon Star untuk rating ulasan
 } from "react-icons/fi";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -19,6 +20,13 @@ export default function OrderHistory() {
   const { orders } = useCart();
   const [activeTab, setActiveTab] = useState("sekarang"); // 'sekarang' | 'selesai'
   const [expandedOrder, setExpandedOrder] = useState(null);
+  
+  // State Baru untuk Ulasan & Testimoni
+  const [reviewForm, setReviewForm] = useState(null); // Menyimpan objek { orderId, itemId } yang sedang diulas
+  const [rating, setRating] = useState(0); // Nilai rating aktif (1-5)
+  const [comment, setComment] = useState(""); // Nilai teks ulasan aktif
+  const [completedReviews, setCompletedReviews] = useState({}); // Menyimpan ulasan terkumpul berbasis key `${orderId}-${itemId}`
+  
   const navigate = useNavigate();
 
   // Helper Format Rupiah
@@ -127,31 +135,24 @@ export default function OrderHistory() {
       status: "diterima",
       cashbackEarned: 50250,
     },
-    {
-      id: "DM-094726",
-      date: "02 April 2026",
-      items: [
-        {
-          id: 106,
-          nama: "Classic Trench Coat Beige",
-          size: "L",
-          harga: 1299000,
-          quantity: 1,
-          gambar:
-            "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400",
-        },
-      ],
-      subtotal: 1299000,
-      shippingFee: 0, 
-      discount: 0,
-      total: 1299000,
-      payment: "qris",
-      shippingName: "Next Day Delivery",
-      address: "Perumahan Elite Blok C2, Marpoyan Damai, Pekanbaru, Riau",
-      status: "diterima",
-      cashbackEarned: 64950,
-    },
   ];
+
+  // Handler Kirim Ulasan
+  const handleSubmitReview = (orderId, itemId) => {
+    if (rating === 0 || !comment.trim()) return;
+
+    // Menyimpan ulasan ke dalam state lokal terintegrasi unik id order & produk
+    const reviewKey = `${orderId}-${itemId}`;
+    setCompletedReviews((prev) => ({
+      ...prev,
+      [reviewKey]: { rating, comment, date: new Date().toLocaleDateString("id-ID") },
+    }));
+
+    // Reset Form Input
+    setReviewForm(null);
+    setRating(0);
+    setComment("");
+  };
 
   // 1. Filter data asli dari state terlebih dahulu
   const realCurrentOrders = orders.filter((o) => o.status !== "diterima");
@@ -279,9 +280,7 @@ export default function OrderHistory() {
 
                   {/* Card Body & Dynamic Tracker */}
                   <div className="p-6 space-y-8">
-                    {/* ---------------------------------------------------------------- */}
                     {/* CUSTOM DESIGN MODERN PROGRESS STEPS BAR */}
-                    {/* ---------------------------------------------------------------- */}
                     <div className="relative pt-4 pb-2">
                       <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-200 -translate-y-1/2 z-0 hidden md:block"></div>
                       <div
@@ -332,9 +331,7 @@ export default function OrderHistory() {
                       </div>
                     </div>
 
-                    {/* ---------------------------------------------------------------- */}
                     {/* LIVE TRACKING TIMELINE LOGS (Hanya Muncul jika Status 'dikirim') */}
-                    {/* ---------------------------------------------------------------- */}
                     {order.status === "dikirim" && (
                       <div className="bg-[#F2F0F1] p-5 rounded-[20px] space-y-4 border border-transparent">
                         <h4 className="font-bold text-xs uppercase tracking-wider text-gray-900 flex items-center gap-2">
@@ -343,7 +340,6 @@ export default function OrderHistory() {
                         </h4>
 
                         <div className="relative border-l border-gray-300 ml-2.5 pl-5 space-y-4 text-xs font-medium">
-                          {/* Log 3 - Terbaru */}
                           <div className="relative">
                             <div className="absolute -left-[25.5px] top-0.5 w-2.5 h-2.5 rounded-full bg-black ring-4 ring-white"></div>
                             <span className="text-[10px] font-mono text-gray-400 block">
@@ -354,7 +350,6 @@ export default function OrderHistory() {
                               (Rute Pekanbaru Kota).
                             </p>
                           </div>
-                          {/* Log 2 */}
                           <div className="relative opacity-60">
                             <div className="absolute -left-[25.5px] top-0.5 w-2.5 h-2.5 rounded-full bg-gray-400 ring-4 ring-white"></div>
                             <span className="text-[10px] font-mono text-gray-400 block">
@@ -365,7 +360,6 @@ export default function OrderHistory() {
                               Riau.
                             </p>
                           </div>
-                          {/* Log 1 */}
                           <div className="relative opacity-60">
                             <div className="absolute -left-[25.5px] top-0.5 w-2.5 h-2.5 rounded-full bg-gray-400 ring-4 ring-white"></div>
                             <span className="text-[10px] font-mono text-gray-400 block">
@@ -384,37 +378,146 @@ export default function OrderHistory() {
                     {isExpanded && (
                       <div className="pt-4 border-t border-gray-100 space-y-6 text-sm animate-fadeIn">
                         {/* List Items Ordered */}
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           <span className="text-xs font-bold text-gray-400 uppercase tracking-wider block">
                             Rincian Item
                           </span>
-                          {order.items.map((item, idx) => (
-                            <div
-                              key={idx}
-                              className="flex items-center justify-between gap-4 p-2 hover:bg-gray-50 rounded-xl transition"
-                            >
-                              <div className="flex items-center gap-4">
-                                <div className="w-12 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                                  <img
-                                    src={item.gambar}
-                                    alt={item.nama}
-                                    className="w-full h-full object-cover"
-                                  />
+                          {order.items.map((item, idx) => {
+                            const reviewKey = `${order.id}-${item.id}`;
+                            const isReviewing = reviewForm?.orderId === order.id && reviewForm?.itemId === item.id;
+                            const hasBeenReviewed = completedReviews[reviewKey];
+
+                            return (
+                              <div
+                                key={idx}
+                                className="p-3 hover:bg-gray-50 rounded-2xl border border-transparent hover:border-gray-100 transition duration-300 space-y-3"
+                              >
+                                <div className="flex items-center justify-between gap-4">
+                                  <div className="flex items-center gap-4">
+                                    <div className="w-12 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                                      <img
+                                        src={item.gambar}
+                                        alt={item.nama}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </div>
+                                    <div>
+                                      <h5 className="font-bold text-gray-900 text-xs md:text-sm line-clamp-1">
+                                        {item.nama}
+                                      </h5>
+                                      <p className="text-[11px] text-gray-400 mt-0.5">
+                                        Ukuran: {item.size} x {item.quantity}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <span className="font-bold text-gray-900 text-xs">
+                                    {formatRupiah(item.harga * item.quantity)}
+                                  </span>
                                 </div>
-                                <div>
-                                  <h5 className="font-bold text-gray-900 text-xs md:text-sm line-clamp-1">
-                                    {item.nama}
-                                  </h5>
-                                  <p className="text-[11px] text-gray-400 mt-0.5">
-                                    Ukuran: {item.size} x {item.quantity}
-                                  </p>
-                                </div>
+
+                                {/* FITUR REVIEW DILAKUKAN PER ITEM JIKA STATUS 'DITERIMA' */}
+                                {order.status === "diterima" && (
+                                  <div className="pl-16">
+                                    {hasBeenReviewed ? (
+                                      /* Ulasan Sukses Dikirim */
+                                      <div className="bg-zinc-50 border border-zinc-100 p-3 rounded-xl max-w-lg space-y-1">
+                                        <div className="flex items-center justify-between">
+                                          <div className="flex text-yellow-400">
+                                            {[...Array(5)].map((_, i) => (
+                                              <FiStar 
+                                                key={i} 
+                                                size={12} 
+                                                className={i < hasBeenReviewed.rating ? "fill-current" : "text-gray-200"} 
+                                              />
+                                            ))}
+                                          </div>
+                                          <span className="text-[10px] text-gray-400 font-medium">
+                                            {hasBeenReviewed.date}
+                                          </span>
+                                        </div>
+                                        <p className="text-xs text-gray-700 italic font-medium">
+                                          "{hasBeenReviewed.comment}"
+                                        </p>
+                                        <span className="inline-block text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                                          Terima kasih atas ulasan Anda!
+                                        </span>
+                                      </div>
+                                    ) : isReviewing ? (
+                                      /* Form Pengisian Ulasan */
+                                      <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl max-w-lg space-y-3 animate-fadeIn">
+                                        <p className="text-[11px] font-black uppercase tracking-wider text-gray-700">
+                                          Berikan Penilaian Produk
+                                        </p>
+                                        
+                                        {/* Interaksi Rating Bintang */}
+                                        <div className="flex gap-1">
+                                          {[1, 2, 3, 4, 5].map((star) => (
+                                            <button
+                                              key={star}
+                                              type="button"
+                                              onClick={() => setRating(star)}
+                                              className="transition hover:scale-110 focus:outline-none"
+                                            >
+                                              <FiStar
+                                                size={18}
+                                                className={
+                                                  star <= rating 
+                                                    ? "text-yellow-400 fill-current" 
+                                                    : "text-gray-300"
+                                                }
+                                              />
+                                            </button>
+                                          ))}
+                                        </div>
+
+                                        {/* Teks Deskripsi Ulasan */}
+                                        <textarea
+                                          value={comment}
+                                          onChange={(e) => setComment(e.target.value)}
+                                          placeholder="Tulis ulasan produk di sini (bahan, kesesuaian ukuran, dll)..."
+                                          className="w-full p-2.5 text-xs bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-black resize-none"
+                                          rows={3}
+                                        />
+
+                                        {/* Tombol Aksi */}
+                                        <div className="flex gap-2 justify-end">
+                                          <button
+                                            onClick={() => {
+                                              setReviewForm(null);
+                                              setRating(0);
+                                              setComment("");
+                                            }}
+                                            className="px-3 py-1.5 text-[10px] font-bold uppercase border border-gray-200 rounded-full bg-white hover:bg-gray-100"
+                                          >
+                                            Batal
+                                          </button>
+                                          <button
+                                            onClick={() => handleSubmitReview(order.id, item.id)}
+                                            disabled={rating === 0 || !comment.trim()}
+                                            className="px-4 py-1.5 text-[10px] font-bold uppercase rounded-full bg-black text-white hover:bg-zinc-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+                                          >
+                                            Kirim Ulasan
+                                          </button>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      /* Tombol Utama Picu Form */
+                                      <button
+                                        onClick={() => {
+                                          setReviewForm({ orderId: order.id, itemId: item.id });
+                                          setRating(0);
+                                          setComment("");
+                                        }}
+                                        className="px-4 py-1.5 text-[10px] font-black uppercase tracking-wider border border-black bg-white text-black rounded-full hover:bg-black hover:text-white transition duration-300"
+                                      >
+                                        Beri Ulasan
+                                      </button>
+                                    )}
+                                  </div>
+                                )}
                               </div>
-                              <span className="font-bold text-gray-900 text-xs">
-                                {formatRupiah(item.harga * item.quantity)}
-                              </span>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
 
                         {/* Ringkasan Biaya Pengiriman & Alamat */}
