@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"; 
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import {
@@ -15,20 +15,20 @@ import {
 
 import { useAuth } from "../../context/AuthContext";
 // Import Cart Context untuk mengambil data jumlah item di keranjang
-import { useCart } from "../../context/CartContext"; 
+import { useCart } from "../../context/CartContext";
 // Import Rewards Context untuk sistem poin & voucher (Marketing Automation)
 import { useRewards } from "../../context/RewardsContext";
-import { getLevelFromPoints, getMemberStatus, LEVEL_BADGE_CLASSES } from "../../services/membership";
+import {
+  getLevelFromPoints,
+  getMemberStatus,
+  LEVEL_BADGE_CLASSES,
+} from "../../services/membership";
 
 export default function Header() {
   const { user, logout } = useAuth();
   const { cartItems } = useCart();
-  const {
-    points,
-    availableVouchers,
-    rewardCatalog,
-    redeemReward,
-  } = useRewards();
+  const { points, availableVouchers, rewardCatalog, redeemReward } =
+    useRewards();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,7 +60,8 @@ export default function Header() {
   const status = getMemberStatus({ isActive, orderCount, totalSpend, level });
 
   // Hitung total kuantitas item yang ada di keranjang untuk badge ikon cart
-  const cartCount = cartItems?.reduce((total, item) => total + item.quantity, 0) || 0;
+  const cartCount =
+    cartItems?.reduce((total, item) => total + item.quantity, 0) || 0;
 
   const scrollToSection = (sectionId) => {
     if (location.pathname !== "/") {
@@ -182,6 +183,14 @@ export default function Header() {
       time: "3 hari yang lalu",
       unread: false,
     },
+    {
+      id: 6,
+      type: "cart",
+      title: "Keranjang Belanjamu Menanti! 🛒",
+      desc: "Yuk, segera selesaikan pembayaran untuk 'Dress Casual Wanita' di keranjangmu sebelum kehabisan stok!",
+      time: "30 menit yang lalu",
+      unread: true,
+    },
   ];
 
   const unreadCount = notifications.filter((item) => item.unread).length;
@@ -200,14 +209,14 @@ export default function Header() {
     `}
     >
       {/* LOGO */}
-      <div 
+      <div
         onClick={() => scrollToSection("hero")}
         className="flex items-center gap-4 cursor-pointer group"
       >
-        <img 
-          src="/img/logo.png" 
-          alt="DM Boutiquera Logo" 
-          className="w-14 h-14 object-contain transition-transform duration-300 group-hover:scale-105" 
+        <img
+          src="/img/logo.png"
+          alt="DM Boutiquera Logo"
+          className="w-14 h-14 object-contain transition-transform duration-300 group-hover:scale-105"
         />
         <h1 className="font-black uppercase tracking-tighter text-3xl ml-[-10px]">
           DM Boutiquera
@@ -375,7 +384,10 @@ export default function Header() {
                     </p>
                     <div className="flex items-end justify-between mt-1">
                       <span className="text-2xl font-black">
-                        {points} <span className="text-xs font-medium text-zinc-400">PTS</span>
+                        {points}{" "}
+                        <span className="text-xs font-medium text-zinc-400">
+                          PTS
+                        </span>
                       </span>
                       <span
                         className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
@@ -413,7 +425,9 @@ export default function Header() {
                             className="flex items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100"
                           >
                             <div>
-                              <p className="text-xs font-bold text-gray-900">{reward.label}</p>
+                              <p className="text-xs font-bold text-gray-900">
+                                {reward.label}
+                              </p>
                               <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
                                 {reward.description}
                               </p>
@@ -446,14 +460,20 @@ export default function Header() {
                               className="flex items-center justify-between gap-3 p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl"
                             >
                               <div>
-                                <p className="text-xs font-bold text-gray-900">{v.label}</p>
-                                <p className="text-[10px] font-mono text-gray-500 mt-0.5">{v.code}</p>
+                                <p className="text-xs font-bold text-gray-900">
+                                  {v.label}
+                                </p>
+                                <p className="text-[10px] font-mono text-gray-500 mt-0.5">
+                                  {v.code}
+                                </p>
                               </div>
                               <button
                                 onClick={() => handleCopyCode(v.code)}
                                 className="text-[10px] font-black uppercase tracking-wider px-3 py-2 rounded-full bg-white border border-gray-200 hover:bg-gray-100 transition cursor-pointer whitespace-nowrap"
                               >
-                                {copiedCode === v.code ? "Tersalin!" : "Salin Kode"}
+                                {copiedCode === v.code
+                                  ? "Tersalin!"
+                                  : "Salin Kode"}
                               </button>
                             </div>
                           ))}
@@ -535,7 +555,7 @@ export default function Header() {
             </div>
 
             {/* CART (Sudah Diperbaiki Agar Bisa Diklik & Memiliki Badge Kuantitas) */}
-            <button 
+            <button
               onClick={() => navigate("/cart")}
               className="text-2xl cursor-pointer hover:text-gray-600 transition relative flex items-center justify-center p-1 mt-1 outline-none"
             >
@@ -565,7 +585,9 @@ export default function Header() {
                 <div className="absolute right-0 mt-4 w-64 bg-white border shadow-xl rounded-2xl p-4 z-[999]">
                   {/* Data profil dinamis menggunakan data dari AuthContext */}
                   <p className="font-bold">{user?.name || "Dzikri Maulana"}</p>
-                  <p className="text-sm text-gray-500 capitalize">{status || "Member"}</p>
+                  <p className="text-sm text-gray-500 capitalize">
+                    {status || "Member"}
+                  </p>
 
                   <div className="flex flex-wrap gap-2 mt-3">
                     <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-400">
